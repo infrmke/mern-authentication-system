@@ -8,7 +8,7 @@ import { verifyConnection } from './config/nodemailer.js'
 import errorHandler from './middlewares/errorHandler.js'
 
 const app = express()
-const PORT = process.env.PORT || 3001
+const PORT = process.env.SERVER_PORT || 3001
 
 connectToDb()
 verifyConnection() // verifica a conexão do nodemailer
