@@ -5,6 +5,7 @@ import connectToDb from './config/database.js'
 import cors from './config/cors.js'
 import { verifyConnection } from './config/nodemailer.js'
 
+import UserRouter from './modules/user/user.route.js'
 import errorHandler from './middlewares/errorHandler.js'
 
 const app = express()
@@ -16,6 +17,9 @@ verifyConnection() // verifica a conexão do nodemailer
 app.use(express.json())
 app.use(cors)
 app.use(cookieParser())
+
+//  rotas
+app.use(UserRouter)
 
 //  middleware para rotas não encontradas (404)
 app.use((req, res, next) => {
