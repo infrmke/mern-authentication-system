@@ -1,5 +1,4 @@
 import User from '../modules/user/user.model.js'
-import formatUserObject from '../utils/formatUserObject.js'
 
 /**
  * Verifica se o ID fornecido existe ou não no banco de dados. Caso exista, armazena o dado no corpo da requisição.
@@ -14,8 +13,7 @@ const validateIdExists = async (req, res, next) => {
       return res.status(404).json({ error: "ID doesn't exist." })
     }
 
-    const formattedUser = formatUserObject(isIdOnDb)
-    req.user = { ...req.user, ...formattedUser }
+    req.user = { id: isIdOnDb._id }
 
     next()
   } catch (error) {
