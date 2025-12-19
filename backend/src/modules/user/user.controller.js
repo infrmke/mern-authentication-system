@@ -33,18 +33,24 @@ const getUser = async (req, res, next) => {
 }
 
 const createUser = async (req, res, next) => {
-  const { name, email, password } = req.body
+  const { name, email, password, confirm_password } = req.body
 
-  if (!name || !email || !password) {
+  if (!name || !email || !password || !confirm_password) {
     return res.status(400).json({
       error:
-        'Must provide fields "name", "email" and "password" for registration.',
+        'Must provide fields "name", "email", "password" and "confirm_password" for registration.',
     })
   }
 
   if (password.length < 8) {
     return res.status(400).json({
       error: 'Password must be at least 8 characters.',
+    })
+  }
+
+  if (password !== confirm_password) {
+    return res.status(400).json({
+      error: 'Password must match each other.',
     })
   }
 
