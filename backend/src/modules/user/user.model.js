@@ -1,4 +1,5 @@
 import mongoose, { Schema } from 'mongoose'
+import { generatePassword } from '../../utils/password.js'
 
 const userSchema = new Schema(
   {
@@ -18,6 +19,19 @@ const userSchema = new Schema(
   },
   { timestamps: true }
 )
+
+//  faz a senha ser hasheada na operação User.save()
+userSchema.pre('save', async function (next) {
+  if (!this.isModified('password')) return next()
+
+  try {
+    const hash = await generatePassword(this.password)
+    this.password = hash
+    next()
+  } catch (error) {
+    next(error)
+  }
+})
 
 const User = mongoose.model('User', userSchema)
 
