@@ -45,7 +45,7 @@ const createUser = async (data) => {
   const formattedUser = formatUserObject(user)
 
   const accessToken = generateToken(
-    user._id,
+    { user: user._id, email: user.email },
     process.env.JWT_ACCESS_SECRET,
     '1d'
   )
