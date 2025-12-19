@@ -19,7 +19,7 @@ app.use(cors)
 app.use(cookieParser())
 
 //  rotas
-app.use(UserRouter)
+app.use('/users', UserRouter)
 
 //  middleware para rotas não encontradas (404)
 app.use((req, res, next) => {
