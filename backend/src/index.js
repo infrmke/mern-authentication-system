@@ -7,6 +7,8 @@ import { verifyConnection } from './config/nodemailer.js'
 
 import UserRouter from './modules/user/user.route.js'
 import AuthRouter from './modules/auth/auth.route.js'
+import OtpRouter from './modules/otp/otp.route.js'
+
 import errorHandler from './middlewares/errorHandler.js'
 
 const app = express()
@@ -22,6 +24,7 @@ app.use(cookieParser())
 //  rotas
 app.use('/users', UserRouter)
 app.use('/auth', AuthRouter)
+app.use('/otp', OtpRouter)
 
 //  middleware para rotas não encontradas (404)
 app.use((req, res, next) => {
