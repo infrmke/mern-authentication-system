@@ -50,7 +50,7 @@ const createUser = async (req, res, next) => {
 
   if (password !== confirm_password) {
     return res.status(400).json({
-      error: 'Password must match each other.',
+      error: 'Passwords must match each other.',
     })
   }
 
