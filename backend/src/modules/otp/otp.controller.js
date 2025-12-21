@@ -1,4 +1,5 @@
 import OtpService from './otp.service.js'
+import throwHttpError from '../../utils/throwHttpError.js'
 
 const sendEmailVerification = async (req, res, next) => {
   const { id } = req.user
@@ -7,19 +8,20 @@ const sendEmailVerification = async (req, res, next) => {
     const user = await OtpService.sendUserEmail(id)
 
     if (!user) {
-      return res.status(400).json({
-        error: 'Verification failed. Invalid session or user not found.',
-      })
+      throwHttpError(
+        400,
+        'Verification failed. Invalid session or user not found.',
+        'USER_NOT_FOUND'
+      )
     }
 
     return res.status(200).json({ message: 'OTP has been sent.' })
   } catch (error) {
     if (error.code === 11000) {
-      return res.status(400).json({ error: `Already sent an e-mail OTP.` })
-    }
-
-    if (error.statusCode) {
-      return res.status(error.statusCode).json({ error: error.message })
+      error.status = 409
+      error.message =
+        'An active e-mail OTP has already been sent to this account.'
+      error.code = 'OTP_ALREADY_SENT'
     }
 
     next(error)
@@ -30,9 +32,11 @@ const sendPasswordReset = async (req, res, next) => {
   const { email } = req.body
 
   if (!email) {
-    return res.status(400).json({
-      message: 'Must provide field "email" to request a password reset.',
-    })
+    throwHttpError(
+      400,
+      'Must provide field "email" to request a password reset.',
+      'OTP_MISSING_FIELDS'
+    )
   }
 
   try {
@@ -45,9 +49,10 @@ const sendPasswordReset = async (req, res, next) => {
     })
   } catch (error) {
     if (error.code === 11000) {
-      return res
-        .status(400)
-        .json({ error: `Already sent a password reset OTP.` })
+      error.status = 409
+      error.message =
+        'An active password reset OTP has already been sent to this account.'
+      error.code = 'OTP_ALREADY_SENT'
     }
 
     next(error)
@@ -59,26 +64,26 @@ const verifyUserEmail = async (req, res, next) => {
   const { otp } = req.body
 
   if (!otp) {
-    return res.status(400).json({
-      error: 'Must provide field "otp" for e-mail verification.',
-    })
+    throwHttpError(
+      400,
+      'Must provide field "otp" for e-mail verification.',
+      'OTP_MISSING_FIELDS'
+    )
   }
 
   try {
     const user = await OtpService.verifyEmailOtp(id, otp, 'VERIFY')
 
     if (!user) {
-      return res
-        .status(400)
-        .json({ error: 'Verification failed. Invalid user or OTP.' })
+      throwHttpError(
+        400,
+        'Verification failed. Invalid OTP or user not found.',
+        'USER_NOT_FOUND'
+      )
     }
 
     res.status(200).json({ message: 'E-mail verified successfully.' })
   } catch (error) {
-    if (error.statusCode) {
-      return res.status(error.statusCode).json({ error: error.message })
-    }
-
     next(error)
   }
 }
@@ -87,20 +92,27 @@ const resetUserPassword = async (req, res, next) => {
   const { otp, email, password, confirm_password } = req.body
 
   if (!otp || !email || !password || !confirm_password) {
-    return res.status(400).json({
-      error:
-        'Must provide fields "otp", "email", "password" and "confirm_password" to reset password.',
-    })
+    throwHttpError(
+      400,
+      'Must provide fields "otp", "email", "password" and "confirm_password" to reset password.',
+      'OTP_MISSING_FIELDS'
+    )
   }
 
   if (password.length < 8) {
-    return res
-      .status(400)
-      .json({ error: 'Password must be at least 8 characters.' })
+    throwHttpError(
+      400,
+      'Password must be at least 8 characters.',
+      'PASSWORD_TOO_SHORT'
+    )
   }
 
   if (password !== confirm_password) {
-    return res.status(400).json({ error: 'Passwords must match each other.' })
+    throwHttpError(
+      400,
+      'Passwords must match each other.',
+      'PASSWORD_NOT_EQUAL'
+    )
   }
 
   try {
@@ -112,17 +124,15 @@ const resetUserPassword = async (req, res, next) => {
     )
 
     if (!user) {
-      return res
-        .status(400)
-        .json({ error: 'Password reset failed. Invalid user or OTP.' })
+      throwHttpError(
+        400,
+        'Verification failed. Invalid OTP or user not found.',
+        'USER_NOT_FOUND'
+      )
     }
 
     res.status(200).json({ message: 'Password has been reset.' })
   } catch (error) {
-    if (error.statusCode) {
-      return res.status(error.statusCode).json({ error: error.message })
-    }
-
     next(error)
   }
 }

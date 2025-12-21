@@ -15,7 +15,11 @@ const sendUserEmail = async (id) => {
   const { user } = capsule
 
   if (user.isAccountVerified)
-    throwHttpError(400, 'Account has already been verified.')
+    throwHttpError(
+      400,
+      'Account has already been verified.',
+      'USER_ALREADY_VERIFIED'
+    )
 
   const otpOptions = {
     user: user._id,
@@ -78,7 +82,11 @@ const verifyEmailOtp = async (id, otp, otpType) => {
   const { user } = capsule
 
   if (user.isAccountVerified)
-    throwHttpError(400, 'Account has already been verified.')
+    throwHttpError(
+      400,
+      'Account has already been verified.',
+      'USER_ALREADY_VERIFIED'
+    )
 
   const otpDocument = await OtpRepository.findOtpById(user._id, 'VERIFY')
 
@@ -89,7 +97,7 @@ const verifyEmailOtp = async (id, otp, otpType) => {
     otp !== otpDocument.code ||
     otpType !== otpDocument.type
   )
-    throwHttpError(403, 'Invalid OTP or OTP has expired.')
+    throwHttpError(403, 'Invalid OTP or OTP has expired.', 'OTP_NOT_FOUND')
 
   const updatedUser = await UserService.updateUserById(user._id, {
     isAccountVerified: true,
@@ -118,7 +126,7 @@ const verifyResetOtp = async (otp, otpType, filter, password) => {
     otp !== otpDocument.code ||
     otpType !== otpDocument.type
   )
-    throwHttpError(403, 'Invalid OTP or OTP has expired.')
+    throwHttpError(403, 'Invalid OTP or OTP has expired.', 'OTP_NOT_FOUND')
 
   const updatedUser = await UserService.updateUserById(user._id, { password })
 
