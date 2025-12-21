@@ -34,31 +34,7 @@ const getUser = async (req, res, next) => {
 }
 
 const createUser = async (req, res, next) => {
-  const { name, email, password, confirm_password } = req.body
-
-  if (!name || !email || !password || !confirm_password) {
-    throwHttpError(
-      400,
-      'Must provide fields "name", "email", "password" and "confirm_password" for registration.',
-      'USER_MISSING_FIELDS'
-    )
-  }
-
-  if (password.length < 8) {
-    throwHttpError(
-      400,
-      'Password must be at least 8 characters.',
-      'PASSWORD_TOO_SHORT'
-    )
-  }
-
-  if (password !== confirm_password) {
-    throwHttpError(
-      400,
-      'Password must be at least 8 characters.',
-      'PASSWORD_NOT_EQUAL'
-    )
-  }
+  const { name, email, password } = req.body
 
   const data = { name, email, password }
 

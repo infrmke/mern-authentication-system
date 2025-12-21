@@ -16,14 +16,6 @@ const logIn = async (req, res, next) => {
 
   const { email, password } = req.body
 
-  if (!email || !password) {
-    throwHttpError(
-      400,
-      'Must provide fields "email" and "password" to log in.',
-      'AUTH_MISSING_FIELDS'
-    )
-  }
-
   try {
     const capsule = await AuthService.logUserIn(password, { email })
 
