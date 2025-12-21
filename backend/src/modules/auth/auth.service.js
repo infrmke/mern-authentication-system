@@ -14,7 +14,8 @@ const logUserIn = async (password, filter) => {
 
   const isPwdValid = await validatePassword(password, user.password)
 
-  if (!isPwdValid) throwHttpError(400, 'Incorrect credentials.')
+  if (!isPwdValid)
+    throwHttpError(400, 'Incorrect credentials.', 'USER_INVALID_CREDENTIALS')
 
   const formattedUser = formatUserObject(user)
 

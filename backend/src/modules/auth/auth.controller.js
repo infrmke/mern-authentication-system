@@ -1,11 +1,8 @@
 import AuthService from './auth.service.js'
+import throwHttpError from '../../utils/throwHttpError.js'
 
 const status = async (req, res, next) => {
   try {
-    if (!req.cookies.accessToken) {
-      return res.status(401).end()
-    }
-
     return res.status(200).json(req.user)
   } catch (error) {
     next(error)
@@ -14,22 +11,24 @@ const status = async (req, res, next) => {
 
 const logIn = async (req, res, next) => {
   if (req.cookies.accessToken) {
-    return res.status(400).json({ error: 'Already logged in.' })
+    throwHttpError(400, 'Already logged in.', 'USER_ALREADY_AUTHENTICATED')
   }
 
   const { email, password } = req.body
 
   if (!email || !password) {
-    return res.status(400).json({
-      error: 'Must provide fields "email" and "password" to log in.',
-    })
+    throwHttpError(
+      400,
+      'Must provide fields "email" and "password" to log in.',
+      'AUTH_MISSING_FIELDS'
+    )
   }
 
   try {
     const capsule = await AuthService.logUserIn(password, { email })
 
     if (!capsule) {
-      return res.status(400).json({ error: 'Incorrect credentials.' })
+      throwHttpError(400, 'Incorrect credentials.', 'USER_INVALID_CREDENTIALS')
     }
 
     const { formattedUser, accessToken } = capsule
@@ -43,17 +42,13 @@ const logIn = async (req, res, next) => {
 
     return res.status(200).json(formattedUser)
   } catch (error) {
-    if (error.statusCode) {
-      return res.status(error.statusCode).json({ error: error.message })
-    }
-
     next(error)
   }
 }
 
 const logOut = async (req, res, next) => {
   if (!req.cookies.accessToken) {
-    return res.status(400).json({ error: 'Already logged out.' })
+    throwHttpError(400, 'Already logged out.', 'USER_ALREADY_UNAUTHENTICATED')
   }
 
   try {
