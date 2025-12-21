@@ -4,6 +4,7 @@ const HTTP_ERROR = {
   403: 'Forbidden',
   404: 'Not Found',
   409: 'Conflict', // indica "conflito" no estado atual de um recurso no servidor (ex.: duplicidade)
+  429: 'Too Many Requests',
   500: 'Internal Server Error',
 }
 
