@@ -1,4 +1,5 @@
 import UserService from './user.service.js'
+import throwHttpError from '../../utils/throwHttpError.js'
 
 const getAllUsers = async (req, res, next) => {
   try {
@@ -21,7 +22,7 @@ const getUser = async (req, res, next) => {
     const capsule = await UserService.findUserById(id)
 
     if (!capsule) {
-      return res.status(400).json({ error: 'User does not exist.' })
+      throwHttpError(400, 'User does not exist.', 'USER_NOT_FOUND')
     }
 
     const { formattedUser } = capsule
@@ -36,22 +37,27 @@ const createUser = async (req, res, next) => {
   const { name, email, password, confirm_password } = req.body
 
   if (!name || !email || !password || !confirm_password) {
-    return res.status(400).json({
-      error:
-        'Must provide fields "name", "email", "password" and "confirm_password" for registration.',
-    })
+    throwHttpError(
+      400,
+      'Must provide fields "name", "email", "password" and "confirm_password" for registration.',
+      'USER_MISSING_FIELDS'
+    )
   }
 
   if (password.length < 8) {
-    return res.status(400).json({
-      error: 'Password must be at least 8 characters.',
-    })
+    throwHttpError(
+      400,
+      'Password must be at least 8 characters.',
+      'PASSWORD_TOO_SHORT'
+    )
   }
 
   if (password !== confirm_password) {
-    return res.status(400).json({
-      error: 'Passwords must match each other.',
-    })
+    throwHttpError(
+      400,
+      'Password must be at least 8 characters.',
+      'PASSWORD_NOT_EQUAL'
+    )
   }
 
   const data = { name, email, password }
@@ -70,9 +76,10 @@ const createUser = async (req, res, next) => {
   } catch (error) {
     if (error.code === 11000) {
       const field = Object.keys(error.keyValue)[0]
-      return res
-        .status(400)
-        .json({ error: `Provided ${field.toUpperCase()} already exists.` })
+
+      error.code = 409
+      error.message = `This ${field} already exists in the database.`
+      error.code = 'USER_ALREADY_EXISTS'
     }
 
     next(error)
