@@ -3,17 +3,25 @@ import { generatePassword } from '../../utils/password.js'
 
 const userSchema = new Schema(
   {
-    name: { type: String, required: true },
+    name: {
+      type: String,
+      minlength: [2, 'Name must be at least 2 characters long.'],
+      maxlength: [56, 'Name cannot exceed 56 characters.'],
+      trim: true,
+      required: [true, 'Name is required.'],
+    },
     email: {
       type: String,
       unique: true,
-      required: true,
+      trim: true,
+      lowercase: true,
+      required: [true, 'Email is required.'],
       match: [/^[\w-.]+@([\w-]+\.)+[\w-]{2,4}$/, 'Invalid e-mail format.'],
     },
     password: {
       type: String,
       select: false,
-      required: true,
+      required: [true, 'Password is required.'],
     },
     isAccountVerified: { type: Boolean, default: false },
   },
