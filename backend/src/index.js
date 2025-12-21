@@ -5,15 +5,11 @@ import connectToDb from './config/database.js'
 import cors from './config/cors.js'
 import { verifyConnection } from './config/nodemailer.js'
 
-import UserRouter from './modules/user/user.route.js'
-import AuthRouter from './modules/auth/auth.route.js'
-import OtpRouter from './modules/otp/otp.route.js'
-
+import GlobalRouter from './routes.js'
 import errorHandler from './middlewares/errorHandler.js'
 
+//  config
 const app = express()
-const PORT = process.env.SERVER_PORT || 3001
-
 connectToDb()
 verifyConnection() // verifica a conexão do nodemailer
 
@@ -22,9 +18,7 @@ app.use(cors)
 app.use(cookieParser())
 
 //  rotas
-app.use('/users', UserRouter)
-app.use('/auth', AuthRouter)
-app.use('/otp', OtpRouter)
+app.use(GlobalRouter)
 
 //  middleware para rotas não encontradas (404)
 app.use((req, res, next) => {
@@ -36,6 +30,4 @@ app.use((req, res, next) => {
 //  middleware de erro global
 app.use(errorHandler)
 
-app.listen(PORT, () =>
-  console.log(`[SERVER] up and running at http://localhost:${PORT}`)
-)
+export default app
