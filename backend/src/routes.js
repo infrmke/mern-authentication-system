@@ -1,13 +1,16 @@
 import { Router } from 'express'
-
-const router = Router()
+import { globalLimiter, authLimiter } from './middlewares/rateLimiter.js'
 
 import UserRouter from './modules/user/user.route.js'
 import AuthRouter from './modules/auth/auth.route.js'
 import OtpRouter from './modules/otp/otp.route.js'
 
+const router = Router()
+
+router.use(globalLimiter)
+
 router.use('/users', UserRouter)
-router.use('/auth', AuthRouter)
-router.use('/otp', OtpRouter)
+router.use('/auth', authLimiter, AuthRouter)
+router.use('/otp', authLimiter, OtpRouter)
 
 export default router
