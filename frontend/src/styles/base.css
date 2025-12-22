@@ -1,0 +1,26 @@
+/*	================================
+    BASE
+================================	*/
+
+body {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-family: "Roboto", Arial, Helvetica, sans-serif;
+  font-size: 1rem;
+  line-height: 1.5;
+  background-color: white;
+  color: black;
+}
+
+button {
+  cursor: pointer;
+  border: none;
+  background-color: transparent;
+}
+
+.btn {
+  border-radius: 100vmax;
+  padding: 0.5em 1.75em;
+  background-color: #65f3d6;
+}
