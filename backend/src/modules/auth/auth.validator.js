@@ -15,11 +15,11 @@ const validate = (req, res, next) => {
 const loginValidator = [
   body('email')
     .trim()
+    .normalizeEmail() // retira pontos extras e converte a string para minúscula
     .notEmpty()
     .withMessage('Email cannot be empty.')
     .isEmail()
-    .withMessage('Provide a valid email address.')
-    .normalizeEmail(), // retira pontos extras e converte a string para minúscula
+    .withMessage('Provide a valid email address.'),
 
   body('password')
     .notEmpty()
