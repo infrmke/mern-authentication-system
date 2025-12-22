@@ -58,4 +58,4 @@ const passwordResetValidator = [
   validate,
 ]
 
-export default { emailValidator, otpValidator, passwordResetValidator }
+export { emailValidator, otpValidator, passwordResetValidator }
