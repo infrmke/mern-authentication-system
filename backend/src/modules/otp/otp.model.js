@@ -2,10 +2,31 @@ import mongoose, { Schema } from 'mongoose'
 
 const otpSchema = new Schema(
   {
-    user: { type: Schema.Types.ObjectId, ref: 'User', required: true },
+    user: {
+      type: Schema.Types.ObjectId,
+      ref: 'User',
+      required: true,
+      match: [/^\d{6}$/, 'OTP code must be exactly 6 digits.'],
+    },
     code: { type: String, required: true },
-    type: { type: String, enum: ['VERIFY', 'RESET'], required: true },
-    expiresAt: { type: Date, required: true },
+    type: {
+      type: String,
+      enum: {
+        values: ['VERIFY', 'RESET'],
+        message: '{VALUE} is not a valid OTP type.',
+      },
+      required: true,
+    },
+    expiresAt: {
+      type: Date,
+      required: true,
+      validate: {
+        validator: function (value) {
+          return value > Date.now()
+        },
+        message: "An OTP's expiration date must be in the future.",
+      },
+    },
   },
   { timestamps: true }
 )
