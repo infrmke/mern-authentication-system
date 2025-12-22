@@ -1,4 +1,5 @@
 import rateLimit from 'express-rate-limit'
+import throwHttpError from '../utils/throwHttpError.js'
 
 const globalLimiter = rateLimit({
   windowMs: 15 * 60 * 1000, // 15 minutos
