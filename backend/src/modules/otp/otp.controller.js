@@ -31,14 +31,6 @@ const sendEmailVerification = async (req, res, next) => {
 const sendPasswordReset = async (req, res, next) => {
   const { email } = req.body
 
-  if (!email) {
-    throwHttpError(
-      400,
-      'Must provide field "email" to request a password reset.',
-      'OTP_MISSING_FIELDS'
-    )
-  }
-
   try {
     //  não captura o retorno porque o service lida com o caso de usuário não encontrado
     await OtpService.sendUserReset({ email })
@@ -63,14 +55,6 @@ const verifyUserEmail = async (req, res, next) => {
   const { id } = req.user
   const { otp } = req.body
 
-  if (!otp) {
-    throwHttpError(
-      400,
-      'Must provide field "otp" for e-mail verification.',
-      'OTP_MISSING_FIELDS'
-    )
-  }
-
   try {
     const user = await OtpService.verifyEmailOtp(id, otp, 'VERIFY')
 
@@ -89,31 +73,7 @@ const verifyUserEmail = async (req, res, next) => {
 }
 
 const resetUserPassword = async (req, res, next) => {
-  const { otp, email, password, confirm_password } = req.body
-
-  if (!otp || !email || !password || !confirm_password) {
-    throwHttpError(
-      400,
-      'Must provide fields "otp", "email", "password" and "confirm_password" to reset password.',
-      'OTP_MISSING_FIELDS'
-    )
-  }
-
-  if (password.length < 8) {
-    throwHttpError(
-      400,
-      'Password must be at least 8 characters.',
-      'PASSWORD_TOO_SHORT'
-    )
-  }
-
-  if (password !== confirm_password) {
-    throwHttpError(
-      400,
-      'Passwords must match each other.',
-      'PASSWORD_NOT_EQUAL'
-    )
-  }
+  const { otp, email, password } = req.body
 
   try {
     const user = await OtpService.verifyResetOtp(
