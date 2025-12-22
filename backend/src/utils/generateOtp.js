@@ -1,5 +1,5 @@
 /**
- * Gera uma string de 8 dígitos numéricos aleatórios para ser usada como OTP.
+ * Gera uma string de 6 dígitos numéricos aleatórios para ser usada como OTP.
  * @returns {string}
  */
 const generateOtp = () => {
