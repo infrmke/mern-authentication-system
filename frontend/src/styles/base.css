@@ -1,6 +1,9 @@
 /*	================================
     BASE
 ================================	*/
+*:focus {
+  outline: 2px solid hsl(212, 100%, 66%);
+}
 
 body {
   display: flex;
@@ -9,8 +12,8 @@ body {
   font-family: "Roboto", Arial, Helvetica, sans-serif;
   font-size: 1rem;
   line-height: 1.5;
-  background-color: white;
-  color: black;
+  background-color: hsl(0, 0%, 100%);
+  color: hsl(228, 8%, 12%);
 }
 
 button {
@@ -20,7 +23,13 @@ button {
 }
 
 .btn {
+  font-weight: 500;
   border-radius: 100vmax;
   padding: 0.5em 1.75em;
-  background-color: #65f3d6;
+  background-color: hsl(47, 100%, 59%);
+
+  &:focus,
+  &:hover {
+    background-color: hsl(44, 100%, 50%);
+  }
 }
