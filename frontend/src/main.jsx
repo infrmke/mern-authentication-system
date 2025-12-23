@@ -2,6 +2,9 @@ import { StrictMode } from 'react'
 import { createRoot } from 'react-dom/client'
 import { createBrowserRouter } from 'react-router-dom'
 import { RouterProvider } from 'react-router-dom'
+import { Toaster } from 'react-hot-toast'
+
+import { UserProvider } from './context/UserContext.jsx'
 
 import App from './App.jsx'
 import LogIn from './routes/LogIn.jsx'
@@ -32,6 +35,9 @@ const router = createBrowserRouter([
 
 createRoot(document.getElementById('root')).render(
   <StrictMode>
-    <RouterProvider router={router} />
+    <UserProvider>
+      <Toaster />
+      <RouterProvider router={router} />
+    </UserProvider>
   </StrictMode>
 )
