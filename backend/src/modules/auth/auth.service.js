@@ -20,7 +20,12 @@ const logUserIn = async (password, filter) => {
   const formattedUser = formatUserObject(user)
 
   const accessToken = generateToken(
-    { id: user._id, email: user.email },
+    {
+      id: user._id,
+      name: user.name,
+      email: user.email,
+      isAccountVerified: user.isAccountVerified,
+    },
     process.env.JWT_ACCESS_SECRET,
     '1d'
   )
