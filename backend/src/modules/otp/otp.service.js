@@ -4,6 +4,7 @@ import OtpRepository from './otp.repository.js'
 import throwHttpError from '../../utils/throwHttpError.js'
 import generateOtp from '../../utils/generateOtp.js'
 import formatUserObject from '../../utils/formatUserObject.js'
+import generateToken from '../../utils/generateToken.js'
 
 import { sendEmail } from '../../config/nodemailer.js'
 
@@ -105,9 +106,20 @@ const verifyEmailOtp = async (id, otp, otpType) => {
 
   if (!updatedUser) throwHttpError(500, 'Could not update user. Try again.')
 
+  const accessToken = generateToken(
+    {
+      id: updatedUser._id,
+      name: updatedUser.name,
+      email: updatedUser.email,
+      isAccountVerified: updatedUser.isAccountVerified,
+    },
+    process.env.JWT_ACCESS_SECRET,
+    '1d'
+  )
+
   await OtpRepository.deleteOtp(id, 'VERIFY')
 
-  return updatedUser
+  return { updatedUser, accessToken }
 }
 
 const verifyResetOtp = async (otp, otpType, filter, password) => {
