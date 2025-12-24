@@ -98,7 +98,7 @@ const verifyEmailOtp = async (id, otp, otpType) => {
     otp !== otpDocument.code ||
     otpType !== otpDocument.type
   )
-    throwHttpError(403, 'Invalid OTP or OTP has expired.', 'OTP_NOT_FOUND')
+    throwHttpError(403, 'Invalid OTP.', 'OTP_NOT_FOUND')
 
   const updatedUser = await UserService.updateUserById(user._id, {
     isAccountVerified: true,
@@ -138,7 +138,7 @@ const verifyResetOtp = async (otp, otpType, filter, password) => {
     otp !== otpDocument.code ||
     otpType !== otpDocument.type
   )
-    throwHttpError(403, 'Invalid OTP or OTP has expired.', 'OTP_NOT_FOUND')
+    throwHttpError(403, 'Invalid OTP.', 'OTP_NOT_FOUND')
 
   const updatedUser = await UserService.updateUserById(user._id, { password })
 
