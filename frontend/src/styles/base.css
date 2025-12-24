@@ -32,6 +32,16 @@ button {
   &:hover {
     background-color: hsl(44, 100%, 50%);
   }
+
+  &:disabled {
+    cursor: initial;
+    opacity: 0.5;
+
+    &:focus,
+    &:hover {
+      background-color: hsl(47, 100%, 59%);
+    }
+  }
 }
 
 ul {
