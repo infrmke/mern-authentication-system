@@ -6,31 +6,46 @@ import { Toaster } from 'react-hot-toast'
 
 import { UserProvider } from './context/UserContext.jsx'
 
+import Public from './routes/Public.jsx'
+import Protected from './routes/Protected.jsx'
+import Verification from './routes/Verification.jsx'
+
 import App from './App.jsx'
-import LogIn from './routes/LogIn.jsx'
-import SignUp from './routes/SignUp.jsx'
-import Home from './routes/Home.jsx'
-import ForgotPassword from './routes/ForgotPassword.jsx'
-import Error from './routes/Error.jsx'
+import LogIn from './pages/LogIn.jsx'
+import SignUp from './pages/SignUp.jsx'
+import Home from './pages/Home.jsx'
+import ForgotPassword from './pages/ForgotPassword.jsx'
+import VerifyEmail from './pages/VerifyEmail.jsx'
+import ResetPassword from './pages/ResetPassword.jsx'
+import Error from './pages/Error.jsx'
 
 import './styles/index.css'
 
 const router = createBrowserRouter([
   {
-    path: '/',
-    element: <LogIn />,
+    element: <Public />,
     errorElement: <Error />,
+    children: [
+      { path: '/', element: <LogIn /> },
+      { path: '/register', element: <SignUp /> },
+      { path: '/password', element: <ForgotPassword /> },
+      { path: '/password/reset', element: <ResetPassword /> },
+    ],
   },
   {
-    path: '/register',
-    element: <SignUp />,
+    element: <Protected />,
+    children: [
+      {
+        path: '/home',
+        element: <App />,
+        children: [{ index: true, element: <Home /> }],
+      },
+    ],
   },
   {
-    path: '/home',
-    element: <App />,
-    children: [{ index: true, element: <Home /> }],
+    element: <Verification />,
+    children: [{ path: '/email/verify', element: <VerifyEmail /> }],
   },
-  { path: '/password', element: <ForgotPassword /> },
 ])
 
 createRoot(document.getElementById('root')).render(
