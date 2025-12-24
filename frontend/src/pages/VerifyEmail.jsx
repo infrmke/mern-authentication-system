@@ -108,8 +108,8 @@ const VerifyEmail = () => {
     <div className="entry">
       <h1>Check your inbox</h1>
       <p>
-        Enter the 6-digit password reset code sent to your e-mail. The code
-        expires after 15 minutes.
+        Enter the 6-digit code sent to your e-mail. The code expires after 15
+        minutes.
       </p>
 
       <form className="form">
