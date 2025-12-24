@@ -45,6 +45,11 @@ const VerifyEmail = () => {
       await refreshUserData()
       navigate('/home')
     } catch (error) {
+      if (error.response.data['code'] === 'OTP_NOT_FOUND') {
+        setOtp(new Array(6).fill(''))
+        inputRefs.current[0]?.focus()
+      }
+
       toast.error(
         error?.response?.data['message'] || 'Something went wrong. Try again.'
       )
