@@ -1,0 +1,58 @@
+import { useId } from 'react'
+import { useNavigate } from 'react-router-dom'
+import toast from 'react-hot-toast'
+
+import '../styles/entry.css'
+import api from '../services/axios'
+
+const ForgotPassword = () => {
+  const emailId = useId()
+  const navigate = useNavigate()
+
+  const handleEmailSubmit = async (e) => {
+    e.preventDefault()
+
+    const formData = new FormData(e.target)
+    const { email } = Object.fromEntries(formData)
+
+    try {
+      const response = await api.post('/otp/reset', { email })
+      toast.success(response.data['message'])
+      navigate('/password/verify')
+    } catch (error) {
+      toast.error(
+        error?.response?.data['message'] || 'Something went wrong. Try again.'
+      )
+    }
+  }
+
+  return (
+    <div className="entry">
+      <h1>Forgot password?</h1>
+      <p>
+        Enter the e-mail associated with your account and you'll be sent a code
+        to redefine your password.
+      </p>
+
+      <form className="form" onSubmit={handleEmailSubmit}>
+        <div className="form__group">
+          <label htmlFor={emailId}>E-mail address</label>
+          <input
+            type="email"
+            name="email"
+            id={emailId}
+            placeholder="Your e-mail here..."
+            autoFocus
+            required
+          />
+        </div>
+
+        <button type="submit" className="btn">
+          Request code
+        </button>
+      </form>
+    </div>
+  )
+}
+
+export default ForgotPassword
