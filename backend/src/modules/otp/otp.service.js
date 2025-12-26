@@ -122,10 +122,15 @@ const verifyEmailOtp = async (id, otp, otpType) => {
   return { updatedUser, accessToken }
 }
 
-const verifyResetOtp = async (otp, otpType, filter, password) => {
-  const capsule = await UserService.findUser(filter, '+password')
+const verifyResetOtp = async (otp, otpType, filter) => {
+  const capsule = await UserService.findUser(filter)
 
-  if (!capsule) return null
+  if (!capsule)
+    throwHttpError(
+      400,
+      'Verification failed. User not found.',
+      'USER_NOT_FOUND'
+    )
 
   const { user } = capsule
 
@@ -140,13 +145,35 @@ const verifyResetOtp = async (otp, otpType, filter, password) => {
   )
     throwHttpError(403, 'Invalid OTP.', 'OTP_NOT_FOUND')
 
+  await OtpRepository.deleteOtp(user._id, 'RESET')
+
+  const passwordToken = generateToken(
+    user._id,
+    process.env.JWT_RESET_SECRET,
+    '15m'
+  )
+
+  return passwordToken
+}
+
+const resetPassword = async (filter, password) => {
+  const capsule = await UserService.findUser(filter, '+password')
+
+  if (!capsule) return null
+
+  const { user } = capsule
+
   const updatedUser = await UserService.updateUserById(user._id, { password })
 
   if (!updatedUser) throwHttpError(500, 'Could not update user. Try again.')
 
-  await OtpRepository.deleteOtp(user._id, 'RESET')
-
   return updatedUser
 }
 
-export default { sendUserEmail, sendUserReset, verifyEmailOtp, verifyResetOtp }
+export default {
+  sendUserEmail,
+  sendUserReset,
+  verifyEmailOtp,
+  verifyResetOtp,
+  resetPassword,
+}

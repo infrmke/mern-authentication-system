@@ -28,7 +28,7 @@ const sendEmailVerification = async (req, res, next) => {
   }
 }
 
-const sendPasswordReset = async (req, res, next) => {
+const requestPasswordReset = async (req, res, next) => {
   const { email } = req.body
 
   try {
@@ -81,26 +81,49 @@ const verifyUserEmail = async (req, res, next) => {
   }
 }
 
-const resetUserPassword = async (req, res, next) => {
-  const { otp, email, password } = req.body
+const verifyPasswordOtp = async (req, res, next) => {
+  const { email, otp } = req.body
 
   try {
-    const user = await OtpService.verifyResetOtp(
-      otp,
-      'RESET',
-      { email },
-      password
-    )
+    const passwordToken = await OtpService.verifyResetOtp(otp, 'RESET', {
+      email,
+    })
 
-    if (!user) {
+    res.cookie('passwordToken', passwordToken, {
+      httpOnly: true,
+      secure: process.env.NODE_ENV === 'production', // usar TRUE em HTTPS
+      sameSite: 'Lax',
+      maxAge: 15 * 60 * 1000, // 15 minutos
+    })
+
+    res
+      .status(200)
+      .json({ message: 'OTP has been verified. Proceed to password reset.' })
+  } catch (error) {
+    next(error)
+  }
+}
+
+const resetUserPassword = async (req, res, next) => {
+  const { email, new_password } = req.body
+
+  try {
+    const user = await OtpService.resetPassword(email, new_password)
+
+    if (!user)
       throwHttpError(
         400,
-        'Verification failed. Invalid OTP or user not found.',
+        'Verification failed. Invalid session or user not found.',
         'USER_NOT_FOUND'
       )
-    }
 
-    res.status(200).json({ message: 'Password has been reset.' })
+    res.clearCookie('passwordToken', {
+      httpOnly: true,
+      secure: process.env.NODE_ENV === 'production', // usar TRUE em HTTPS
+      sameSite: 'Lax',
+    })
+
+    res.status(200).json(user)
   } catch (error) {
     next(error)
   }
@@ -108,7 +131,8 @@ const resetUserPassword = async (req, res, next) => {
 
 export default {
   sendEmailVerification,
-  sendPasswordReset,
+  requestPasswordReset,
   verifyUserEmail,
+  verifyPasswordOtp,
   resetUserPassword,
 }
