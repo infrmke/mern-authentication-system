@@ -4,16 +4,24 @@ import OtpController from './otp.controller.js'
 import {
   otpValidator,
   emailValidator,
-  passwordResetValidator,
+  resetValidator,
 } from './otp.validator.js'
 
 import validateIdFormat from '../../middlewares/validateIdFormat.js'
 import validateIdExists from '../../middlewares/validateIdExists.js'
+import verifyPasswordToken from '../../middlewares/verifyPasswordToken.js'
 
 const router = Router()
 
 const validateId = [validateIdFormat, validateIdExists]
 const validateIdAndOtp = [...validateId, otpValidator]
+const validatePasswordReset = [
+  verifyPasswordToken,
+  emailValidator,
+  resetValidator,
+]
+
+const emailAndOtpValidator = [emailValidator, otpValidator]
 
 router.post('/email/:id', validateId, OtpController.sendEmailVerification)
 router.post(
@@ -22,10 +30,19 @@ router.post(
   OtpController.verifyUserEmail
 )
 
-router.post('/reset', emailValidator, OtpController.sendPasswordReset)
 router.post(
-  '/reset/verify/',
-  passwordResetValidator,
+  '/forgot-password',
+  emailValidator,
+  OtpController.requestPasswordReset
+)
+router.post(
+  '/forgot-password/verify/',
+  emailAndOtpValidator,
+  OtpController.verifyPasswordOtp
+)
+router.patch(
+  '/forgot-password/reset',
+  validatePasswordReset,
   OtpController.resetUserPassword
 )
 
