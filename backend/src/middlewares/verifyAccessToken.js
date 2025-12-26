@@ -1,4 +1,5 @@
 import jwt from 'jsonwebtoken'
+import throwHttpError from '../utils/throwHttpError.js'
 
 const isEnvDev =
   process.env.NODE_ENV === 'dev' || process.env.NODE_ENV === 'development'
@@ -10,9 +11,7 @@ const verifyAccessToken = (req, res, next) => {
   const { accessToken } = req.cookies
 
   if (!accessToken) {
-    return res.status(401).json({
-      message: isEnvDev ? 'Access denied. Missing token.' : 'Access denied.',
-    })
+    throwHttpError(401, isEnvDev ? 'Access denied. Missing token.' : 'Access denied.', 'MISSING_TOKEN')
   }
 
   try {
@@ -20,10 +19,16 @@ const verifyAccessToken = (req, res, next) => {
     req.user = { ...req.user, ...payload }
     next()
   } catch (error) {
+    // personalizando outros erros para serem estritamente 401 (Unauthorized)
+    error.status = 401
+    error.code = 'INVALID_TOKEN'
+
     if (error.name === 'TokenExpiredError') {
-      return res.status(403).json({
-        message: isEnvDev ? 'Access denied. Expired token.' : 'Access denied.',
-      })
+      error.status = 403
+      error.code = 'EXPIRED_TOKEN'
+      error.message = isEnvDev ? 'Access denied. Expired token.' : 'Session expired.'
+    } else {
+      error.message = isEnvDev ? 'Access denied. Invalid token.' : 'Access denied.'
     }
 
     next(error)
