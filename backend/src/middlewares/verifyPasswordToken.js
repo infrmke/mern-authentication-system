@@ -34,6 +34,8 @@ const verifyPasswordToken = (req, res, next) => {
     } else {
       error.message = isEnvDev ? 'Invalid password token.' : 'Unauthorized action.'
     }
+
+    next(error)
   }
 }
 
