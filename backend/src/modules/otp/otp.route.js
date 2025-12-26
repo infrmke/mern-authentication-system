@@ -23,6 +23,8 @@ const validatePasswordReset = [
 
 const emailAndOtpValidator = [emailValidator, otpValidator]
 
+router.get('/status', verifyPasswordToken, OtpController.status)
+
 router.post('/email/:id', validateId, OtpController.sendEmailVerification)
 router.post(
   '/email/verify/:id',

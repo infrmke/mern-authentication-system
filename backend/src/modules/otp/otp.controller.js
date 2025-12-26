@@ -1,6 +1,10 @@
 import OtpService from './otp.service.js'
 import throwHttpError from '../../utils/throwHttpError.js'
 
+const status = async (req, res, next) => {
+  return res.status(200).json({ active: true, message: 'The password reset session is still active.'})
+}
+
 const sendEmailVerification = async (req, res, next) => {
   const { id } = req.user
 
@@ -130,6 +134,7 @@ const resetUserPassword = async (req, res, next) => {
 }
 
 export default {
+  status,
   sendEmailVerification,
   requestPasswordReset,
   verifyUserEmail,
