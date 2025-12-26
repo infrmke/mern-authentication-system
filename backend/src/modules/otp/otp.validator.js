@@ -29,17 +29,8 @@ const otpValidator = [
   validate,
 ]
 
-const passwordResetValidator = [
-  body('otp').notEmpty().withMessage('OTP cannot be empty.'),
-
-  body('email')
-    .trim()
-    .normalizeEmail()
-    .notEmpty()
-    .withMessage('Email cannot be empty.')
-    .isEmail(),
-
-  body('password')
+const resetValidator = [
+  body('new_password')
     .notEmpty()
     .withMessage('Password cannot be empty.')
     .isLength({ min: 8 })
@@ -49,7 +40,7 @@ const passwordResetValidator = [
     .notEmpty()
     .withMessage('Confirm your password.')
     .custom((value, { req }) => {
-      if (value !== req.body.password) {
+      if (value !== req.body.new_password) {
         throw new Error('Passwords do not match each other.')
       }
       return true
@@ -58,4 +49,4 @@ const passwordResetValidator = [
   validate,
 ]
 
-export { emailValidator, otpValidator, passwordResetValidator }
+export { emailValidator, otpValidator, resetValidator }
