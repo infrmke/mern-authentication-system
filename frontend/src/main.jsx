@@ -9,13 +9,15 @@ import { UserProvider } from './context/UserContext.jsx'
 import Public from './routes/Public.jsx'
 import Protected from './routes/Protected.jsx'
 import Verification from './routes/Verification.jsx'
+import Password from './routes/Password.jsx'
 
 import App from './App.jsx'
 import LogIn from './pages/LogIn.jsx'
 import SignUp from './pages/SignUp.jsx'
 import Home from './pages/Home.jsx'
-import ForgotPassword from './pages/ForgotPassword.jsx'
 import VerifyEmail from './pages/VerifyEmail.jsx'
+import ForgotPassword from './pages/ForgotPassword.jsx'
+import VerifyPassword from './pages/VerifyPassword.jsx'
 import ResetPassword from './pages/ResetPassword.jsx'
 import Error from './pages/Error.jsx'
 
@@ -28,8 +30,8 @@ const router = createBrowserRouter([
     children: [
       { path: '/', element: <LogIn /> },
       { path: '/register', element: <SignUp /> },
-      { path: '/password', element: <ForgotPassword /> },
-      { path: '/password/reset', element: <ResetPassword /> },
+      { path: '/forgot-password', element: <ForgotPassword /> },
+      { path: '/forgot-password/verify', element: <VerifyPassword /> },
     ],
   },
   {
@@ -45,6 +47,10 @@ const router = createBrowserRouter([
   {
     element: <Verification />,
     children: [{ path: '/email/verify', element: <VerifyEmail /> }],
+  },
+  {
+    element: <Password/>,
+    children: [{ path: '/forgot-password/reset', element: <ResetPassword /> }],
   },
 ])
 
