@@ -112,7 +112,7 @@ const resetUserPassword = async (req, res, next) => {
   const { email, new_password } = req.body
 
   try {
-    const user = await OtpService.resetPassword(email, new_password)
+    const user = await OtpService.resetPassword({ email }, new_password)
 
     if (!user)
       throwHttpError(
