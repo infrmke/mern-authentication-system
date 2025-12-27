@@ -61,7 +61,7 @@ const LogIn = () => {
 
         <div className="form__group">
           <p>
-            <Link to="/password">Forgot your password?</Link>
+            <Link to="/forgot-password">Forgot your password?</Link>
           </p>
         </div>
 
