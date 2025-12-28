@@ -17,10 +17,10 @@ const ForgotPassword = () => {
 
     try {
       const response = await api.post('/otp/forgot-password', { email })
-      toast.success(response.data['message'])
-      
+      toast.success(response.data['message'], { duration: 6000 })
+
       //  leva o usuário para a próxima página e passa o objeto "email" à frente
-      navigate('/forgot-password/verify', {state: { email }})
+      navigate('/forgot-password/verify', { state: { email } })
     } catch (error) {
       toast.error(
         error?.response?.data['message'] || 'Something went wrong. Try again.'
