@@ -1,6 +1,7 @@
 /*	================================
-    SECTION: USER
+    HOME
 ================================	*/
+
 .user {
   display: flex;
   flex-flow: column nowrap;

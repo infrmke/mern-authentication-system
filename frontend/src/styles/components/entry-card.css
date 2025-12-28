@@ -1,0 +1,56 @@
+/*	================================
+    ENTRY-CARD
+================================	*/
+
+.entry {
+  width: 334px;
+  display: flex;
+  flex-flow: column nowrap;
+  gap: 1rem;
+  border-radius: 10px;
+  padding: 3em 2em;
+  background-color: white;
+  box-shadow: var(--shadow-main);
+
+  h1,
+  p {
+    text-align: center;
+  }
+
+  h1 {
+    font-size: 1.75rem;
+    margin-bottom: 1rem;
+
+    & + p {
+      margin-top: -1.5rem;
+      color: var(--clr-text-muted);
+    }
+  }
+
+  a {
+    color: var(--clr-accent);
+    text-decoration: none;
+
+    &:focus,
+    &:hover {
+      color: var(--clr-accent-hover);
+    }
+  }
+}
+
+@media screen and (min-width: 48em) {
+  .entry {
+    width: 392px;
+
+    h1 {
+      font-size: 2rem;
+    }
+  }
+}
+
+.resend {
+  font-size: 0.9rem;
+  text-align: center;
+  color: var(--clr-text-muted);
+  margin-top: 20px;
+}
