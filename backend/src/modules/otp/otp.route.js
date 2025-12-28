@@ -10,6 +10,7 @@ import {
 
 import validateIdFormat from '../../middlewares/validateIdFormat.js'
 import validateIdExists from '../../middlewares/validateIdExists.js'
+import verifyAccessToken from '../../middlewares/verifyAccessToken.js'
 import verifyPasswordToken from '../../middlewares/verifyPasswordToken.js'
 
 const router = Router()
