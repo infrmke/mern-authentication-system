@@ -10,7 +10,11 @@ const validateIdFormat = async (req, res, next) => {
   const isIdValid = mongoose.Types.ObjectId.isValid(id)
 
   if (!isIdValid) {
-    throwHttpError(400, 'The provided ID format is invalid.', 'INVALID_ID_FORMAT')
+    throwHttpError(
+      400,
+      'The provided ID format is invalid.',
+      'INVALID_ID_FORMAT'
+    )
   }
 
   next()

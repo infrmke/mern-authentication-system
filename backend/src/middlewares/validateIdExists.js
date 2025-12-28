@@ -11,10 +11,14 @@ const validateIdExists = async (req, res, next) => {
     const isIdOnDb = await User.findById(id)
 
     if (!isIdOnDb) {
-      throwHttpError(404, 'The requested ID does not exist in our records.', 'USER_NOT_FOUND')
+      throwHttpError(
+        404,
+        'The requested ID does not exist in our records.',
+        'USER_NOT_FOUND'
+      )
     }
 
-    req.user = { id: isIdOnDb._id }
+    req.user = { ...req.user, id: isIdOnDb._id }
     next()
   } catch (error) {
     next(error)
