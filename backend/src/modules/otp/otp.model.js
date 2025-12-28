@@ -6,9 +6,12 @@ const otpSchema = new Schema(
       type: Schema.Types.ObjectId,
       ref: 'User',
       required: true,
+    },
+    code: {
+      type: String,
+      required: true,
       match: [/^\d{6}$/, 'OTP code must be exactly 6 digits.'],
     },
-    code: { type: String, required: true },
     type: {
       type: String,
       enum: {
