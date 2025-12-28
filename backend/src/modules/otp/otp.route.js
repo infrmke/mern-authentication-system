@@ -4,6 +4,7 @@ import OtpController from './otp.controller.js'
 import {
   otpValidator,
   emailValidator,
+  resendOtpValidator,
   resetValidator,
 } from './otp.validator.js'
 
@@ -30,6 +31,17 @@ router.post(
   '/email/verify/:id',
   validateIdAndOtp,
   OtpController.verifyUserEmail
+)
+
+// re-envio de OTP: se for VERIFY, precisa de token e se for RESET, o validator verifica o e-mail
+router.post(
+  '/resend',
+  (req, res, next) => {
+    if (req.body.type === 'VERIFY') return verifyAccessToken(req, res, next)
+    next()
+  },
+  resendOtpValidator,
+  OtpController.resendOtp
 )
 
 router.post(

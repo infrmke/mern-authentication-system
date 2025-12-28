@@ -29,6 +29,18 @@ const otpValidator = [
   validate,
 ]
 
+const resendOtpValidator = [
+  body('type').isIn(['VERIFY', 'RESET']).withMessage('Invalid OTP type.'),
+
+  body('email')
+    // a corrente de validação abaixo só vai acontecer se o type de otp for 'RESET'
+    .if(body('type').equals('RESET'))
+    .trim()
+    .isEmail(),
+
+  validate,
+]
+
 const resetValidator = [
   body('new_password')
     .notEmpty()
@@ -49,4 +61,4 @@ const resetValidator = [
   validate,
 ]
 
-export { emailValidator, otpValidator, resetValidator }
+export { emailValidator, otpValidator, resendOtpValidator, resetValidator }

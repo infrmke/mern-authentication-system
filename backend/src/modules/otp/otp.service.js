@@ -75,6 +75,23 @@ const sendUserReset = async (filter) => {
   return formattedUser
 }
 
+const resendOtp = async (type, filter) => {
+  const capsule = await UserService.findUser(filter)
+
+  if (!capsule) return null
+
+  const { user } = capsule
+
+  // deleta o OTP previamente gerado
+  await OtpRepository.deleteOtp(user._id, type)
+
+  if (type === 'VERIFY') {
+    return await sendUserEmail(user._id)
+  } else if (type === 'RESET') {
+    return await sendUserReset({ email: user.email })
+  }
+}
+
 const verifyEmailOtp = async (id, otp, otpType) => {
   const capsule = await UserService.findUserById(id)
 
@@ -173,6 +190,7 @@ const resetPassword = async (filter, password) => {
 export default {
   sendUserEmail,
   sendUserReset,
+  resendOtp,
   verifyEmailOtp,
   verifyResetOtp,
   resetPassword,

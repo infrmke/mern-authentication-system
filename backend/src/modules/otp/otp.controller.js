@@ -2,7 +2,10 @@ import OtpService from './otp.service.js'
 import throwHttpError from '../../utils/throwHttpError.js'
 
 const status = async (req, res, next) => {
-  return res.status(200).json({ active: true, message: 'The password reset session is still active.'})
+  return res.status(200).json({
+    active: true,
+    message: 'The password reset session is still active.',
+  })
 }
 
 const sendEmailVerification = async (req, res, next) => {
@@ -51,6 +54,37 @@ const requestPasswordReset = async (req, res, next) => {
       error.code = 'OTP_ALREADY_SENT'
     }
 
+    next(error)
+  }
+}
+
+const resendOtp = async (req, res, next) => {
+  const { email, type } = req.body
+
+  // disponível se o usuário estiver logado ('VERIFY')
+  const userIdFromToken = req.user?.id
+
+  try {
+    let filter
+
+    if (type === 'VERIFY' && userIdFromToken) {
+      filter = { _id: userIdFromToken }
+    } else if (type === 'RESET' && email) {
+      filter = { email }
+    } else {
+      throwHttpError(400, 'Invalid request body.', 'BAD_REQUEST')
+    }
+
+    const result = await OtpService.resendOtp(type, filter)
+
+    if (!result) {
+      throwHttpError(404, 'User does not exist.', 'USER_NOT_FOUND')
+    }
+
+    return res
+      .status(200)
+      .json({ message: 'A new OTP has been sent to your email.' })
+  } catch (error) {
     next(error)
   }
 }
@@ -137,6 +171,7 @@ export default {
   status,
   sendEmailVerification,
   requestPasswordReset,
+  resendOtp,
   verifyUserEmail,
   verifyPasswordOtp,
   resetUserPassword,
