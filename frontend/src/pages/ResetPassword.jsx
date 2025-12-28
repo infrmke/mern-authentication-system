@@ -1,6 +1,7 @@
 import { useId } from 'react'
 import { useLocation, useNavigate } from 'react-router-dom'
 import toast from 'react-hot-toast'
+import { LockOpen, Lock } from 'lucide-react'
 
 import api from '../services/axios'
 
@@ -42,28 +43,40 @@ const ResetPassword = () => {
       <form className="form" onSubmit={handleFormSubmit}>
         <div className="form__group">
           <label htmlFor={passwordId}>New password</label>
-          <input
-            type="password"
-            name="new_password"
-            id={passwordId}
-            placeholder="Password"
-            autoFocus
-            required
-          />
+
+          <div className="form__group form__group--addon">
+            <span className="form__icon">
+              <LockOpen color="hsl(220, 10%, 46%)" />
+            </span>
+            <input
+              type="password"
+              name="new_password"
+              id={passwordId}
+              placeholder="Password"
+              autoFocus
+              required
+            />
+          </div>
         </div>
 
         <div className="form__group">
           <label htmlFor={confirmPwdId}>Confirm new password</label>
-          <input
-            type="password"
-            name="confirm_password"
-            id={confirmPwdId}
-            placeholder="Repeat your password here..."
-            required
-          />
+
+          <div className="form__group form__group--addon">
+            <span className="form__icon">
+              <Lock color="hsl(220, 10%, 46%)" />
+            </span>
+            <input
+              type="password"
+              name="confirm_password"
+              id={confirmPwdId}
+              placeholder="Repeat your password here..."
+              required
+            />
+          </div>
         </div>
 
-        <button type="submit" className="btn">
+        <button type="submit" className="btn btn--warning">
           Reset password
         </button>
       </form>

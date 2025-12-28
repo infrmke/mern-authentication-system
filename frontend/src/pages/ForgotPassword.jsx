@@ -1,6 +1,7 @@
 import { useId } from 'react'
 import { useNavigate } from 'react-router-dom'
 import toast from 'react-hot-toast'
+import { AtSign } from 'lucide-react'
 
 import api from '../services/axios'
 
@@ -38,14 +39,20 @@ const ForgotPassword = () => {
       <form className="form" onSubmit={handleEmailSubmit}>
         <div className="form__group">
           <label htmlFor={emailId}>E-mail address</label>
-          <input
-            type="email"
-            name="email"
-            id={emailId}
-            placeholder="Your e-mail here..."
-            autoFocus
-            required
-          />
+
+          <div className="form__group form__group--addon">
+            <span className="form__icon">
+              <AtSign color="hsl(220, 10%, 46%)" />
+            </span>
+            <input
+              type="email"
+              name="email"
+              id={emailId}
+              placeholder="Your e-mail here..."
+              autoFocus
+              required
+            />
+          </div>
         </div>
 
         <button type="submit" className="btn btn--warning">

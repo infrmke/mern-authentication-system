@@ -2,6 +2,9 @@ import { useContext, useId } from 'react'
 import { useNavigate, Link } from 'react-router-dom'
 import toast from 'react-hot-toast'
 
+import { User } from 'lucide-react'
+import { Lock } from 'lucide-react'
+
 import api from '../services/axios'
 import { UserContext } from '../context/UserContext'
 
@@ -36,25 +39,37 @@ const LogIn = () => {
       <form className="form" onSubmit={handleFormSubmit}>
         <div className="form__group">
           <label htmlFor={emailId}>E-mail address</label>
-          <input
-            type="email"
-            name="email"
-            id={emailId}
-            placeholder="E-mail"
-            autoFocus
-            required
-          />
+
+          <div className="form__group form__group--addon">
+            <span className="form__icon">
+              <User color="hsl(220, 10%, 46%)" />
+            </span>
+            <input
+              type="email"
+              name="email"
+              id={emailId}
+              placeholder="E-mail"
+              autoFocus
+              required
+            />
+          </div>
         </div>
 
         <div className="form__group">
           <label htmlFor={passwordId}>Password</label>
-          <input
-            type="password"
-            name="password"
-            id={passwordId}
-            placeholder="Password"
-            required
-          />
+
+          <div className="form__group form__group--addon">
+            <span className="form__icon">
+              <Lock color="hsl(220, 10%, 46%)" />
+            </span>
+            <input
+              type="password"
+              name="password"
+              id={passwordId}
+              placeholder="Password"
+              required
+            />
+          </div>
         </div>
 
         <div className="form__group">

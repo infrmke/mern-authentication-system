@@ -2,6 +2,8 @@ import { useContext, useId } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import toast from 'react-hot-toast'
 
+import { User, AtSign, LockOpen, Lock } from 'lucide-react'
+
 import { UserContext } from '../context/UserContext'
 import api from '../services/axios'
 
@@ -45,50 +47,74 @@ const SignUp = () => {
       <form className="form" onSubmit={handleFormSubmit}>
         <div className="form__group">
           <label htmlFor={nameId}>Name</label>
-          <input
-            type="text"
-            name="name"
-            id={nameId}
-            placeholder="First or full name..."
-            minLength={2}
-            maxLength={56}
-            autoFocus
-            required
-          />
+
+          <div className="form__group form__group--addon">
+            <span className="form__icon">
+              <User color="hsl(220, 10%, 46%)" />
+            </span>
+            <input
+              type="text"
+              name="name"
+              id={nameId}
+              placeholder="First or full name..."
+              minLength={2}
+              maxLength={56}
+              autoFocus
+              required
+            />
+          </div>
         </div>
 
         <div className="form__group">
           <label htmlFor={emailId}>E-mail address</label>
-          <input
-            type="email"
-            name="email"
-            id={emailId}
-            placeholder="E-mail"
-            required
-          />
+
+          <div className="form__group form__group--addon">
+            <span className="form__icon">
+              <AtSign color="hsl(220, 10%, 46%)" />
+            </span>
+            <input
+              type="email"
+              name="email"
+              id={emailId}
+              placeholder="E-mail"
+              required
+            />
+          </div>
         </div>
 
         <div className="form__group">
           <label htmlFor={passwordId}>Password</label>
-          <input
-            type="password"
-            name="password"
-            id={passwordId}
-            placeholder="Password"
-            minLength={8}
-            required
-          />
+
+          <div className="form__group form__group--addon">
+            <span className="form__icon">
+              <LockOpen color="hsl(220, 10%, 46%)" />
+            </span>
+            <input
+              type="password"
+              name="password"
+              id={passwordId}
+              placeholder="Password"
+              minLength={8}
+              required
+            />
+          </div>
         </div>
 
         <div className="form__group">
           <label htmlFor={confirmPwdId}>Confirm password</label>
-          <input
-            type="password"
-            name="confirm_password"
-            id={confirmPwdId}
-            placeholder="Repeat your password here..."
-            required
-          />
+
+          <div className="form__group form__group--addon">
+            <span className="form__icon">
+              <Lock color="hsl(220, 10%, 46%)" />
+            </span>
+            <input
+              type="password"
+              name="confirm_password"
+              id={confirmPwdId}
+              placeholder="Repeat your password here..."
+              required
+            />
+          </div>
         </div>
 
         <button type="submit" className="btn btn--warning">
