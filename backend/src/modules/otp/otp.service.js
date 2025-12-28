@@ -108,7 +108,7 @@ const verifyEmailOtp = async (id, otp, otpType) => {
 
   const accessToken = generateToken(
     {
-      id: updatedUser._id,
+      id: updatedUser.id,
       name: updatedUser.name,
       email: updatedUser.email,
       isAccountVerified: updatedUser.isAccountVerified,
@@ -148,7 +148,7 @@ const verifyResetOtp = async (otp, otpType, filter) => {
   await OtpRepository.deleteOtp(user._id, 'RESET')
 
   const passwordToken = generateToken(
-    {id: user._id},
+    { id: user._id },
     process.env.JWT_RESET_SECRET,
     '15m'
   )
