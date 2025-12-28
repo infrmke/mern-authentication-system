@@ -23,6 +23,15 @@ const VerifyPassword = () => {
     }
   }, [email, navigate])
 
+  const handleFormSubmit = (e) => {
+    e.preventDefault()
+
+    //  se nenhum dígito estiver vazio, chama o handleOtpSubmit()
+    if (otp.every((digit) => digit !== '')) {
+      handleOtpSubmit(otp.join(''))
+    }
+  }
+
   const handleOtpSubmit = async (passwordOtp) => {
     setIsSubmitting(true)
 
@@ -103,7 +112,7 @@ const VerifyPassword = () => {
         expires after 15 minutes.
       </p>
 
-      <form className="form">
+      <form className="form" onSubmit={handleFormSubmit}>
         <div className="form__group form__group--otp">
           {otp.map((number, index) => (
             <input
