@@ -1,6 +1,7 @@
 import { Link, useNavigate } from 'react-router-dom'
 import { useContext } from 'react'
 import toast from 'react-hot-toast'
+import { ChevronDown } from 'lucide-react'
 
 import { UserContext } from '../context/UserContext'
 import api from '../services/axios'
@@ -31,6 +32,10 @@ const Navbar = () => {
         <li className="menu__user">
           <p className="user__avatar">{userData?.name[0].toUpperCase()}</p>
           <p>{userData?.name.split(' ')[0]}</p>
+
+          <span className="menu__icon">
+            <ChevronDown color="hsl(220, 10%, 46%)" />
+          </span>
         </li>
 
         <li className="menu__item" onClick={handleClickLogOut}>
