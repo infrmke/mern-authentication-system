@@ -15,32 +15,28 @@ const VerifyPassword = () => {
   const navigate = useNavigate()
 
   //  recuperando o objeto "email" da página ForgotPassword
-  const email = location.state?.email;
+  const email = location.state?.email
 
   useEffect(() => {
     if (!email) {
-      navigate('/forgot-password');
+      navigate('/forgot-password')
     }
-  }, [email, navigate]);
-
-  const handleFormSubmit = (e) => {
-    e.preventDefault();
-
-    //  se nenhum dígito estiver vazio, chama o handleOtpSubmit()
-    if (otp.every((digit) => digit !== '')) {
-      handleOtpSubmit(otp.join(''));
-    }
-  };
+  }, [email, navigate])
 
   const handleOtpSubmit = async (passwordOtp) => {
     setIsSubmitting(true)
 
     try {
-      await api.post(`/otp/forgot-password/verify/`, { email, otp: passwordOtp })
+      await api.post(`/otp/forgot-password/verify/`, {
+        email,
+        otp: passwordOtp,
+      })
 
       //  leva o usuário para a próxima página e passa o objeto "email" à frente
-      navigate('/forgot-password/reset', {state: {email}})
+      navigate('/forgot-password/reset', { state: { email } })
     } catch (error) {
+      setIsSubmitting(false)
+
       if (error.response.data['code'] === 'OTP_NOT_FOUND') {
         setOtp(new Array(6).fill(''))
         inputRefs.current[0]?.focus()
@@ -49,7 +45,6 @@ const VerifyPassword = () => {
       toast.error(
         error?.response?.data['message'] || 'Something went wrong. Try again.'
       )
-      setIsSubmitting(false)
     }
   }
 
@@ -108,7 +103,7 @@ const VerifyPassword = () => {
         expires after 15 minutes.
       </p>
 
-      <form className="form" onSubmit={handleFormSubmit}>
+      <form className="form">
         <div className="form__group form__group--otp">
           {otp.map((number, index) => (
             <input
