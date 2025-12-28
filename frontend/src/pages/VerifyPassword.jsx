@@ -9,6 +9,10 @@ import '../styles/entry.css'
 const VerifyPassword = () => {
   const [otp, setOtp] = useState(new Array(6).fill(''))
   const [isSubmitting, setIsSubmitting] = useState(false)
+
+  const [timer, setTimer] = useState(0)
+  const [isResending, setIsResending] = useState(false)
+
   const inputRefs = useRef([])
 
   const location = useLocation()
@@ -22,6 +26,21 @@ const VerifyPassword = () => {
       navigate('/forgot-password')
     }
   }, [email, navigate])
+
+  // contagem regressiva para reabilitar o re-envio do OTP
+  useEffect(() => {
+    let interval = null
+
+    if (timer > 0) {
+      interval = setInterval(() => {
+        setTimer((prev) => prev - 1)
+      }, 1000)
+    } else {
+      clearInterval(interval)
+    }
+
+    return () => clearInterval(interval)
+  }, [timer])
 
   const handleFormSubmit = (e) => {
     e.preventDefault()
@@ -54,6 +73,23 @@ const VerifyPassword = () => {
       toast.error(
         error?.response?.data['message'] || 'Something went wrong. Try again.'
       )
+    }
+  }
+
+  const handleResendOtp = async () => {
+    setIsResending(true)
+
+    try {
+      const response = await api.post('/otp/resend', { email, type: 'RESET' })
+      toast.success(response.data['message'])
+      setTimer(60)
+    } catch (error) {
+      toast.error(
+        error.response?.data['message'] ||
+          "Something didn't work. Try again later."
+      )
+    } finally {
+      setIsResending(false)
     }
   }
 
@@ -105,40 +141,59 @@ const VerifyPassword = () => {
   }
 
   return (
-    <div className="entry">
-      <h1>Check your inbox</h1>
-      <p>
-        Enter the 6-digit password reset code sent to your e-mail. The code
-        expires after 15 minutes.
-      </p>
+    <>
+      <div className="entry">
+        <h1>Check your inbox</h1>
+        <p>
+          Enter the 6-digit password reset code sent to your e-mail. The code
+          expires after 15 minutes.
+        </p>
 
-      <form className="form" onSubmit={handleFormSubmit}>
-        <div className="form__group form__group--otp">
-          {otp.map((number, index) => (
-            <input
-              key={index}
-              type="text"
-              maxLength={1}
-              value={number}
-              aria-label={`${index}° digit`}
-              ref={(element) => (inputRefs.current[index] = element)} // vai atribuindo os valores à ref
-              onChange={(e) => handleChange(e.target, index)}
-              onKeyDown={(e) => handleKeyDown(e, index)}
-              onPaste={index === 0 ? handlePaste : undefined} // apenas recebe ctrl+v no primeiro input
-              disabled={isSubmitting}
-            />
-          ))}
-        </div>
+        <form className="form" onSubmit={handleFormSubmit}>
+          <div className="form__group form__group--otp">
+            {otp.map((number, index) => (
+              <input
+                key={index}
+                type="text"
+                maxLength={1}
+                value={number}
+                aria-label={`${index}° digit`}
+                ref={(element) => (inputRefs.current[index] = element)} // vai atribuindo os valores à ref
+                onChange={(e) => handleChange(e.target, index)}
+                onKeyDown={(e) => handleKeyDown(e, index)}
+                onPaste={index === 0 ? handlePaste : undefined} // apenas recebe ctrl+v no primeiro input
+                disabled={isSubmitting}
+              />
+            ))}
+          </div>
+
+          <button
+            type="submit"
+            className="btn"
+            disabled={otp.some((digit) => digit === '') || isSubmitting}
+          >
+            {isSubmitting ? 'Verifying...' : 'Confirm'}
+          </button>
+        </form>
+      </div>
+
+      <div className="resend">
+        <p>Didn't receive the code?</p>
 
         <button
-          type="submit"
-          className="btn"
-          disabled={otp.some((digit) => digit === '') || isSubmitting}
+          type="button"
+          className="btn btn--link"
+          onClick={handleResendOtp}
+          disabled={timer > 0 || isResending}
         >
-          {isSubmitting ? 'Verifying...' : 'Confirm'}
+          {timer > 0
+            ? `Resend in ${timer}s`
+            : isResending
+            ? 'Sending...'
+            : 'Resend code'}
         </button>
-      </form>
-    </div>
+      </div>
+    </>
   )
 }
 
