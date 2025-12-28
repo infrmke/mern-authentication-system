@@ -19,10 +19,17 @@ const UserProvider = ({ children }) => {
           setUserData(response.data)
         }
       } catch (error) {
-        if (error.response?.data['status'] !== 401 && error.response?.data['status'] !== 403) {
-        toast.error("There was a server connection error. Please try again later.", {duration: 6000});
-      }
         setUserData(null)
+
+        if (
+          error.response?.data['status'] !== 401 &&
+          error.response?.data['status'] !== 403
+        ) {
+          toast.error(
+            'There was a server connection error. Please try again later.',
+            { duration: 6000 }
+          )
+        }
       } finally {
         setLoading(false)
       }
