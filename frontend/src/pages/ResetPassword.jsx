@@ -18,17 +18,22 @@ const ResetPassword = () => {
     e.preventDefault()
 
     const formData = new FormData(e.target)
-    const {new_password, confirm_password} = Object.fromEntries(formData)
+    const { new_password, confirm_password } = Object.fromEntries(formData)
 
     try {
-      await api.patch('/otp/forgot-password/reset', {email, new_password, confirm_password})
+      await api.patch('/otp/forgot-password/reset', {
+        email,
+        new_password,
+        confirm_password,
+      })
+      toast.success('Your password has been changed!', { duration: 6000 })
       navigate('/')
     } catch (error) {
       toast.error(
         error?.response?.data['message'] || 'Something went wrong. Try again.'
       )
     }
-    }
+  }
 
   return (
     <div className="entry">
