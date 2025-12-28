@@ -5,8 +5,6 @@ import toast from 'react-hot-toast'
 import { UserContext } from '../context/UserContext'
 import api from '../services/axios'
 
-import '../styles/entry.css'
-
 const VerifyEmail = () => {
   const { userData, loading, refreshUserData } = useContext(UserContext)
 
@@ -185,7 +183,7 @@ const VerifyEmail = () => {
 
           <button
             type="submit"
-            className="btn"
+            className="btn btn--warning"
             disabled={otp.some((digit) => digit === '') || isSubmitting}
           >
             {isSubmitting ? 'Verifying...' : 'Confirm'}

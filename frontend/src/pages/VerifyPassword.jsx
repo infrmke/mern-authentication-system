@@ -4,8 +4,6 @@ import toast from 'react-hot-toast'
 
 import api from '../services/axios'
 
-import '../styles/entry.css'
-
 const VerifyPassword = () => {
   const [otp, setOtp] = useState(new Array(6).fill(''))
   const [isSubmitting, setIsSubmitting] = useState(false)
@@ -169,7 +167,7 @@ const VerifyPassword = () => {
 
           <button
             type="submit"
-            className="btn"
+            className="btn btn--warning"
             disabled={otp.some((digit) => digit === '') || isSubmitting}
           >
             {isSubmitting ? 'Verifying...' : 'Confirm'}

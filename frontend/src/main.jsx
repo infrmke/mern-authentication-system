@@ -21,8 +21,6 @@ import VerifyPassword from './pages/VerifyPassword.jsx'
 import ResetPassword from './pages/ResetPassword.jsx'
 import Error from './pages/Error.jsx'
 
-import './styles/index.css'
-
 const router = createBrowserRouter([
   {
     element: <Public />,

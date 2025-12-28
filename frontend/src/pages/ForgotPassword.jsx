@@ -2,7 +2,6 @@ import { useId } from 'react'
 import { useNavigate } from 'react-router-dom'
 import toast from 'react-hot-toast'
 
-import '../styles/entry.css'
 import api from '../services/axios'
 
 const ForgotPassword = () => {
@@ -49,7 +48,7 @@ const ForgotPassword = () => {
           />
         </div>
 
-        <button type="submit" className="btn">
+        <button type="submit" className="btn btn--warning">
           Request code
         </button>
       </form>

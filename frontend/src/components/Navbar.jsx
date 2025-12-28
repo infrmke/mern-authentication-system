@@ -5,8 +5,6 @@ import toast from 'react-hot-toast'
 import { UserContext } from '../context/UserContext'
 import api from '../services/axios'
 
-import '../styles/navbar.css'
-
 const Navbar = () => {
   const { userData, setUserData } = useContext(UserContext)
   const navigate = useNavigate()

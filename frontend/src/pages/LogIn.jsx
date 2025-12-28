@@ -5,8 +5,6 @@ import toast from 'react-hot-toast'
 import api from '../services/axios'
 import { UserContext } from '../context/UserContext'
 
-import '../styles/entry.css'
-
 const LogIn = () => {
   const { setUserData } = useContext(UserContext)
   const navigate = useNavigate()
@@ -65,7 +63,7 @@ const LogIn = () => {
           </p>
         </div>
 
-        <button type="submit" className="btn">
+        <button type="submit" className="btn btn--warning">
           Login
         </button>
       </form>

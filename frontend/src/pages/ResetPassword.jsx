@@ -2,7 +2,6 @@ import { useId } from 'react'
 import { useLocation, useNavigate } from 'react-router-dom'
 import toast from 'react-hot-toast'
 
-import '../styles/entry.css'
 import api from '../services/axios'
 
 const ResetPassword = () => {
