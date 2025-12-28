@@ -44,6 +44,42 @@ button {
   }
 }
 
+.btn--warning {
+  background-color: #ffffff;
+  color: hsl(357, 96%, 58%);
+  border: 1px solid hsl(357, 96%, 58%);
+
+  &:focus,
+  &:hover {
+    color: #ffffff;
+    background-color: hsl(357, 96%, 58%);
+  }
+}
+
+.btn--link {
+  text-decoration: underline;
+  font-weight: 500;
+  background-color: transparent;
+  color: hsl(212, 100%, 66%);
+
+  &:focus,
+  &:hover {
+    background-color: transparent;
+    color: hsl(221, 97%, 53%);
+  }
+
+  &:disabled {
+    cursor: not-allowed;
+    text-decoration: none;
+    background-color: transparent;
+
+    &:focus,
+    &:hover {
+      background-color: transparent;
+    }
+  }
+}
+
 ul {
   list-style: none;
   padding: 0;
