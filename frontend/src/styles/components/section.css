@@ -9,13 +9,24 @@
   padding: 2em;
 }
 
-.user__email {
+.user__heading {
   display: flex;
   flex-flow: column nowrap;
-  gap: 0.5rem;
+  gap: 0.25rem;
+}
+
+.user__actions {
+  display: flex;
+  flex-flow: column nowrap;
 
   a {
-    color: inherit;
     text-decoration: none;
+    color: inherit;
+  }
+}
+
+@media screen and (min-width: 45em) {
+  .user__actions {
+    align-items: center;
   }
 }
