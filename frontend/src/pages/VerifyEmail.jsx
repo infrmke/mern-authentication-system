@@ -12,7 +12,9 @@ const VerifyEmail = () => {
 
   const [otp, setOtp] = useState(new Array(6).fill(''))
   const [isSubmitting, setIsSubmitting] = useState(false)
+
   const inputRefs = useRef([])
+  const hasSentOtpAlready = useRef(false)
 
   const navigate = useNavigate()
 
@@ -23,9 +25,14 @@ const VerifyEmail = () => {
 
       if (!userData || !userData.id) return
 
+      if (hasSentOtpAlready.current) return
+
       try {
+        hasSentOtpAlready.current = true
         await api.post(`/otp/email/${userData.id}`)
       } catch (error) {
+        hasSentOtpAlready.current = false
+
         toast.error(
           error?.response?.data['message'] ||
             "Something didn't work. Try again."
@@ -36,16 +43,6 @@ const VerifyEmail = () => {
     sendEmailOtp()
   }, [userData, loading])
 
-  const handleFormSubmit = (e) => {
-    e.preventDefault();
-
-    //  se nenhum dígito estiver vazio, chama o handleOtpSubmit()
-    if (otp.every((digit) => digit !== '')) {
-      handleOtpSubmit(otp.join(''));
-    }
-  };
-
-
   const handleOtpSubmit = async (emailOtp) => {
     const { id } = userData
     setIsSubmitting(true)
@@ -55,6 +52,8 @@ const VerifyEmail = () => {
       await refreshUserData()
       navigate('/home')
     } catch (error) {
+      setIsSubmitting(false)
+
       if (error.response.data['code'] === 'OTP_NOT_FOUND') {
         setOtp(new Array(6).fill(''))
         inputRefs.current[0]?.focus()
@@ -63,7 +62,6 @@ const VerifyEmail = () => {
       toast.error(
         error?.response?.data['message'] || 'Something went wrong. Try again.'
       )
-      setIsSubmitting(false)
     }
   }
 
@@ -122,7 +120,7 @@ const VerifyEmail = () => {
         minutes.
       </p>
 
-      <form className="form" onSubmit={handleFormSubmit}>
+      <form className="form">
         <div className="form__group form__group--otp">
           {otp.map((number, index) => (
             <input
