@@ -88,3 +88,10 @@
     }
   }
 }
+
+.resend {
+  font-size: 0.9rem;
+  text-align: center;
+  color: hsl(220, 10%, 46%);
+  margin-top: 20px;
+}
