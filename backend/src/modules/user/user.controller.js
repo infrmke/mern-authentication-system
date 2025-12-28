@@ -62,4 +62,36 @@ const createUser = async (req, res, next) => {
   }
 }
 
-export default { getAllUsers, getUser, createUser }
+const deleteUser = async (req, res, next) => {
+  const { id: tokenId } = req.user
+  const { id: paramId } = req.params
+
+  //  usuário só pode deletar a própria conta
+  if (tokenId.toString() !== paramId) {
+    throwHttpError(
+      403,
+      'You are not authorized to delete this account.',
+      'USER_NOT_AUTHORIZED'
+    )
+  }
+
+  try {
+    const user = await UserService.deleteUserById(paramId)
+
+    if (!user) {
+      throwHttpError(400, 'User does not exist.', 'USER_NOT_FOUND')
+    }
+
+    res.clearCookie('accessToken', {
+      httpOnly: true,
+      secure: process.env.NODE_ENV === 'production', // usar TRUE em HTTPS
+      sameSite: 'Lax',
+    })
+
+    return res.status(204).end()
+  } catch (error) {
+    next(error)
+  }
+}
+
+export default { getAllUsers, getUser, createUser, deleteUser }

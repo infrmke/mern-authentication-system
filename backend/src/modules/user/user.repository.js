@@ -12,4 +12,6 @@ const create = async (data) => await User.create(data)
 const updateById = async (id, data) =>
   await User.findByIdAndUpdate(id, data, { new: true })
 
-export default { findAll, findOne, findById, create, updateById }
+const deleteById = async (id) => await User.findByIdAndDelete(id)
+
+export default { findAll, findOne, findById, create, updateById, deleteById }

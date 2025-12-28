@@ -77,10 +77,21 @@ const updateUserById = async (id, data) => {
   return formattedUser
 }
 
+const deleteUserById = async (id) => {
+  const user = await UserRepository.deleteById(id)
+
+  if (!user) return null
+
+  const formattedUser = formatUserObject(user)
+
+  return formattedUser
+}
+
 export default {
   findAllUsers,
   findUser,
   findUserById,
   createUser,
   updateUserById,
+  deleteUserById,
 }
