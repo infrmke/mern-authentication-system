@@ -18,7 +18,8 @@ const emailValidator = [
     .normalizeEmail()
     .notEmpty()
     .withMessage('Email cannot be empty.')
-    .isEmail(),
+    .isEmail()
+    .withMessage('Provide a valid email address.'),
 
   validate,
 ]
@@ -36,7 +37,8 @@ const resendOtpValidator = [
     // a corrente de validação abaixo só vai acontecer se o type de otp for 'RESET'
     .if(body('type').equals('RESET'))
     .trim()
-    .isEmail(),
+    .isEmail()
+    .withMessage('Provide a valid email address.'),
 
   validate,
 ]
