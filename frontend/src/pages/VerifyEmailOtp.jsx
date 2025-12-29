@@ -157,7 +157,7 @@ const VerifyEmailOtp = () => {
 
   return (
     <>
-      <div className="entry">
+      <div className="entry fade-in">
         <h1>Check your inbox</h1>
         <p>
           Enter the 6-digit code sent to your e-mail. The code expires after 15

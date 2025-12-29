@@ -141,7 +141,7 @@ const VerifyPasswordOtp = () => {
 
   return (
     <>
-      <div className="entry">
+      <div className="entry fade-in">
         <h1>Check your inbox</h1>
         <p>
           Enter the 6-digit password reset code sent to your e-mail. The code
