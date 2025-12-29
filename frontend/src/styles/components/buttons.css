@@ -22,6 +22,17 @@ button {
   }
 }
 
+.btn--outline {
+  border: 1px solid var(--clr-text-muted);
+  background-color: white;
+  color: var(--clr-text-main);
+
+  &:focus,
+  &:hover {
+    background-color: #eee;
+  }
+}
+
 .btn--warning {
   background-color: var(--clr-primary);
 
