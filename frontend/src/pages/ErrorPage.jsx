@@ -6,9 +6,10 @@ const ErrorPage = () => {
   const error = useRouteError()
 
   return (
-    <div>
+    <div className="error fade-in">
       <h1>Oops!</h1>
       <p>Looks like something went wrong.</p>
+
       <p>
         <i>{error.statusText}</i>
       </p>
