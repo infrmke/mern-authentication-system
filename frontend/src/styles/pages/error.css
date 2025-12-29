@@ -1,3 +1,7 @@
+/*	================================
+    ERROR PAGE
+================================	*/
+
 .error {
   display: flex;
   flex-flow: column nowrap;
