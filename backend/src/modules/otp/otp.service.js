@@ -72,7 +72,7 @@ const sendUserReset = async (filter) => {
     text: `Your password reset code is:\n\n${newOtp.code}\n\nThis code expires after 15 minutes. If you don't know what this is about, you are free to ignore it.`,
     html: otpEmail
       .replace('{{type}}', 'password reset')
-      .replace('{{code}}', newOtp.code),
+      .replaceAll('{{code}}', newOtp.code),
   }
 
   await sendEmail(mail)
