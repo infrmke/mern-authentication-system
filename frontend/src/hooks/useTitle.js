@@ -2,7 +2,7 @@ import { useEffect } from 'react'
 
 /**
  * Altera o título do documento.
- * @param {string} title - Título da página.
+ * @param {string} title - Título a ser exibido (ex.: 'Profile').
  */
 const useTitle = (title) => {
   useEffect(() => {
