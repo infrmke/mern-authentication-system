@@ -44,7 +44,7 @@ const SignUp = () => {
 
   return (
     <div className="entry fade-in">
-      <h1>Sign up</h1>
+      <h1>Register</h1>
       <p>Enter your details below to create an account</p>
 
       <form className="form" onSubmit={handleFormSubmit}>
@@ -125,9 +125,11 @@ const SignUp = () => {
         </button>
       </form>
 
-      <p className="entry__redirect">
-        Already have an account? <Link to="/">Sign in here</Link>
-      </p>
+      <div className="redirect">
+        <p>
+          Already have an account? <Link to="/">Sign in here</Link>
+        </p>
+      </div>
     </div>
   )
 }

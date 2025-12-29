@@ -86,9 +86,11 @@ const LogIn = () => {
         </button>
       </form>
 
-      <p className="entry__redirect">
-        Don't have an account yet? <Link to="/register">Sign up here</Link>
-      </p>
+      <div className="redirect">
+        <p>
+          Don't have an account yet? <Link to="/register">Sign up here</Link>
+        </p>
+      </div>
     </div>
   )
 }
