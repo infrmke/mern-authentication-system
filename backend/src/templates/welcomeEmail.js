@@ -82,8 +82,7 @@ const welcomeEmail = `
                         an account with the following e-mail:
                         <span style="color: #135dfb; font-weight: 600"
                           >{{email}}</span
-                        >. If you happen to not know what this might be about,
-                        you are free to ignore it.
+                        >. If you don't know what this is about, you are free to ignore it.
                       </td>
                     </tr>
                     <tr>
