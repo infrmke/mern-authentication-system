@@ -5,10 +5,13 @@ import toast from 'react-hot-toast'
 import { User } from 'lucide-react'
 import { Lock } from 'lucide-react'
 
-import api from '../services/axios'
+import useTitle from '../hooks/useTitle'
 import { UserContext } from '../context/UserContext'
+import api from '../services/axios'
 
 const LogIn = () => {
+  useTitle('Log in')
+
   const { setUserData } = useContext(UserContext)
   const navigate = useNavigate()
 

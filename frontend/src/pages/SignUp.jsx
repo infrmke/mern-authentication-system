@@ -4,10 +4,13 @@ import toast from 'react-hot-toast'
 
 import { User, AtSign, LockOpen, Lock } from 'lucide-react'
 
+import useTitle from '../hooks/useTitle'
 import { UserContext } from '../context/UserContext'
 import api from '../services/axios'
 
 const SignUp = () => {
+  useTitle('Register')
+
   const { setUserData } = useContext(UserContext)
   const navigate = useNavigate()
 
