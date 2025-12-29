@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react'
 import { useLocation, Navigate, Outlet } from 'react-router-dom'
 import toast from 'react-hot-toast'
 
+import SpinnerLoader from '../components/loaders/SpinnerLoader'
 import api from '../services/axios'
 
 const PasswordGuardRoute = () => {
@@ -33,7 +34,7 @@ const PasswordGuardRoute = () => {
     checkStatus()
   }, [email])
 
-  if (isValid === null) return <div>Loading...</div>
+  if (isValid === null) return <SpinnerLoader />
 
   // se o token for inválido ou o e-mail não estiver no state, redireciona
   // o usuário para a página de solicitação de redefinição de senha
