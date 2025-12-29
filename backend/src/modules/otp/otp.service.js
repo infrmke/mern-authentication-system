@@ -6,6 +6,7 @@ import generateOtp from '../../utils/generateOtp.js'
 import formatUserObject from '../../utils/formatUserObject.js'
 import generateToken from '../../utils/generateToken.js'
 
+import otpEmail from '../../templates/otpEmail.js'
 import { sendEmail } from '../../config/nodemailer.js'
 
 const sendUserEmail = async (id) => {
@@ -34,8 +35,11 @@ const sendUserEmail = async (id) => {
   const mail = {
     from: process.env.SMTP_MAILER,
     to: user.email,
-    subject: `[GreatShack] Your verification code: ${newOtp.code}`,
-    text: `Your one-time verification code is: ${newOtp.code}. This code expires after 15 minutes. If you did not request this, you are free to ignore it.`,
+    subject: `Authentication System code: ${newOtp.code}`,
+    text: `Your verification code is:\n\n${newOtp.code}\n\nThis code expires after 15 minutes. If you don't know what this is about, you are free to ignore it.`,
+    html: otpEmail
+      .replace('{{type}}', 'verification')
+      .replaceAll('{{code}}', newOtp.code),
   }
 
   await sendEmail(mail)
@@ -64,8 +68,11 @@ const sendUserReset = async (filter) => {
   const mail = {
     from: process.env.SMTP_MAILER,
     to: user.email,
-    subject: `[GreatShack] Your verification code: ${newOtp.code}`,
-    text: `Your one-time verification code is: ${newOtp.code}. This code expires after 15 minutes. If you did not request this, you are free to ignore it.`,
+    subject: `Authentication System code: ${newOtp.code}`,
+    text: `Your password reset code is:\n\n${newOtp.code}\n\nThis code expires after 15 minutes. If you don't know what this is about, you are free to ignore it.`,
+    html: otpEmail
+      .replace('{{type}}', 'password reset')
+      .replace('{{code}}', newOtp.code),
   }
 
   await sendEmail(mail)
