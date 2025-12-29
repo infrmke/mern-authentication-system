@@ -6,34 +6,34 @@ import { Toaster } from 'react-hot-toast'
 
 import { UserProvider } from './context/UserContext.jsx'
 
-import Public from './routes/Public.jsx'
-import Protected from './routes/Protected.jsx'
-import Verification from './routes/Verification.jsx'
-import Password from './routes/Password.jsx'
+import PublicRoute from './routes/PublicRoute.jsx'
+import ProtectedRoute from './routes/ProtectedRoute.jsx'
+import VerificationRoute from './routes/VerificationRoute.jsx'
+import PasswordGuardRoute from './routes/PasswordGuardRoute.jsx'
 
 import App from './App.jsx'
 import LogIn from './pages/LogIn.jsx'
 import SignUp from './pages/SignUp.jsx'
 import Home from './pages/Home.jsx'
-import VerifyEmail from './pages/VerifyEmail.jsx'
+import VerifyEmailOtp from './pages/VerifyEmailOtp.jsx'
 import ForgotPassword from './pages/ForgotPassword.jsx'
-import VerifyPassword from './pages/VerifyPassword.jsx'
+import VerifyPasswordOtp from './pages/VerifyPasswordOtp.jsx'
 import ResetPassword from './pages/ResetPassword.jsx'
-import Error from './pages/Error.jsx'
+import ErrorPage from './pages/ErrorPage.jsx'
 
 const router = createBrowserRouter([
   {
-    element: <Public />,
-    errorElement: <Error />,
+    element: <PublicRoute />,
+    errorElement: <ErrorPage />,
     children: [
       { path: '/', element: <LogIn /> },
       { path: '/register', element: <SignUp /> },
       { path: '/forgot-password', element: <ForgotPassword /> },
-      { path: '/forgot-password/verify', element: <VerifyPassword /> },
+      { path: '/forgot-password/verify', element: <VerifyPasswordOtp /> },
     ],
   },
   {
-    element: <Protected />,
+    element: <ProtectedRoute />,
     children: [
       {
         path: '/home',
@@ -43,11 +43,11 @@ const router = createBrowserRouter([
     ],
   },
   {
-    element: <Verification />,
-    children: [{ path: '/verify-email', element: <VerifyEmail /> }],
+    element: <VerificationRoute />,
+    children: [{ path: '/verify-email', element: <VerifyEmailOtp /> }],
   },
   {
-    element: <Password />,
+    element: <PasswordGuardRoute />,
     children: [{ path: '/forgot-password/reset', element: <ResetPassword /> }],
   },
 ])
