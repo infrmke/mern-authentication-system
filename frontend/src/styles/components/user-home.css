@@ -3,6 +3,7 @@
 ================================	*/
 
 .user {
+  max-width: 400px;
   display: flex;
   flex-flow: column nowrap;
   gap: 1rem;
@@ -10,10 +11,25 @@
   padding: 2em;
 }
 
+@media screen and (min-width: 45em) {
+  .user {
+    max-width: 600px;
+  }
+}
+
 .user__heading {
   display: flex;
   flex-flow: column nowrap;
-  gap: 0.25rem;
+  gap: 0.75rem;
+
+  h1 {
+    font-size: 1.5rem;
+    font-weight: 500;
+  }
+
+  h2 {
+    font-size: 2rem;
+  }
 }
 
 .user__actions {
