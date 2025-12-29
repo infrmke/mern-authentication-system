@@ -36,7 +36,7 @@ const LogIn = () => {
   }
 
   return (
-    <div className="entry">
+    <div className="entry fade-in">
       <h1>Welcome back!</h1>
 
       <form className="form" onSubmit={handleFormSubmit}>
@@ -86,7 +86,7 @@ const LogIn = () => {
         </button>
       </form>
 
-      <p>
+      <p className="entry__redirect">
         Don't have an account yet? <Link to="/register">Sign up here</Link>
       </p>
     </div>

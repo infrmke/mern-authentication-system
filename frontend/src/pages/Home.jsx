@@ -35,7 +35,7 @@ const Home = () => {
   }
 
   return (
-    <section className="user">
+    <section className="user fade-in">
       {!userData?.isAccountVerified ? (
         <>
           <div className="user__heading">

@@ -29,7 +29,7 @@ const ForgotPassword = () => {
   }
 
   return (
-    <div className="entry">
+    <div className="entry fade-in">
       <h1>Forgot password?</h1>
       <p>
         Enter the e-mail associated with your account and you'll be sent a code

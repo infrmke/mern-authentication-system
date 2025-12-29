@@ -36,7 +36,7 @@ const ResetPassword = () => {
   }
 
   return (
-    <div className="entry">
+    <div className="entry fade-in">
       <h1>Change your password</h1>
       <p>Enter a new password below to change your password.</p>
 
