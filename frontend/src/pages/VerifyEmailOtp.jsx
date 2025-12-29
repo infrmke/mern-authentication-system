@@ -30,7 +30,7 @@ const VerifyEmailOtp = () => {
 
       try {
         hasSentOtpAlready.current = true
-        await api.post(`/otp/email/${userData.id}`)
+        await api.post(`/otps/email-verification/${userData.id}`)
       } catch (error) {
         hasSentOtpAlready.current = false
 
@@ -73,7 +73,7 @@ const VerifyEmailOtp = () => {
     setIsSubmitting(true)
 
     try {
-      await api.post(`/otp/email/verify/${id}`, { otp: emailOtp })
+      await api.post(`/otps/email-verification/check/${id}`, { otp: emailOtp })
       await refreshUserData()
       navigate('/home')
     } catch (error) {
@@ -94,7 +94,7 @@ const VerifyEmailOtp = () => {
     setIsResending(true)
 
     try {
-      const response = await api.post('/otp/resend', { type: 'VERIFY' })
+      const response = await api.post('/otps/resend', { type: 'VERIFY' })
       toast.success(response.data['message'])
       setTimer(60)
     } catch (error) {

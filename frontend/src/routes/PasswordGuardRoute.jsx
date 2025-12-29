@@ -20,7 +20,7 @@ const PasswordGuardRoute = () => {
       }
 
       try {
-        await api.get('/otp/status')
+        await api.get('/otps/password-reset/status')
         setIsValid(true)
       } catch (error) {
         setIsValid(false)

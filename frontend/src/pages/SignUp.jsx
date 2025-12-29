@@ -27,7 +27,7 @@ const SignUp = () => {
       Object.fromEntries(formData)
 
     try {
-      const user = await api.post('/users/create', {
+      const user = await api.post('/users', {
         name,
         email,
         password,

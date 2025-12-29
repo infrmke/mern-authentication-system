@@ -13,7 +13,7 @@ const UserProvider = ({ children }) => {
   useEffect(() => {
     const verifyToken = async () => {
       try {
-        const response = await api.get('/auth/status')
+        const response = await api.get('/auth/me')
 
         if (response.data) {
           setUserData(response.data)
@@ -41,7 +41,7 @@ const UserProvider = ({ children }) => {
   // realiza a busca de dados do usuário (manual)
   const refreshUserData = async () => {
     try {
-      const response = await api.get('/auth/status')
+      const response = await api.get('/auth/me')
       setUserData(response.data)
     } catch (error) {
       toast.error(

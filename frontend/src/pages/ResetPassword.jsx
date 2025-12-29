@@ -21,7 +21,7 @@ const ResetPassword = () => {
     const { new_password, confirm_password } = Object.fromEntries(formData)
 
     try {
-      await api.patch('/otp/forgot-password/reset', {
+      await api.patch('/otps/password-reset', {
         email,
         new_password,
         confirm_password,

@@ -16,7 +16,7 @@ const ForgotPassword = () => {
     const { email } = Object.fromEntries(formData)
 
     try {
-      const response = await api.post('/otp/forgot-password', { email })
+      const response = await api.post('/otps/password-reset/request', { email })
       toast.success(response.data['message'], { duration: 6000 })
 
       //  leva o usuário para a próxima página e passa o objeto "email" à frente

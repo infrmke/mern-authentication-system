@@ -53,7 +53,7 @@ const VerifyPasswordOtp = () => {
     setIsSubmitting(true)
 
     try {
-      await api.post(`/otp/forgot-password/verify/`, {
+      await api.post(`/otps/password-reset/check/`, {
         email,
         otp: passwordOtp,
       })
@@ -78,7 +78,7 @@ const VerifyPasswordOtp = () => {
     setIsResending(true)
 
     try {
-      const response = await api.post('/otp/resend', { email, type: 'RESET' })
+      const response = await api.post('/otps/resend', { email, type: 'RESET' })
       toast.success(response.data['message'])
       setTimer(60)
     } catch (error) {
