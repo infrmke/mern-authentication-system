@@ -18,10 +18,20 @@ const validateTokenAndAccount = [
   deleteUserValidator,
 ]
 
+//  --- PUBLIC ROUTES ---
+
+// @route GET /users
 router.get('/', UserController.getAllUsers)
+
+// @route POST /users
 router.post('/', registerValidator, UserController.createUser)
 
+// @route GET /users/:id
 router.get('/:id', validateId, UserController.getUser)
+
+//  --- PRIVATE ROUTES ---
+
+// @route DELETE /users/:id
 router.delete('/:id', validateTokenAndAccount, UserController.deleteUser)
 
 export default router

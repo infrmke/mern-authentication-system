@@ -6,8 +6,17 @@ import verifyAccessToken from '../../middlewares/verifyAccessToken.js'
 
 const router = Router()
 
-router.get('/me', verifyAccessToken, AuthController.status)
+//  --- PUBLIC ROUTES ---
+
+// @route POST /auth/login
 router.post('/login', loginValidator, AuthController.logIn)
+
+// @route POST /auth/logout
 router.post('/logout', AuthController.logOut)
+
+//  --- PRIVATE ROUTES ---
+
+// @route GET /auth/me
+router.get('/me', verifyAccessToken, AuthController.status)
 
 export default router

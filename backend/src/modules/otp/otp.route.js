@@ -25,35 +25,50 @@ const validatePasswordReset = [
 
 const emailAndOtpValidator = [emailValidator, otpValidator]
 
+//  --- PUBLIC ROUTES ---
+
+// @route POST /otps/email-verification/:id
 router.post(
   '/email-verification/:id',
   validateId,
   OtpController.sendEmailVerification
 )
+
+// @route POST /otps/email-verification/check/:id
 router.post(
   '/email-verification/check/:id',
   validateIdAndOtp,
   OtpController.verifyUserEmail
 )
 
-router.get('/password-reset/status', verifyPasswordToken, OtpController.status)
+// @route POST /otps/password-reset/request
 router.post(
   '/password-reset/request',
   emailValidator,
   OtpController.requestPasswordReset
 )
+
+// @route POST /otps/password-reset/check
 router.post(
   '/password-reset/check/',
   emailAndOtpValidator,
   OtpController.verifyPasswordOtp
 )
+
+//  --- PRIVATE ROUTES ---
+
+// @route GET /otps/password-reset/status
+router.get('/password-reset/status', verifyPasswordToken, OtpController.status)
+
+// @route PATCH /password-reset
 router.patch(
   '/password-reset',
   validatePasswordReset,
   OtpController.resetUserPassword
 )
 
-// re-envio de OTP: se for VERIFY, precisa de token e se for RESET, o validator verifica o e-mail
+// @route POST /otps/resend
+// se for do tipo VERIFY, precisa de token. Se for RESET o validator verifica o e-mail
 router.post(
   '/resend',
   (req, res, next) => {
