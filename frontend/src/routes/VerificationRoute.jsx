@@ -3,7 +3,7 @@ import { Navigate, Outlet } from 'react-router-dom'
 
 import { UserContext } from '../context/UserContext'
 
-const Verification = () => {
+const VerificationRoute = () => {
   const { userData, loading } = useContext(UserContext)
 
   if (loading) return null
@@ -20,4 +20,4 @@ const Verification = () => {
   return <Outlet />
 }
 
-export default Verification
+export default VerificationRoute

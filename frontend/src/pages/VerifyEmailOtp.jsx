@@ -1,10 +1,13 @@
-import { useState, useRef, useEffect } from 'react'
-import { useLocation, useNavigate } from 'react-router-dom'
+import { useContext, useState, useRef, useEffect } from 'react'
+import { useNavigate } from 'react-router-dom'
 import toast from 'react-hot-toast'
 
+import { UserContext } from '../context/UserContext'
 import api from '../services/axios'
 
-const VerifyPassword = () => {
+const VerifyEmailOtp = () => {
+  const { userData, loading, refreshUserData } = useContext(UserContext)
+
   const [otp, setOtp] = useState(new Array(6).fill(''))
   const [isSubmitting, setIsSubmitting] = useState(false)
 
@@ -12,18 +15,34 @@ const VerifyPassword = () => {
   const [isResending, setIsResending] = useState(false)
 
   const inputRefs = useRef([])
+  const hasSentOtpAlready = useRef(false)
 
-  const location = useLocation()
   const navigate = useNavigate()
 
-  //  recuperando o objeto "email" da página ForgotPassword
-  const email = location.state?.email
-
+  //  envia OTP na primeira montagem
   useEffect(() => {
-    if (!email) {
-      navigate('/forgot-password')
+    const sendEmailOtp = async () => {
+      if (loading) return
+
+      if (!userData || !userData.id) return
+
+      if (hasSentOtpAlready.current) return
+
+      try {
+        hasSentOtpAlready.current = true
+        await api.post(`/otp/email/${userData.id}`)
+      } catch (error) {
+        hasSentOtpAlready.current = false
+
+        toast.error(
+          error?.response?.data['message'] ||
+            "Something didn't work. Try again."
+        )
+      }
     }
-  }, [email, navigate])
+
+    sendEmailOtp()
+  }, [userData, loading])
 
   // contagem regressiva para reabilitar o re-envio do OTP
   useEffect(() => {
@@ -49,17 +68,14 @@ const VerifyPassword = () => {
     }
   }
 
-  const handleOtpSubmit = async (passwordOtp) => {
+  const handleOtpSubmit = async (emailOtp) => {
+    const { id } = userData
     setIsSubmitting(true)
 
     try {
-      await api.post(`/otp/forgot-password/verify/`, {
-        email,
-        otp: passwordOtp,
-      })
-
-      //  leva o usuário para a próxima página e passa o objeto "email" à frente
-      navigate('/forgot-password/reset', { state: { email } })
+      await api.post(`/otp/email/verify/${id}`, { otp: emailOtp })
+      await refreshUserData()
+      navigate('/home')
     } catch (error) {
       setIsSubmitting(false)
 
@@ -78,7 +94,7 @@ const VerifyPassword = () => {
     setIsResending(true)
 
     try {
-      const response = await api.post('/otp/resend', { email, type: 'RESET' })
+      const response = await api.post('/otp/resend', { type: 'VERIFY' })
       toast.success(response.data['message'])
       setTimer(60)
     } catch (error) {
@@ -94,9 +110,9 @@ const VerifyPassword = () => {
   const handleChange = (element, index) => {
     if (isNaN(element.value)) return false
 
-    const passwordOtp = [...otp]
-    passwordOtp[index] = element.value
-    setOtp(passwordOtp)
+    const emailOtp = [...otp]
+    emailOtp[index] = element.value
+    setOtp(emailOtp)
 
     // move o foco para o próximo input após ser preenchido
     if (element.value !== '' && index < 5) {
@@ -104,8 +120,8 @@ const VerifyPassword = () => {
     }
 
     //  envia o form se todos os campos estiverem preenchidos
-    if (passwordOtp.every((digit) => digit !== '')) {
-      handleOtpSubmit(passwordOtp.join(''))
+    if (emailOtp.every((digit) => digit !== '')) {
+      handleOtpSubmit(emailOtp.join(''))
     }
   }
 
@@ -124,13 +140,13 @@ const VerifyPassword = () => {
     const pastedOtpArray = pastedOtp.split('').slice(0, 6)
 
     if (pastedOtpArray.length > 0) {
-      const passwordOtp = [...otp]
+      const emailOtp = [...otp]
 
       pastedOtpArray.forEach((char, index) => {
-        passwordOtp[index] = char
+        emailOtp[index] = char
       })
 
-      setOtp(passwordOtp)
+      setOtp(emailOtp)
 
       if (pastedOtpArray.length === 6) {
         handleOtpSubmit(pastedOtpArray.join(''))
@@ -143,8 +159,8 @@ const VerifyPassword = () => {
       <div className="entry">
         <h1>Check your inbox</h1>
         <p>
-          Enter the 6-digit password reset code sent to your e-mail. The code
-          expires after 15 minutes.
+          Enter the 6-digit code sent to your e-mail. The code expires after 15
+          minutes.
         </p>
 
         <form className="form" onSubmit={handleFormSubmit}>
@@ -195,4 +211,4 @@ const VerifyPassword = () => {
   )
 }
 
-export default VerifyPassword
+export default VerifyEmailOtp

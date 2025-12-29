@@ -1,7 +1,7 @@
 import { useRouteError, Link } from 'react-router-dom'
 import useTitle from '../hooks/useTitle'
 
-const Error = () => {
+const ErrorPage = () => {
   useTitle('Oops!')
   const error = useRouteError()
 
@@ -18,4 +18,4 @@ const Error = () => {
   )
 }
 
-export default Error
+export default ErrorPage

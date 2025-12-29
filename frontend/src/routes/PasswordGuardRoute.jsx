@@ -4,7 +4,7 @@ import toast from 'react-hot-toast'
 
 import api from '../services/axios'
 
-const Password = () => {
+const PasswordGuardRoute = () => {
   const [isValid, setIsValid] = useState(null)
 
   const location = useLocation()
@@ -22,9 +22,11 @@ const Password = () => {
         await api.get('/otp/status')
         setIsValid(true)
       } catch (error) {
-        toast.error(
-        error?.response?.data['message'] || 'Something went wrong. Try again.')
         setIsValid(false)
+
+        toast.error(
+          error?.response?.data['message'] || 'Something went wrong. Try again.'
+        )
       }
     }
 
@@ -38,4 +40,4 @@ const Password = () => {
   return isValid ? <Outlet /> : <Navigate to="/forgot-password" replace />
 }
 
-export default Password
+export default PasswordGuardRoute
