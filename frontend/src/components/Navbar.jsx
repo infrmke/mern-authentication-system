@@ -1,7 +1,9 @@
 import { Link, useNavigate } from 'react-router-dom'
 import { useContext } from 'react'
 import toast from 'react-hot-toast'
+
 import { ChevronDown } from 'lucide-react'
+import Logo from '../assets/images/logoipsum_light.png'
 
 import { UserContext } from '../context/UserContext'
 import api from '../services/axios'
@@ -25,7 +27,7 @@ const Navbar = () => {
   return (
     <nav className="nav">
       <Link to="/home" className="nav__logo">
-        auth
+        <img src={Logo} alt="Logo Ipsum Network" />
       </Link>
 
       <ul className="menu">
