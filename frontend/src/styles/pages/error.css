@@ -1,0 +1,20 @@
+.error {
+  display: flex;
+  flex-flow: column nowrap;
+  align-items: center;
+  gap: 1rem;
+
+  p {
+    font-size: 1.125rem;
+  }
+
+  a {
+    color: var(--clr-accent);
+    font-weight: 500;
+
+    &:focus,
+    &:hover {
+      color: var(--clr-accent-hover);
+    }
+  }
+}
