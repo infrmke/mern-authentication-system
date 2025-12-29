@@ -6,7 +6,7 @@ import verifyAccessToken from '../../middlewares/verifyAccessToken.js'
 
 const router = Router()
 
-router.get('/status', verifyAccessToken, AuthController.status)
+router.get('/me', verifyAccessToken, AuthController.status)
 router.post('/login', loginValidator, AuthController.logIn)
 router.post('/logout', AuthController.logOut)
 

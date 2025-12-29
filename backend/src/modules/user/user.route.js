@@ -19,8 +19,9 @@ const validateTokenAndAccount = [
 ]
 
 router.get('/', UserController.getAllUsers)
+router.post('/', registerValidator, UserController.createUser)
+
 router.get('/:id', validateId, UserController.getUser)
-router.post('/create', registerValidator, UserController.createUser)
 router.delete('/:id', validateTokenAndAccount, UserController.deleteUser)
 
 export default router

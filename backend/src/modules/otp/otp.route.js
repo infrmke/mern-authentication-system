@@ -25,13 +25,32 @@ const validatePasswordReset = [
 
 const emailAndOtpValidator = [emailValidator, otpValidator]
 
-router.get('/status', verifyPasswordToken, OtpController.status)
-
-router.post('/email/:id', validateId, OtpController.sendEmailVerification)
 router.post(
-  '/email/verify/:id',
+  '/email-verification/:id',
+  validateId,
+  OtpController.sendEmailVerification
+)
+router.post(
+  '/email-verification/check/:id',
   validateIdAndOtp,
   OtpController.verifyUserEmail
+)
+
+router.get('/password-reset/status', verifyPasswordToken, OtpController.status)
+router.post(
+  '/password-reset/request',
+  emailValidator,
+  OtpController.requestPasswordReset
+)
+router.post(
+  '/password-reset/check/',
+  emailAndOtpValidator,
+  OtpController.verifyPasswordOtp
+)
+router.patch(
+  '/password-reset',
+  validatePasswordReset,
+  OtpController.resetUserPassword
 )
 
 // re-envio de OTP: se for VERIFY, precisa de token e se for RESET, o validator verifica o e-mail
@@ -43,22 +62,6 @@ router.post(
   },
   resendOtpValidator,
   OtpController.resendOtp
-)
-
-router.post(
-  '/forgot-password',
-  emailValidator,
-  OtpController.requestPasswordReset
-)
-router.post(
-  '/forgot-password/verify/',
-  emailAndOtpValidator,
-  OtpController.verifyPasswordOtp
-)
-router.patch(
-  '/forgot-password/reset',
-  validatePasswordReset,
-  OtpController.resetUserPassword
 )
 
 export default router
