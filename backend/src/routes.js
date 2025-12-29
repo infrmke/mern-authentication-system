@@ -11,6 +11,6 @@ router.use(globalLimiter)
 
 router.use('/users', UserRouter)
 router.use('/auth', authLimiter, AuthRouter)
-router.use('/otp', authLimiter, OtpRouter)
+router.use('/otps', authLimiter, OtpRouter)
 
 export default router
