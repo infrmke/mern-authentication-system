@@ -120,7 +120,8 @@ const VerifyPasswordOtp = () => {
   const handlePaste = (e) => {
     e.preventDefault()
 
-    const pastedOtp = e.clipboardData.getData('text')
+    // pega tudo o que for número e apenas número
+    const pastedOtp = e.clipboardData.getData('text').replace(/\D/g, '')
     const pastedOtpArray = pastedOtp.split('').slice(0, 6)
 
     if (pastedOtpArray.length > 0) {
