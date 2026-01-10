@@ -7,6 +7,7 @@ import validateIdFormat from '../../middlewares/validateIdFormat.js'
 import validateIdExists from '../../middlewares/validateIdExists.js'
 import verifyAccessToken from '../../middlewares/verifyAccessToken.js'
 import isAccountVerified from '../../middlewares/isAccountVerified.js'
+import verifyOwnership from '../../middlewares/verifyOwnership.js'
 
 const router = Router()
 
@@ -15,6 +16,7 @@ const validateTokenAndAccount = [
   verifyAccessToken,
   isAccountVerified,
   ...validateId,
+  verifyOwnership,
   deleteUserValidator,
 ]
 
