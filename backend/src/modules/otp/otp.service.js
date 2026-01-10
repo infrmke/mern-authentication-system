@@ -5,7 +5,7 @@ import throwHttpError from '../../utils/throwHttpError.js'
 import formatUserObject from '../../utils/formatUserObject.js'
 import generateToken from '../../utils/generateToken.js'
 
-import otpEmail from '../../templates/otpEmail.js'
+import { getOtpMailOptions } from '../../utils/generateMail.js'
 import { sendEmail } from '../../config/nodemailer.js'
 
 const sendVerificationEmail = async (id) => {
@@ -25,16 +25,7 @@ const sendVerificationEmail = async (id) => {
   const otpOptions = createOtpOptions(user._id, 'VERIFY')
   const newOtp = await OtpRepository.createOtp(otpOptions)
 
-  const mail = {
-    from: process.env.SMTP_MAILER,
-    to: user.email,
-    subject: `Authentication System code: ${newOtp.code}`,
-    text: `Your verification code is:\n\n${newOtp.code}\n\nThis code expires after 15 minutes. If you don't know what this is about, you are free to ignore it.`,
-    html: otpEmail
-      .replace('{{type}}', 'verification')
-      .replaceAll('{{code}}', newOtp.code),
-  }
-
+  const mail = getOtpMailOptions(user.email, newOtp.code, 'VERIFY')
   await sendEmail(mail)
 
   const formattedUser = formatUserObject(user)
@@ -52,16 +43,7 @@ const sendResetEmail = async (filter) => {
   const otpOptions = createOtpOptions(user._id, 'RESET')
   const newOtp = await OtpRepository.createOtp(otpOptions)
 
-  const mail = {
-    from: process.env.SMTP_MAILER,
-    to: user.email,
-    subject: `Authentication System code: ${newOtp.code}`,
-    text: `Your password reset code is:\n\n${newOtp.code}\n\nThis code expires after 15 minutes. If you don't know what this is about, you are free to ignore it.`,
-    html: otpEmail
-      .replace('{{type}}', 'password reset')
-      .replaceAll('{{code}}', newOtp.code),
-  }
-
+  const mail = getOtpMailOptions(user.email, newOtp.code, 'RESET')
   await sendEmail(mail)
 
   const formattedUser = formatUserObject(user)
