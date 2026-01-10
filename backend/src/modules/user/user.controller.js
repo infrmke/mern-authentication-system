@@ -1,7 +1,7 @@
 import UserService from './user.service.js'
 import throwHttpError from '../../utils/throwHttpError.js'
 
-const getAllUsers = async (req, res, next) => {
+const getAll = async (req, res, next) => {
   try {
     const users = await UserService.findAllUsers()
 
@@ -15,7 +15,7 @@ const getAllUsers = async (req, res, next) => {
   }
 }
 
-const getUser = async (req, res, next) => {
+const getById = async (req, res, next) => {
   const { id } = req.user
 
   try {
@@ -33,7 +33,7 @@ const getUser = async (req, res, next) => {
   }
 }
 
-const createUser = async (req, res, next) => {
+const create = async (req, res, next) => {
   const { name, email, password } = req.body
 
   const data = { name, email, password }
@@ -62,7 +62,7 @@ const createUser = async (req, res, next) => {
   }
 }
 
-const deleteUser = async (req, res, next) => {
+const destroy = async (req, res, next) => {
   const { id } = req.params
 
   try {
@@ -84,4 +84,4 @@ const deleteUser = async (req, res, next) => {
   }
 }
 
-export default { getAllUsers, getUser, createUser, deleteUser }
+export default { getAll, getById, create, destroy }
