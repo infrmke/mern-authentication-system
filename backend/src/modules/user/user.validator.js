@@ -36,17 +36,4 @@ const registerValidator = [
   handleValidation,
 ]
 
-const deleteUserValidator = [
-  param('id').custom((value, { req }) => {
-    //  "value" é o id passado por param, e req.user.id é o id dentro do token
-    if (!req.user || value !== req.user.id.toString()) {
-      throw new Error('You are not authorized to delete this account.')
-    }
-
-    return true
-  }),
-
-  handleValidation,
-]
-
-export { registerValidator, deleteUserValidator }
+export default registerValidator
