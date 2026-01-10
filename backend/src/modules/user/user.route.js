@@ -1,7 +1,7 @@
 import { Router } from 'express'
 
 import UserController from './user.controller.js'
-import { registerValidator, deleteUserValidator } from './user.validator.js'
+import registerValidator from './user.validator.js'
 
 import validateIdFormat from '../../middlewares/validateIdFormat.js'
 import validateIdExists from '../../middlewares/validateIdExists.js'
@@ -17,7 +17,6 @@ const validateTokenAndAccount = [
   isAccountVerified,
   ...validateId,
   verifyOwnership,
-  deleteUserValidator,
 ]
 
 //  --- PUBLIC ROUTES ---
