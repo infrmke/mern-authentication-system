@@ -23,17 +23,17 @@ const validateTokenAndAccount = [
 //  --- PUBLIC ROUTES ---
 
 // @route GET /users
-router.get('/', UserController.getAllUsers)
+router.get('/', UserController.getAll)
 
 // @route POST /users
-router.post('/', registerValidator, UserController.createUser)
+router.post('/', registerValidator, UserController.create)
 
 // @route GET /users/:id
-router.get('/:id', validateId, UserController.getUser)
+router.get('/:id', validateId, UserController.getById)
 
 //  --- PRIVATE ROUTES ---
 
 // @route DELETE /users/:id
-router.delete('/:id', validateTokenAndAccount, UserController.deleteUser)
+router.delete('/:id', validateTokenAndAccount, UserController.destroy)
 
 export default router
