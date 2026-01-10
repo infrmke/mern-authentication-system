@@ -8,7 +8,7 @@ const status = async (req, res, next) => {
   })
 }
 
-const sendEmailVerification = async (req, res, next) => {
+const sendVerification = async (req, res, next) => {
   const { id } = req.user
 
   try {
@@ -35,7 +35,7 @@ const sendEmailVerification = async (req, res, next) => {
   }
 }
 
-const requestPasswordReset = async (req, res, next) => {
+const requestReset = async (req, res, next) => {
   const { email } = req.body
 
   try {
@@ -58,7 +58,7 @@ const requestPasswordReset = async (req, res, next) => {
   }
 }
 
-const resendOtp = async (req, res, next) => {
+const resendCode = async (req, res, next) => {
   const { email, type } = req.body
 
   // disponível se o usuário estiver logado ('VERIFY')
@@ -89,7 +89,7 @@ const resendOtp = async (req, res, next) => {
   }
 }
 
-const verifyUserEmail = async (req, res, next) => {
+const verifyEmail = async (req, res, next) => {
   const { id } = req.user
   const { otp } = req.body
 
@@ -119,7 +119,7 @@ const verifyUserEmail = async (req, res, next) => {
   }
 }
 
-const verifyPasswordOtp = async (req, res, next) => {
+const verifyResetCode = async (req, res, next) => {
   const { email, otp } = req.body
 
   try {
@@ -142,7 +142,7 @@ const verifyPasswordOtp = async (req, res, next) => {
   }
 }
 
-const resetUserPassword = async (req, res, next) => {
+const resetPassword = async (req, res, next) => {
   const { email, new_password } = req.body
 
   try {
@@ -169,10 +169,10 @@ const resetUserPassword = async (req, res, next) => {
 
 export default {
   status,
-  sendEmailVerification,
-  requestPasswordReset,
-  resendOtp,
-  verifyUserEmail,
-  verifyPasswordOtp,
-  resetUserPassword,
+  sendVerification,
+  requestReset,
+  resendCode,
+  verifyEmail,
+  verifyResetCode,
+  resetPassword,
 }
