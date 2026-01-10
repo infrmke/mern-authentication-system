@@ -2,7 +2,6 @@ import UserService from '../user/user.service.js'
 import OtpRepository from './otp.repository.js'
 
 import throwHttpError from '../../utils/throwHttpError.js'
-import generateOtp from '../../utils/generateOtp.js'
 import formatUserObject from '../../utils/formatUserObject.js'
 import generateToken from '../../utils/generateToken.js'
 
@@ -23,13 +22,7 @@ const sendVerificationEmail = async (id) => {
       'USER_ALREADY_VERIFIED'
     )
 
-  const otpOptions = {
-    user: user._id,
-    code: generateOtp(),
-    type: 'VERIFY',
-    expiresAt: new Date(Date.now() + 15 * 60 * 1000), // 15 minutos
-  }
-
+  const otpOptions = createOtpOptions(user._id, 'VERIFY')
   const newOtp = await OtpRepository.createOtp(otpOptions)
 
   const mail = {
@@ -56,13 +49,7 @@ const sendResetEmail = async (filter) => {
 
   const { user } = capsule
 
-  const otpOptions = {
-    user: user._id,
-    code: generateOtp(),
-    type: 'RESET',
-    expiresAt: new Date(Date.now() + 15 * 60 * 1000), // 15 minutos
-  }
-
+  const otpOptions = createOtpOptions(user._id, 'RESET')
   const newOtp = await OtpRepository.createOtp(otpOptions)
 
   const mail = {
