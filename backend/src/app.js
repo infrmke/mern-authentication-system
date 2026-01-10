@@ -5,7 +5,7 @@ import connectToDb from './config/database.js'
 import cors from './config/cors.js'
 import { verifyConnection } from './config/nodemailer.js'
 
-import GlobalRouter from './routes.js'
+import GlobalRouter from './modules/index.routes.js'
 import errorHandler from './middlewares/errorHandler.js'
 
 //  config
