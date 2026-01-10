@@ -12,7 +12,7 @@ const sendVerification = async (req, res, next) => {
   const { id } = req.user
 
   try {
-    const user = await OtpService.sendUserEmail(id)
+    const user = await OtpService.sendVerificationEmail(id)
 
     if (!user) {
       throwHttpError(
@@ -40,7 +40,7 @@ const requestReset = async (req, res, next) => {
 
   try {
     //  não captura o retorno porque o service lida com o caso de usuário não encontrado
-    await OtpService.sendUserReset({ email })
+    await OtpService.sendResetEmail({ email })
 
     return res.status(200).json({
       message:
@@ -75,7 +75,7 @@ const resendCode = async (req, res, next) => {
       throwHttpError(400, 'Invalid request body.', 'BAD_REQUEST')
     }
 
-    const result = await OtpService.resendOtp(type, filter)
+    const result = await OtpService.resendCode(type, filter)
 
     if (!result) {
       throwHttpError(404, 'User does not exist.', 'USER_NOT_FOUND')
@@ -94,7 +94,7 @@ const verifyEmail = async (req, res, next) => {
   const { otp } = req.body
 
   try {
-    const capsule = await OtpService.verifyEmailOtp(id, otp, 'VERIFY')
+    const capsule = await OtpService.validateEmailCode(id, otp, 'VERIFY')
 
     if (!capsule) {
       throwHttpError(
@@ -123,7 +123,7 @@ const verifyResetCode = async (req, res, next) => {
   const { email, otp } = req.body
 
   try {
-    const passwordToken = await OtpService.verifyResetOtp(otp, 'RESET', {
+    const passwordToken = await OtpService.validateResetCode(otp, 'RESET', {
       email,
     })
 
@@ -146,7 +146,7 @@ const resetPassword = async (req, res, next) => {
   const { email, new_password } = req.body
 
   try {
-    const user = await OtpService.resetPassword({ email }, new_password)
+    const user = await OtpService.updatePassword({ email }, new_password)
 
     if (!user)
       throwHttpError(
