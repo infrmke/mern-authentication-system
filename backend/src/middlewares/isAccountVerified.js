@@ -1,5 +1,8 @@
 import throwHttpError from '../utils/throwHttpError.js'
 
+/**
+ * Restringe o acesso apenas a usuários que realizaram a verificação de conta.
+ */
 const isAccountVerified = (req, res, next) => {
   if (!req.user.isAccountVerified) {
     throwHttpError(
