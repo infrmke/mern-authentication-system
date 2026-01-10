@@ -31,28 +31,28 @@ const emailAndOtpValidator = [emailValidator, otpValidator]
 router.post(
   '/email-verification/:id',
   validateId,
-  OtpController.sendEmailVerification
+  OtpController.sendVerification
 )
 
 // @route POST /otps/email-verification/check/:id
 router.post(
   '/email-verification/check/:id',
   validateIdAndOtp,
-  OtpController.verifyUserEmail
+  OtpController.verifyEmail
 )
 
 // @route POST /otps/password-reset/request
 router.post(
   '/password-reset/request',
   emailValidator,
-  OtpController.requestPasswordReset
+  OtpController.requestReset
 )
 
 // @route POST /otps/password-reset/check
 router.post(
   '/password-reset/check/',
   emailAndOtpValidator,
-  OtpController.verifyPasswordOtp
+  OtpController.verifyResetCode
 )
 
 //  --- PRIVATE ROUTES ---
@@ -64,7 +64,7 @@ router.get('/password-reset/status', verifyPasswordToken, OtpController.status)
 router.patch(
   '/password-reset',
   validatePasswordReset,
-  OtpController.resetUserPassword
+  OtpController.resetPassword
 )
 
 // @route POST /otps/resend
@@ -76,7 +76,7 @@ router.post(
     next()
   },
   resendOtpValidator,
-  OtpController.resendOtp
+  OtpController.resendCode
 )
 
 export default router
