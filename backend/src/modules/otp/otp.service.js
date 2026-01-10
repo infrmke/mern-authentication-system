@@ -9,7 +9,7 @@ import generateToken from '../../utils/generateToken.js'
 import otpEmail from '../../templates/otpEmail.js'
 import { sendEmail } from '../../config/nodemailer.js'
 
-const sendUserEmail = async (id) => {
+const sendVerificationEmail = async (id) => {
   const capsule = await UserService.findUserById(id)
 
   if (!capsule) return null
@@ -49,7 +49,7 @@ const sendUserEmail = async (id) => {
   return formattedUser
 }
 
-const sendUserReset = async (filter) => {
+const sendResetEmail = async (filter) => {
   const capsule = await UserService.findUser(filter)
 
   if (!capsule) return null
@@ -82,7 +82,7 @@ const sendUserReset = async (filter) => {
   return formattedUser
 }
 
-const resendOtp = async (type, filter) => {
+const resendCode = async (type, filter) => {
   const capsule = await UserService.findUser(filter)
 
   if (!capsule) return null
@@ -93,13 +93,13 @@ const resendOtp = async (type, filter) => {
   await OtpRepository.deleteOtp(user._id, type)
 
   if (type === 'VERIFY') {
-    return await sendUserEmail(user._id)
+    return await sendVerificationEmail(user._id)
   } else if (type === 'RESET') {
-    return await sendUserReset({ email: user.email })
+    return await sendResetEmail({ email: user.email })
   }
 }
 
-const verifyEmailOtp = async (id, otp, otpType) => {
+const validateEmailCode = async (id, otp, otpType) => {
   const capsule = await UserService.findUserById(id)
 
   if (!capsule) return null
@@ -146,7 +146,7 @@ const verifyEmailOtp = async (id, otp, otpType) => {
   return { updatedUser, accessToken }
 }
 
-const verifyResetOtp = async (otp, otpType, filter) => {
+const validateResetCode = async (otp, otpType, filter) => {
   const capsule = await UserService.findUser(filter)
 
   if (!capsule)
@@ -180,7 +180,7 @@ const verifyResetOtp = async (otp, otpType, filter) => {
   return passwordToken
 }
 
-const resetPassword = async (filter, password) => {
+const updatePassword = async (filter, password) => {
   const capsule = await UserService.findUser(filter, '+password')
 
   if (!capsule) return null
@@ -195,10 +195,10 @@ const resetPassword = async (filter, password) => {
 }
 
 export default {
-  sendUserEmail,
-  sendUserReset,
-  resendOtp,
-  verifyEmailOtp,
-  verifyResetOtp,
-  resetPassword,
+  sendVerificationEmail,
+  sendResetEmail,
+  resendCode,
+  validateEmailCode,
+  validateResetCode,
+  updatePassword,
 }
