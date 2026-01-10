@@ -5,6 +5,7 @@ import throwHttpError from '../../utils/throwHttpError.js'
 import formatUserObject from '../../utils/formatUserObject.js'
 import generateToken from '../../utils/generateToken.js'
 
+import { createOtpOptions } from '../../utils/generateOtp.js'
 import { getOtpMailOptions } from '../../utils/generateMail.js'
 import { sendEmail } from '../../config/nodemailer.js'
 
