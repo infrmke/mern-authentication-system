@@ -1,4 +1,4 @@
-import AuthService from './auth.service.js'
+import SessionService from './session.service.js'
 import throwHttpError from '../../utils/throwHttpError.js'
 
 const status = async (req, res, next) => {
@@ -17,7 +17,7 @@ const logIn = async (req, res, next) => {
   const { email, password } = req.body
 
   try {
-    const capsule = await AuthService.logUserIn(password, { email })
+    const capsule = await SessionService.logUserIn(password, { email })
 
     if (!capsule) {
       throwHttpError(400, 'Incorrect credentials.', 'USER_INVALID_CREDENTIALS')
