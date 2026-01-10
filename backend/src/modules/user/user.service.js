@@ -2,9 +2,8 @@ import UserRepository from './user.repository.js'
 
 import formatUserObject from '../../utils/formatUserObject.js'
 import generateToken from '../../utils/generateToken.js'
-
-import welcomeEmail from '../../templates/welcomeEmail.js'
 import { sendEmail } from '../../config/nodemailer.js'
+import { getWelcomeMailOptions } from '../../utils/generateMail.js'
 
 const findAllUsers = async () => {
   const users = await UserRepository.findAll()
@@ -56,20 +55,7 @@ const createUser = async (data) => {
     '1d'
   )
 
-  const mail = {
-    from: process.env.SMTP_MAILER,
-    to: data.email,
-    subject: 'Welcome to my Authentication System!',
-    text: `Dear ${
-      data.name.split(' ')[0]
-    },\n\nWelcome to a very simple website made with MongoDB, Express.js, React and Node.js!\n\nYou are receiving this message because you have created an account with the following e-mail: ${
-      data.email
-    }. If you don't know what this is about, you are free to ignore it.\n\nSincerely,\ninfrmke (https://github.com/infrmke)`,
-    html: welcomeEmail
-      .replace('{{user}}', data.name)
-      .replace('{{email}}', data.email),
-  }
-
+  const mail = getWelcomeMailOptions(data.name, data.email)
   await sendEmail(mail)
 
   return { formattedUser, accessToken }
