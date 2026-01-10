@@ -1,16 +1,5 @@
-import { body, validationResult } from 'express-validator'
-import throwHttpError from '../../utils/throwHttpError.js'
-
-const validate = (req, res, next) => {
-  const errors = validationResult(req)
-
-  if (!errors.isEmpty()) {
-    const firstError = errors.array()[0].msg // apenas a primeira mensagem de erro
-    throwHttpError(400, firstError, 'VALIDATION_ERROR')
-  }
-
-  next()
-}
+import { body } from 'express-validator'
+import handleValidation from '../../middlewares/handleValidation.js'
 
 const emailValidator = [
   body('email')
@@ -21,13 +10,13 @@ const emailValidator = [
     .isEmail()
     .withMessage('Provide a valid email address.'),
 
-  validate,
+  handleValidation,
 ]
 
 const otpValidator = [
   body('otp').notEmpty().withMessage('OTP cannot be empty.'),
 
-  validate,
+  handleValidation,
 ]
 
 const resendOtpValidator = [
@@ -40,7 +29,7 @@ const resendOtpValidator = [
     .isEmail()
     .withMessage('Provide a valid email address.'),
 
-  validate,
+  handleValidation,
 ]
 
 const resetValidator = [
@@ -60,7 +49,7 @@ const resetValidator = [
       return true
     }),
 
-  validate,
+  handleValidation,
 ]
 
 export { emailValidator, otpValidator, resendOtpValidator, resetValidator }

@@ -1,16 +1,5 @@
-import { body, validationResult, param } from 'express-validator'
-import throwHttpError from '../../utils/throwHttpError.js'
-
-const validate = (req, res, next) => {
-  const errors = validationResult(req)
-
-  if (!errors.isEmpty()) {
-    const firstError = errors.array()[0].msg // apenas a primeira mensagem de erro
-    throwHttpError(400, firstError, 'VALIDATION_ERROR')
-  }
-
-  next()
-}
+import { body, param } from 'express-validator'
+import handleValidation from '../../middlewares/handleValidation.js'
 
 const registerValidator = [
   body('name')
@@ -44,7 +33,7 @@ const registerValidator = [
       return true
     }),
 
-  validate,
+  handleValidation,
 ]
 
 const deleteUserValidator = [
@@ -57,7 +46,7 @@ const deleteUserValidator = [
     return true
   }),
 
-  validate,
+  handleValidation,
 ]
 
 export { registerValidator, deleteUserValidator }

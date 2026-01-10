@@ -1,16 +1,5 @@
-import { body, validationResult } from 'express-validator'
-import throwHttpError from '../../utils/throwHttpError.js'
-
-const validate = (req, res, next) => {
-  const errors = validationResult(req)
-
-  if (!errors.isEmpty()) {
-    const firstError = errors.array()[0].msg // apenas a primeira mensagem de erro
-    throwHttpError(400, firstError, 'VALIDATION_ERROR')
-  }
-
-  next()
-}
+import { body } from 'express-validator'
+import handleValidation from '../../middlewares/handleValidation.js'
 
 const loginValidator = [
   body('email')
@@ -27,7 +16,7 @@ const loginValidator = [
     .isLength({ min: 8 })
     .withMessage('Password must be at least 8 characters.'),
 
-  validate,
+  handleValidation,
 ]
 
 export default loginValidator
