@@ -8,15 +8,13 @@ import {
   resetValidator,
 } from './otp.validator.js'
 
-import validateIdFormat from '../../middlewares/validateIdFormat.js'
-import validateIdExists from '../../middlewares/validateIdExists.js'
+import validateId from '../../middlewares/validateId.js'
 import verifyAccessToken from '../../middlewares/verifyAccessToken.js'
 import verifyPasswordToken from '../../middlewares/verifyPasswordToken.js'
 
 const router = Router()
 
-const validateId = [validateIdFormat, validateIdExists]
-const validateIdAndOtp = [...validateId, otpValidator]
+const validateIdAndOtp = [validateId, otpValidator]
 const validatePasswordReset = [
   verifyPasswordToken,
   emailValidator,

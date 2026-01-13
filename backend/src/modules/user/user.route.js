@@ -3,19 +3,17 @@ import { Router } from 'express'
 import UserController from './user.controller.js'
 import registerValidator from './user.validator.js'
 
-import validateIdFormat from '../../middlewares/validateIdFormat.js'
-import validateIdExists from '../../middlewares/validateIdExists.js'
+import validateId from '../../middlewares/validateId.js'
 import verifyAccessToken from '../../middlewares/verifyAccessToken.js'
 import isAccountVerified from '../../middlewares/isAccountVerified.js'
 import verifyOwnership from '../../middlewares/verifyOwnership.js'
 
 const router = Router()
 
-const validateId = [validateIdFormat, validateIdExists]
 const validateTokenAndAccount = [
   verifyAccessToken,
   isAccountVerified,
-  ...validateId,
+  validateId,
   verifyOwnership,
 ]
 
