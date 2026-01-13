@@ -62,6 +62,25 @@ const create = async (req, res, next) => {
   }
 }
 
+const update = async (req, res, next) => {
+  const { id } = req.params
+
+  try {
+    const { name, email, password } = req.body
+    const updates = { name, email, password }
+
+    const user = await UserService.updateUserById(id, updates)
+
+    if (!user) {
+      throwHttpError(500, 'Could not update user.')
+    }
+
+    return res.status(200).json(user)
+  } catch (error) {
+    next(error)
+  }
+}
+
 const destroy = async (req, res, next) => {
   const { id } = req.params
 
@@ -84,4 +103,4 @@ const destroy = async (req, res, next) => {
   }
 }
 
-export default { getAll, getById, create, destroy }
+export default { getAll, getById, create, update, destroy }
