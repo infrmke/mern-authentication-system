@@ -44,7 +44,7 @@ const resetValidator = [
     .withMessage('Confirm your password.')
     .custom((value, { req }) => {
       if (value !== req.body.new_password) {
-        throw new Error('Passwords do not match each other.')
+        throw new Error('Passwords must match each other.')
       }
       return true
     }),

@@ -54,7 +54,7 @@ const create = async (req, res, next) => {
       const field = Object.keys(error.keyValue)[0]
 
       error.code = 409
-      error.message = `This ${field} already exists in the database.`
+      error.message = `This ${field} is already in use.`
       error.code = 'USER_ALREADY_EXISTS'
     }
 

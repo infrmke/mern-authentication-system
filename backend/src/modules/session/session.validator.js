@@ -8,7 +8,7 @@ const loginValidator = [
     .notEmpty()
     .withMessage('Email cannot be empty.')
     .isEmail()
-    .withMessage('Provide a valid email address.'),
+    .withMessage('Provide a valid e-mail address.'),
 
   body('password')
     .notEmpty()

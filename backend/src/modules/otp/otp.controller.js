@@ -4,7 +4,7 @@ import throwHttpError from '../../utils/throwHttpError.js'
 const status = async (req, res, next) => {
   return res.status(200).json({
     active: true,
-    message: 'The password reset session is still active.',
+    message: 'The password reset session is active.',
   })
 }
 
@@ -22,12 +22,12 @@ const sendVerification = async (req, res, next) => {
       )
     }
 
-    return res.status(200).json({ message: 'OTP has been sent.' })
+    return res.status(200).json({ message: 'Code has been sent.' })
   } catch (error) {
     if (error.code === 11000) {
       error.status = 409
       error.message =
-        'An active e-mail OTP has already been sent to this account.'
+        'An active e-mail code has already been sent to this account.'
       error.code = 'OTP_ALREADY_SENT'
     }
 
@@ -43,14 +43,13 @@ const requestReset = async (req, res, next) => {
     await OtpService.sendResetEmail({ email })
 
     return res.status(200).json({
-      message:
-        'If the e-mail is registered, a password reset OTP has been sent.',
+      message: 'If the e-mail is registered, a code has been sent.',
     })
   } catch (error) {
     if (error.code === 11000) {
       error.status = 409
       error.message =
-        'An active password reset OTP has already been sent to this account.'
+        'An active password reset code has already been sent to this account.'
       error.code = 'OTP_ALREADY_SENT'
     }
 
@@ -81,9 +80,7 @@ const resendCode = async (req, res, next) => {
       throwHttpError(404, 'User does not exist.', 'USER_NOT_FOUND')
     }
 
-    return res
-      .status(200)
-      .json({ message: 'A new OTP has been sent to your email.' })
+    return res.status(200).json({ message: 'A new code has been sent.' })
   } catch (error) {
     next(error)
   }
@@ -99,7 +96,7 @@ const verifyEmail = async (req, res, next) => {
     if (!user) {
       throwHttpError(
         400,
-        'Verification failed. Invalid OTP or user not found.',
+        'Verification failed. Invalid code or user not found.',
         'USER_NOT_FOUND'
       )
     }
@@ -127,7 +124,7 @@ const verifyResetCode = async (req, res, next) => {
 
     res
       .status(200)
-      .json({ message: 'OTP has been verified. Proceed to password reset.' })
+      .json({ message: 'Code has been verified. Proceed to password reset.' })
   } catch (error) {
     next(error)
   }

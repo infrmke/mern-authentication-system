@@ -85,14 +85,14 @@ const validateEmailCode = async (id, otp, otpType) => {
 
   const otpDocument = await OtpRepository.findOtpById(user._id, 'VERIFY')
 
-  if (!otpDocument) throwHttpError(500, 'Could not verify OTP. Try again.')
+  if (!otpDocument) throwHttpError(500, 'Could not verify code. Try again.')
 
   if (
     !otpDocument.code ||
     otp !== otpDocument.code ||
     otpType !== otpDocument.type
   )
-    throwHttpError(403, 'Invalid OTP.', 'OTP_NOT_FOUND')
+    throwHttpError(403, 'Invalid code.', 'OTP_NOT_FOUND')
 
   const updatedUser = await UserService.updateUserById(user._id, {
     isAccountVerified: true,
@@ -119,14 +119,14 @@ const validateResetCode = async (otp, otpType, filter) => {
 
   const otpDocument = await OtpRepository.findOtpById(user._id, 'RESET')
 
-  if (!otpDocument) throwHttpError(500, 'Could not verify OTP. Try again.')
+  if (!otpDocument) throwHttpError(500, 'Could not verify code. Try again.')
 
   if (
     !otpDocument.code ||
     otp !== otpDocument.code ||
     otpType !== otpDocument.type
   )
-    throwHttpError(403, 'Invalid OTP.', 'OTP_NOT_FOUND')
+    throwHttpError(403, 'Invalid code.', 'OTP_NOT_FOUND')
 
   await OtpRepository.deleteOtp(user._id, 'RESET')
 
