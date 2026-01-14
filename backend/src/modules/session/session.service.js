@@ -5,6 +5,18 @@ import generateToken from '../../utils/generateToken.js'
 import { validatePassword } from '../../utils/password.js'
 import formatUserObject from '../../utils/formatUserObject.js'
 
+const checkStatus = async (id) => {
+  const capsule = await UserService.findUserById(id)
+
+  if (!capsule) return null
+
+  const { user } = capsule
+
+  const formattedUser = formatUserObject(user)
+
+  return formattedUser
+}
+
 const logUserIn = async (password, filter) => {
   const capsule = await UserService.findUser(filter, '+password')
 
@@ -33,4 +45,4 @@ const logUserIn = async (password, filter) => {
   return { formattedUser, accessToken }
 }
 
-export default { logUserIn }
+export default { checkStatus, logUserIn }
