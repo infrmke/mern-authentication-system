@@ -32,7 +32,7 @@ const Navbar = () => {
 
       <ul className="menu">
         <li className="menu__user">
-          <p className="user__avatar">{userData?.name[0].toUpperCase()}</p>
+          <p className="menu__avatar">{userData?.name[0].toUpperCase()}</p>
           <p>{userData?.name.split(' ')[0]}</p>
 
           <span className="menu__icon">
