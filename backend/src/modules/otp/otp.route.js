@@ -60,7 +60,6 @@ router.patch(
 )
 
 // @route POST /otps/resend
-// se for do tipo VERIFY, precisa de token. Se for RESET o validator verifica o e-mail
 router.post(
   '/resend',
   resendOtpFlow,
