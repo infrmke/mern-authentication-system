@@ -7,21 +7,11 @@ import {
   resendOtpValidator,
   resetValidator,
 } from './otp.validator.js'
-
 import validateId from '../../middlewares/validateId.js'
-import verifyAccessToken from '../../middlewares/verifyAccessToken.js'
 import verifyPasswordToken from '../../middlewares/verifyPasswordToken.js'
+import { resendOtpFlow } from '../../middlewares/tollPlaza.js'
 
 const router = Router()
-
-const validateIdAndOtp = [validateId, otpValidator]
-const validatePasswordReset = [
-  verifyPasswordToken,
-  emailValidator,
-  resetValidator,
-]
-
-const emailAndOtpValidator = [emailValidator, otpValidator]
 
 //  --- PUBLIC ROUTES ---
 
@@ -35,7 +25,8 @@ router.post(
 // @route POST /otps/email-verification/check/:id
 router.post(
   '/email-verification/check/:id',
-  validateIdAndOtp,
+  validateId,
+  otpValidator,
   OtpController.verifyEmail
 )
 
@@ -49,7 +40,8 @@ router.post(
 // @route POST /otps/password-reset/check
 router.post(
   '/password-reset/check/',
-  emailAndOtpValidator,
+  emailValidator,
+  otpValidator,
   OtpController.verifyResetCode
 )
 
@@ -61,7 +53,9 @@ router.get('/password-reset/status', verifyPasswordToken, OtpController.status)
 // @route PATCH /password-reset
 router.patch(
   '/password-reset',
-  validatePasswordReset,
+  verifyPasswordToken,
+  emailValidator,
+  resetValidator,
   OtpController.resetPassword
 )
 
@@ -69,10 +63,7 @@ router.patch(
 // se for do tipo VERIFY, precisa de token. Se for RESET o validator verifica o e-mail
 router.post(
   '/resend',
-  (req, res, next) => {
-    if (req.body.type === 'VERIFY') return verifyAccessToken(req, res, next)
-    next()
-  },
+  resendOtpFlow,
   resendOtpValidator,
   OtpController.resendCode
 )

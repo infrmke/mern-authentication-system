@@ -2,20 +2,10 @@ import { Router } from 'express'
 
 import UserController from './user.controller.js'
 import { registerValidator, updateValidator } from './user.validator.js'
-
 import validateId from '../../middlewares/validateId.js'
-import verifyAccessToken from '../../middlewares/verifyAccessToken.js'
-import isAccountVerified from '../../middlewares/isAccountVerified.js'
-import verifyOwnership from '../../middlewares/verifyOwnership.js'
+import { fullLock, ownerOnly } from '../../middlewares/tollPlaza.js'
 
 const router = Router()
-
-const validateTokenAndAccount = [
-  verifyAccessToken,
-  isAccountVerified,
-  validateId,
-  verifyOwnership,
-]
 
 //  --- PUBLIC ROUTES ---
 
@@ -31,15 +21,9 @@ router.get('/:id', validateId, UserController.getById)
 //  --- PRIVATE ROUTES ---
 
 // @route PATCH /users/:id
-router.patch(
-  '/:id',
-  verifyAccessToken,
-  verifyOwnership,
-  updateValidator,
-  UserController.update
-)
+router.patch('/:id', ownerOnly, updateValidator, UserController.update)
 
 // @route DELETE /users/:id
-router.delete('/:id', validateTokenAndAccount, UserController.destroy)
+router.delete('/:id', fullLock, UserController.destroy)
 
 export default router
