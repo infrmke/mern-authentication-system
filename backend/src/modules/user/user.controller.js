@@ -16,7 +16,7 @@ const getAll = async (req, res, next) => {
 }
 
 const getById = async (req, res, next) => {
-  const { id } = req.user
+  const { id } = req.params
 
   try {
     const capsule = await UserService.findUserById(id)
