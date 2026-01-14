@@ -40,7 +40,7 @@ const Home = () => {
         <>
           <div className="user__heading">
             <h1>Welcome, {userData?.name.split(' ')[0] || 'user'}</h1>
-            <h2>Wait a minute...</h2>
+            <h2>It's an honor, but...</h2>
             <p>
               Could you verify your e-mail? It's just going to take you one
               minute. After that, you'll be free to delete your account.
@@ -60,7 +60,8 @@ const Home = () => {
             <h2>Looking good!</h2>
             <p>
               Seems like everything is in order here. You can now delete your
-              account if you'd like.
+              account if you'd like. More features will only be added in the
+              future...
             </p>
           </div>
 
