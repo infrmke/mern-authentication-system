@@ -17,7 +17,7 @@ const globalLimiter = rateLimit({
   },
 })
 
-const authLimiter = rateLimit({
+const sessionLimiter = rateLimit({
   windowMs: 15 * 60 * 1000, // 15 minutos
   max: 5, // 5 requisições
   handler: (req, res, next) => {
@@ -33,4 +33,4 @@ const authLimiter = rateLimit({
   },
 })
 
-export { globalLimiter, authLimiter }
+export { globalLimiter, sessionLimiter }
