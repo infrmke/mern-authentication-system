@@ -25,7 +25,7 @@ const LogIn = () => {
     const { email, password } = Object.fromEntries(formData)
 
     try {
-      const user = await api.post('/auth/login', { email, password })
+      const user = await api.post('/sessions/login', { email, password })
       setUserData(user['data'])
       navigate('/home')
     } catch (error) {

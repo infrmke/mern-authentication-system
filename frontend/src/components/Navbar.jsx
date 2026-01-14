@@ -14,7 +14,7 @@ const Navbar = () => {
 
   const handleClickLogOut = async () => {
     try {
-      await api.post('/auth/logout')
+      await api.post('/sessions/logout')
       setUserData(null)
       navigate('/')
     } catch (error) {
