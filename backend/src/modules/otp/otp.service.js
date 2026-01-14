@@ -101,12 +101,7 @@ const validateEmailCode = async (id, otp, otpType) => {
   if (!updatedUser) throwHttpError(500, 'Could not update user. Try again.')
 
   const accessToken = generateToken(
-    {
-      id: updatedUser.id,
-      name: updatedUser.name,
-      email: updatedUser.email,
-      isAccountVerified: updatedUser.isAccountVerified,
-    },
+    { id: user._id },
     process.env.JWT_ACCESS_SECRET,
     '1d'
   )
