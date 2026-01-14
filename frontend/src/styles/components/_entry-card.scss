@@ -10,7 +10,7 @@
   border-radius: 10px;
   padding: 3em 2em;
   background-color: white;
-  box-shadow: var(--shadow-main);
+  box-shadow: $shadow-main;
 
   h1,
   p {
@@ -23,23 +23,21 @@
 
     & + p {
       margin-top: -1.5rem;
-      color: var(--clr-text-muted);
+      color: $clr-text-muted;
     }
   }
 
   a {
-    color: var(--clr-accent);
+    color: $clr-accent;
     text-decoration: none;
 
     &:focus,
     &:hover {
-      color: var(--clr-accent-hover);
+      color: $clr-accent-hover;
     }
   }
-}
 
-@media screen and (min-width: 48em) {
-  .entry {
+  @media screen and (min-width: 48em) {
     width: 392px;
 
     h1 {
@@ -51,20 +49,4 @@
       text-align: left;
     }
   }
-}
-
-.redirect {
-  font-size: 0.875rem;
-  color: var(--clr-text-muted);
-
-  p {
-    text-align: center;
-  }
-}
-
-.resend {
-  font-size: 0.9rem;
-  text-align: center;
-  color: var(--clr-text-muted);
-  margin-top: 20px;
 }

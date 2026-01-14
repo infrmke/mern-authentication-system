@@ -13,12 +13,12 @@
   }
 
   a {
-    color: var(--clr-accent);
+    color: $clr-accent;
     font-weight: 500;
 
     &:focus,
     &:hover {
-      color: var(--clr-accent-hover);
+      color: $clr-accent-hover;
     }
   }
 }
