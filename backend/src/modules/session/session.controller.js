@@ -2,8 +2,11 @@ import SessionService from './session.service.js'
 import throwHttpError from '../../utils/throwHttpError.js'
 
 const status = async (req, res, next) => {
+  const { id } = req.user
+
   try {
-    return res.status(200).json(req.user)
+    const user = await SessionService.checkStatus(id)
+    return res.status(200).json(user)
   } catch (error) {
     next(error)
   }
