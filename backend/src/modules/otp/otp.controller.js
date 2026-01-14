@@ -94,24 +94,15 @@ const verifyEmail = async (req, res, next) => {
   const { otp } = req.body
 
   try {
-    const capsule = await OtpService.validateEmailCode(id, otp, 'VERIFY')
+    const user = await OtpService.validateEmailCode(id, otp, 'VERIFY')
 
-    if (!capsule) {
+    if (!user) {
       throwHttpError(
         400,
         'Verification failed. Invalid OTP or user not found.',
         'USER_NOT_FOUND'
       )
     }
-
-    const { accessToken } = capsule
-
-    res.cookie('accessToken', accessToken, {
-      httpOnly: true,
-      secure: process.env.NODE_ENV === 'production', // usar TRUE em HTTPS
-      sameSite: 'Lax',
-      maxAge: 24 * 60 * 60 * 1000, // 1 dia
-    })
 
     res.status(200).json({ message: 'E-mail verified successfully.' })
   } catch (error) {
