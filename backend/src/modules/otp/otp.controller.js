@@ -9,7 +9,7 @@ const status = async (req, res, next) => {
 }
 
 const sendVerification = async (req, res, next) => {
-  const { id } = req.user
+  const { id } = req.params
 
   try {
     const user = await OtpService.sendVerificationEmail(id)
@@ -90,7 +90,7 @@ const resendCode = async (req, res, next) => {
 }
 
 const verifyEmail = async (req, res, next) => {
-  const { id } = req.user
+  const { id } = req.params
   const { otp } = req.body
 
   try {
