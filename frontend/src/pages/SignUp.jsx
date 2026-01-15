@@ -6,6 +6,9 @@ import { User, AtSign, LockOpen, Lock } from 'lucide-react'
 
 import useTitle from '../hooks/useTitle'
 import { UserContext } from '../context/UserContext'
+import EntryCard from '../components/EntryCard'
+import InputGroup from '../components/InputGroup'
+
 import api from '../services/axios'
 
 const SignUp = () => {
@@ -19,7 +22,7 @@ const SignUp = () => {
   const passwordId = useId()
   const confirmPwdId = useId()
 
-  const handleFormSubmit = async (e) => {
+  const handleSignUpSubmit = async (e) => {
     e.preventDefault()
 
     const formData = new FormData(e.target)
@@ -44,86 +47,52 @@ const SignUp = () => {
 
   return (
     <div className="entry fade-in">
-      <h1>Register</h1>
-      <p>Enter your details below to create an account</p>
+      <EntryCard
+        title="Register"
+        description="Enter your details below to create an account"
+        onSubmit={handleSignUpSubmit}
+        buttonText="Sign up"
+      >
+        <InputGroup
+          label="Name"
+          icon={User}
+          type="text"
+          name="name"
+          id={nameId}
+          placeholder="First or full name"
+          minLength={2}
+          maxLength={56}
+          autoFocus
+        />
 
-      <form className="form" onSubmit={handleFormSubmit}>
-        <div className="form__group">
-          <label htmlFor={nameId}>Name</label>
+        <InputGroup
+          label="E-mail address"
+          icon={AtSign}
+          type="email"
+          name="email"
+          id={emailId}
+          placeholder="E-mail"
+        />
 
-          <div className="form__group form__group--addon">
-            <span className="form__icon">
-              <User color="hsl(220, 10%, 46%)" />
-            </span>
-            <input
-              type="text"
-              name="name"
-              id={nameId}
-              placeholder="First or full name..."
-              minLength={2}
-              maxLength={56}
-              autoFocus
-              required
-            />
-          </div>
-        </div>
+        <InputGroup
+          label="Password"
+          icon={LockOpen}
+          type="password"
+          name="password"
+          id={passwordId}
+          placeholder="Password"
+          minLength={8}
+        />
 
-        <div className="form__group">
-          <label htmlFor={emailId}>E-mail address</label>
-
-          <div className="form__group form__group--addon">
-            <span className="form__icon">
-              <AtSign color="hsl(220, 10%, 46%)" />
-            </span>
-            <input
-              type="email"
-              name="email"
-              id={emailId}
-              placeholder="E-mail"
-              required
-            />
-          </div>
-        </div>
-
-        <div className="form__group">
-          <label htmlFor={passwordId}>Password</label>
-
-          <div className="form__group form__group--addon">
-            <span className="form__icon">
-              <LockOpen color="hsl(220, 10%, 46%)" />
-            </span>
-            <input
-              type="password"
-              name="password"
-              id={passwordId}
-              placeholder="Password"
-              minLength={8}
-              required
-            />
-          </div>
-        </div>
-
-        <div className="form__group">
-          <label htmlFor={confirmPwdId}>Confirm password</label>
-
-          <div className="form__group form__group--addon">
-            <span className="form__icon">
-              <Lock color="hsl(220, 10%, 46%)" />
-            </span>
-            <input
-              type="password"
-              name="confirm_password"
-              id={confirmPwdId}
-              placeholder="Repeat your password here..."
-              required
-            />
-          </div>
-        </div>
-
-        <button type="submit" className="btn btn--warning">
-          Sign up
-        </button>
-      </form>
+        <InputGroup
+          label="Confirm password"
+          icon={Lock}
+          type="password"
+          name="confirm_password"
+          id={confirmPwdId}
+          placeholder="Repeat your password here..."
+        />
+      </EntryCard>
 
       <div className="redirect">
         <p>

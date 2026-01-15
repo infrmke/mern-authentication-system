@@ -7,6 +7,9 @@ import { Lock } from 'lucide-react'
 
 import useTitle from '../hooks/useTitle'
 import { UserContext } from '../context/UserContext'
+import EntryCard from '../components/EntryCard'
+import InputGroup from '../components/InputGroup'
+
 import api from '../services/axios'
 
 const LogIn = () => {
@@ -18,7 +21,7 @@ const LogIn = () => {
   const emailId = useId()
   const passwordId = useId()
 
-  const handleFormSubmit = async (e) => {
+  const handleLoginSubmit = async (e) => {
     e.preventDefault()
 
     const formData = new FormData(e.target)
@@ -37,54 +40,34 @@ const LogIn = () => {
 
   return (
     <div className="entry fade-in">
-      <h1>Welcome back!</h1>
-
-      <form className="form" onSubmit={handleFormSubmit}>
-        <div className="form__group">
-          <label htmlFor={emailId}>E-mail address</label>
-
-          <div className="form__group form__group--addon">
-            <span className="form__icon">
-              <User color="hsl(220, 10%, 46%)" />
-            </span>
-            <input
-              type="email"
-              name="email"
-              id={emailId}
-              placeholder="E-mail"
-              autoFocus
-              required
-            />
-          </div>
-        </div>
-
-        <div className="form__group">
-          <label htmlFor={passwordId}>Password</label>
-
-          <div className="form__group form__group--addon">
-            <span className="form__icon">
-              <Lock color="hsl(220, 10%, 46%)" />
-            </span>
-            <input
-              type="password"
-              name="password"
-              id={passwordId}
-              placeholder="Password"
-              required
-            />
-          </div>
-        </div>
-
+      <EntryCard
+        title="Welcome back!"
+        onSubmit={handleLoginSubmit}
+        buttonText="Login"
+      >
+        <InputGroup
+          label="E-mail address"
+          icon={User}
+          type="email"
+          name="email"
+          id={emailId}
+          placeholder="E-mail"
+          autoFocus
+        />
+        <InputGroup
+          label="Password"
+          icon={Lock}
+          type="password"
+          name="password"
+          id={passwordId}
+          placeholder="Password"
+        />
         <div className="form__group">
           <p>
             <Link to="/forgot-password">Forgot your password?</Link>
           </p>
         </div>
-
-        <button type="submit" className="btn btn--warning">
-          Login
-        </button>
-      </form>
+      </EntryCard>
 
       <div className="redirect">
         <p>

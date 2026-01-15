@@ -4,6 +4,8 @@ import toast from 'react-hot-toast'
 import { LockOpen, Lock } from 'lucide-react'
 
 import api from '../services/axios'
+import EntryCard from '../components/EntryCard'
+import InputGroup from '../components/InputGroup'
 
 const ResetPassword = () => {
   const passwordId = useId()
@@ -14,7 +16,7 @@ const ResetPassword = () => {
 
   const email = location.state?.email
 
-  const handleFormSubmit = async (e) => {
+  const handleResetSubmit = async (e) => {
     e.preventDefault()
 
     const formData = new FormData(e.target)
@@ -37,49 +39,32 @@ const ResetPassword = () => {
 
   return (
     <div className="entry fade-in">
-      <h1>Change your password</h1>
-      <p>Enter a new password below to change your password.</p>
+      <EntryCard
+        title="Change your password"
+        description="Enter a new password below to change your password."
+        onSubmit={handleResetSubmit}
+        buttonText="Reset password"
+      >
+        <InputGroup
+          label="New password"
+          icon={LockOpen}
+          type="password"
+          name="new_password"
+          id={passwordId}
+          placeholder="Password"
+          autoFocus
+        />
 
-      <form className="form" onSubmit={handleFormSubmit}>
-        <div className="form__group">
-          <label htmlFor={passwordId}>New password</label>
-
-          <div className="form__group form__group--addon">
-            <span className="form__icon">
-              <LockOpen color="hsl(220, 10%, 46%)" />
-            </span>
-            <input
-              type="password"
-              name="new_password"
-              id={passwordId}
-              placeholder="Password"
-              autoFocus
-              required
-            />
-          </div>
-        </div>
-
-        <div className="form__group">
-          <label htmlFor={confirmPwdId}>Confirm new password</label>
-
-          <div className="form__group form__group--addon">
-            <span className="form__icon">
-              <Lock color="hsl(220, 10%, 46%)" />
-            </span>
-            <input
-              type="password"
-              name="confirm_password"
-              id={confirmPwdId}
-              placeholder="Repeat your password here..."
-              required
-            />
-          </div>
-        </div>
-
-        <button type="submit" className="btn btn--warning">
-          Reset password
-        </button>
-      </form>
+        <InputGroup
+          label="Confirm new password"
+          icon={Lock}
+          type="password"
+          name="confirm_password"
+          id={confirmPwdId}
+          placeholder="Repeat your password here..."
+          autoFocus
+        />
+      </EntryCard>
     </div>
   )
 }

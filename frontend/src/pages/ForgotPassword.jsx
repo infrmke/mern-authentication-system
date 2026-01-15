@@ -4,6 +4,8 @@ import toast from 'react-hot-toast'
 import { AtSign } from 'lucide-react'
 
 import api from '../services/axios'
+import EntryCard from '../components/EntryCard'
+import InputGroup from '../components/InputGroup'
 
 const ForgotPassword = () => {
   const emailId = useId()
@@ -30,35 +32,22 @@ const ForgotPassword = () => {
 
   return (
     <div className="entry fade-in">
-      <h1>Forgot password?</h1>
-      <p>
-        Enter the e-mail associated with your account and you'll be sent a code
-        to redefine your password.
-      </p>
-
-      <form className="form" onSubmit={handleEmailSubmit}>
-        <div className="form__group">
-          <label htmlFor={emailId}>E-mail address</label>
-
-          <div className="form__group form__group--addon">
-            <span className="form__icon">
-              <AtSign color="hsl(220, 10%, 46%)" />
-            </span>
-            <input
-              type="email"
-              name="email"
-              id={emailId}
-              placeholder="Your e-mail here..."
-              autoFocus
-              required
-            />
-          </div>
-        </div>
-
-        <button type="submit" className="btn btn--warning">
-          Request code
-        </button>
-      </form>
+      <EntryCard
+        title="Forgot password?"
+        description="Enter the e-mail associated with your account and you'll be sent a code to redefine your password."
+        onSubmit={handleEmailSubmit}
+        buttonText="Request code"
+      >
+        <InputGroup
+          label="E-mail address"
+          icon={AtSign}
+          type="email"
+          name="email"
+          id={emailId}
+          placeholder="Your e-mail here..."
+          autoFocus
+        />
+      </EntryCard>
     </div>
   )
 }
