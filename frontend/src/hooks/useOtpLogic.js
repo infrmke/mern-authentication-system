@@ -1,23 +1,20 @@
 import { useState, useRef, useEffect } from 'react'
 import toast from 'react-hot-toast'
 import api from '../services/axios'
+import useApi from './useApi'
 
-const useOtpLogic = ({
-  type,
-  email,
-  userId,
-  onVerifySuccess,
-  autoSend = false,
-}) => {
+const useOtpLogic = ({ type, email, userId, onVerifySuccess, autoSend = false }) => {
   const [otp, setOtp] = useState(new Array(6).fill(''))
-  const [isSubmitting, setIsSubmitting] = useState(false)
   const [timer, setTimer] = useState(0)
-  const [isResending, setIsResending] = useState(false)
+
+  // dois hooks separados para loadings independentes
+  const { request: verifyRequest, loading: isSubmitting } = useApi()
+  const { request: resendRequest, loading: isResending } = useApi()
 
   const inputRefs = useRef([])
   const hasSentInitialOtp = useRef(false)
 
-  // envia o OTP na primeira montagem caso a autoSend seja true
+  // envia o OTP na primeira montagem caso a  autoSend seja true
   useEffect(() => {
     if (!autoSend || hasSentInitialOtp.current) return
 
@@ -25,17 +22,17 @@ const useOtpLogic = ({
       try {
         // impede que o otp seja enviado mais de uma vez na primeira montagem do componente
         hasSentInitialOtp.current = true
+
+        // uso direto do axios para evitar o estado de loading de useApi()
         await api.post(`/otps/email-verification/${userId}`)
-      } catch (error) {
+      } catch {
         hasSentInitialOtp.current = false
-        toast.error(
-          error?.response?.data['message'] || 'Failed to send code. Try again.'
-        )
+        toast.error('Failed to send code. Try again.') // erro genérico
       }
     }
 
     if (userId) sendInitialOtp()
-  }, [autoSend, userId])
+  }, [autoSend, verifyRequest, userId])
 
   // timer de reenvio
   useEffect(() => {
@@ -53,8 +50,6 @@ const useOtpLogic = ({
   }, [timer])
 
   const handleOtpSubmit = async (currentOtp) => {
-    setIsSubmitting(true)
-
     try {
       // se o type for VERIFY, aponta para a rota de verificação de e-mail.
       // Se for RESET, para a rota de redefinição de senha
@@ -65,40 +60,36 @@ const useOtpLogic = ({
 
       // o endpoint para verificação de e-mail recebe apenas o otp
       // e a redefinição de senha recebe e-mail e otp
-      const payload =
-        type === 'VERIFY' ? { otp: currentOtp } : { email, otp: currentOtp }
+      const payload = type === 'VERIFY' ? { otp: currentOtp } : { email, otp: currentOtp }
 
-      await api.post(endpoint, payload)
+      await verifyRequest({ url: endpoint, method: 'POST', data: payload })
       await onVerifySuccess()
     } catch (error) {
-      setIsSubmitting(false)
+      // se o código for inválido, limpa os inputs e foca no primeiro
       if (error.response?.data['code'] === 'OTP_NOT_FOUND') {
-        setOtp(new Array(6).fill('')) // limpa os inputs
-        inputRefs.current[0]?.focus() // foca no primeiro input
+        setOtp(new Array(6).fill(''))
+        inputRefs.current[0]?.focus()
       }
-
-      toast.error(
-        error?.response?.data['message'] || 'Something went wrong. Try again.'
-      )
     }
   }
 
   const handleResend = async () => {
-    setIsResending(true)
-
     try {
       // se o otp for do tipo VERIFY, envia apenas o type. Se for RESET, envia email e type
       const payload = type === 'VERIFY' ? { type } : { email, type }
-      const response = await api.post('/otps/resend', payload)
-
-      toast.success(response.data['message'])
-      setTimer(60)
-    } catch (error) {
-      toast.error(
-        error.response?.data['message'] || 'Failed to resend code. Try again.'
+      const data = await resendRequest(
+        {
+          url: '/otps/resend',
+          method: 'POST',
+          data: payload,
+        },
+        true,
+        'Failed to resend code. Try again.'
       )
-    } finally {
-      setIsResending(false)
+      toast.success(data.message)
+      setTimer(60)
+    } catch {
+      // o hook useApi() lida com os erros; não é necessário catch(error)
     }
   }
 
