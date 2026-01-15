@@ -37,7 +37,7 @@ const Home = () => {
     }
   }
 
-  const firstName = userData?.name.split(' ')[0] || 'user'
+  const firstName = userData?.name.split(' ')[0] || 'User'
   const isVerified = userData?.isAccountVerified
 
   return (
@@ -48,7 +48,11 @@ const Home = () => {
           subtitle="It's an honor, but..."
           description="Could you verify your e-mail? It's just going to take you one minute. After that, you'll be free to delete your account."
         >
-          <Link to="/verify-email" className="btn btn--outline">
+          <Link
+            to="/verify-email"
+            className="btn btn--outline"
+            aria-label="Click to verify your email address"
+          >
             Verify e-mail
           </Link>
         </UserSection>
@@ -61,6 +65,7 @@ const Home = () => {
           <button
             type="button"
             className="btn btn--danger"
+            title="Warning: this action cannot be undone"
             onClick={handleClickDelete}
           >
             Delete account
