@@ -10,11 +10,7 @@ const loginValidator = [
     .isEmail()
     .withMessage('Provide a valid e-mail address.'),
 
-  body('password')
-    .notEmpty()
-    .withMessage('Password cannot be empty.')
-    .isLength({ min: 8 })
-    .withMessage('Password must be at least 8 characters.'),
+  body('password').notEmpty().withMessage('Password cannot be empty.'),
 
   handleValidation,
 ]
