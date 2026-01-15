@@ -1,3 +1,5 @@
+import ResendAction from './ResendAction'
+
 const OtpForm = ({ logic, title, description }) => {
   const {
     otp,
@@ -51,22 +53,7 @@ const OtpForm = ({ logic, title, description }) => {
         </form>
       </div>
 
-      <div className="resend">
-        <p>Didn't receive the code?</p>
-
-        <button
-          type="button"
-          className="btn btn--link"
-          onClick={handleResend}
-          disabled={timer > 0 || isResending}
-        >
-          {timer > 0
-            ? `Resend in ${timer}s`
-            : isResending
-            ? 'Sending...'
-            : 'Resend code'}
-        </button>
-      </div>
+      <ResendAction onResend={handleResend} timer={timer} isResending={isResending} />
     </>
   )
 }
