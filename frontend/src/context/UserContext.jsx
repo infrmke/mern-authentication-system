@@ -1,52 +1,43 @@
 import { createContext, useState, useEffect } from 'react'
-import toast from 'react-hot-toast'
-
-import api from '../services/axios'
+import useApi from '../hooks/useApi'
 
 const UserContext = createContext()
 
 const UserProvider = ({ children }) => {
   const [userData, setUserData] = useState(null)
-  const [loading, setLoading] = useState(true)
+  const [loading, setLoading] = useState(true) // esse loading é GLOBAL
+  const { request } = useApi()
 
   // busca dados do usuário na primeira montagem
   useEffect(() => {
     const verifyToken = async () => {
       try {
-        const response = await api.get('/sessions/me')
+        const data = await request(
+          { url: '/sessions/me', method: 'GET' },
+          false // não exibe nenhum toast para evitar confusão
+        )
 
-        if (response.data) {
-          setUserData(response.data)
+        if (data) {
+          setUserData(data)
         }
-      } catch (error) {
+      } catch {
+        // o hook useApi() lida com os erros; não é necessário catch(error)
         setUserData(null)
-
-        if (
-          error.response?.data['status'] !== 401 &&
-          error.response?.data['status'] !== 403
-        ) {
-          toast.error(
-            'There was a server connection error. Please try again later.',
-            { duration: 6000 }
-          )
-        }
       } finally {
         setLoading(false)
       }
     }
 
     verifyToken()
-  }, [])
+  }, [request])
 
-  // realiza a busca de dados do usuário (manual)
+  // busca e atualiza os dados do usuário de forma manual
   const refreshUserData = async () => {
     try {
-      const response = await api.get('/sessions/me')
-      setUserData(response.data)
-    } catch (error) {
-      toast.error(
-        error?.response?.data['message'] || 'Something went wrong. Try again.'
-      )
+      const response = await request({ url: '/sessions/me', method: 'GET' })
+      setUserData(response)
+    } catch {
+      // o hook useApi() lida com os erros
       setUserData(null)
     }
   }

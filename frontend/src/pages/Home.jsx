@@ -4,13 +4,15 @@ import { Link } from 'react-router-dom'
 import toast from 'react-hot-toast'
 
 import useTitle from '../hooks/useTitle'
-import api from '../services/axios'
+import useApi from '../hooks/useApi'
 import UserSection from '../components/UserSection'
 
 const Home = () => {
   useTitle('Home')
   const { userData, setUserData } = useContext(UserContext)
+  const { request } = useApi()
 
+  // confirma se o usuário quer deletar a conta e então a deleta
   const handleClickDelete = async () => {
     if (
       !window.confirm(
@@ -21,16 +23,17 @@ const Home = () => {
     }
 
     try {
-      await api.delete(`/users/${userData.id}`)
+      await request({
+        url: `/users/${userData.id}`,
+        method: 'DELETE',
+      })
+
       toast.success('Account deleted successfully.', {
         duration: 6000,
       })
       setUserData(null)
-    } catch (error) {
-      toast.error(
-        error.response?.data['message'] ||
-          "Something didn't work. Try again later."
-      )
+    } catch {
+      // o hook useApi() lida com os erros; não é necessário catch(error)
     }
   }
 

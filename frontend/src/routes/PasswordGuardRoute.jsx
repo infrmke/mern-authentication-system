@@ -1,12 +1,11 @@
 import { useState, useEffect } from 'react'
 import { useLocation, Navigate, Outlet } from 'react-router-dom'
-import toast from 'react-hot-toast'
-
 import SpinnerLoader from '../components/loaders/SpinnerLoader'
-import api from '../services/axios'
+import useApi from '../hooks/useApi'
 
 const PasswordGuardRoute = () => {
   const [isValid, setIsValid] = useState(null)
+  const { request } = useApi()
 
   const location = useLocation()
   const email = location.state?.email
@@ -20,19 +19,24 @@ const PasswordGuardRoute = () => {
       }
 
       try {
-        await api.get('/otps/password-reset/status')
-        setIsValid(true)
-      } catch (error) {
-        setIsValid(false)
+        const data = await request({
+          url: '/otps/password-reset/status',
+          method: 'GET',
+        })
 
-        toast.error(
-          error?.response?.data['message'] || 'Something went wrong. Try again.'
-        )
+        if (data && data.active) {
+          setIsValid(true)
+        } else {
+          setIsValid(false)
+        }
+      } catch {
+        // o hook useApi() lida com os erros; não é necessário catch(error)
+        setIsValid(false)
       }
     }
 
     checkStatus()
-  }, [email])
+  }, [email, request])
 
   if (isValid === null) return <SpinnerLoader />
 
