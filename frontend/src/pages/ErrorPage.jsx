@@ -6,15 +6,17 @@ const ErrorPage = () => {
   const error = useRouteError()
 
   return (
-    <div className="error fade-in">
+    <div className="error fade-in" role="alert">
       <h1>Oops!</h1>
       <p>Looks like something went wrong.</p>
 
-      <p>
-        <i>{error.statusText}</i>
+      <p aria-live="polite">
+        <code>{error.statusText || 'Unknown Error'}</code>
       </p>
 
-      <Link to="/">Go back</Link>
+      <Link to="/" aria-label="Go back to previous page">
+        Go back
+      </Link>
     </div>
   )
 }

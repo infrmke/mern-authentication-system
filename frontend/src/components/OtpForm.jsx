@@ -3,9 +3,11 @@ import ResendAction from './ResendAction'
 const OtpForm = ({ logic, title, description }) => {
   const {
     otp,
+    type,
     timer,
     isSubmitting,
     isResending,
+    isError,
     inputRefs,
     handleOtpSubmit,
     handleResend,
@@ -13,6 +15,9 @@ const OtpForm = ({ logic, title, description }) => {
     handleKeyDown,
     handlePaste,
   } = logic
+
+  const isOtpComplete = otp.every((digit) => digit !== '')
+  const otpType = type === 'VERIFY' ? 'Verification' : 'Password reset'
 
   return (
     <>
@@ -26,27 +31,36 @@ const OtpForm = ({ logic, title, description }) => {
             handleOtpSubmit(otp.join(''))
           }}
         >
-          <div className="form__group form__group--otp">
+          <div className="form__group form__group--otp" role="group" aria-label={`${otpType} code`}>
             {otp.map((number, index) => (
               <input
                 key={index}
                 type="text"
+                inputMode="numeric"
+                pattern="[0-9]*"
                 maxLength={1}
                 value={number}
-                aria-label={`${index + 1}° digit`}
                 ref={(element) => (inputRefs.current[index] = element)}
                 onChange={(e) => handleChange(e.target.value, index)}
                 onKeyDown={(e) => handleKeyDown(e, index)}
                 onPaste={index === 0 ? handlePaste : undefined} // apenas recebe ctrl+v no primeiro input
                 disabled={isSubmitting}
+                aria-label={`Digit ${index + 1} of ${otp.length}`}
+                aria-required="true"
+                aria-invalid={isError ? 'true' : 'false'}
               />
             ))}
+          </div>
+
+          <div className="sr-only" aria-live="polite">
+            {isSubmitting ? 'Verifying code...' : isOtpComplete ? 'Code entered' : ''}
           </div>
 
           <button
             type="submit"
             className="btn btn--warning"
-            disabled={otp.some((digit) => digit === '') || isSubmitting}
+            disabled={!isOtpComplete || isSubmitting}
+            aria-busy={isSubmitting}
           >
             {isSubmitting ? 'Verifying...' : 'Confirm'}
           </button>
