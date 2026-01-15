@@ -7,6 +7,7 @@ import { UserContext } from '../context/UserContext'
 import useFormSubmit from '../hooks/useFormSubmit'
 import EntryCard from '../components/EntryCard'
 import InputGroup from '../components/InputGroup'
+import RedirectAction from '../components/RedirectAction'
 
 import api from '../services/axios'
 
@@ -78,11 +79,7 @@ const SignUp = () => {
         />
       </EntryCard>
 
-      <div className="redirect">
-        <p>
-          Already have an account? <Link to="/">Sign in here</Link>
-        </p>
-      </div>
+      <RedirectAction text="Already have an account?" linkText="Sign in here" to="/" />
     </div>
   )
 }
