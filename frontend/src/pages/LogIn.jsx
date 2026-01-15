@@ -8,6 +8,7 @@ import { UserContext } from '../context/UserContext'
 import useFormSubmit from '../hooks/useFormSubmit'
 import EntryCard from '../components/EntryCard'
 import InputGroup from '../components/InputGroup'
+import RedirectAction from '../components/RedirectAction'
 
 import api from '../services/axios'
 
@@ -30,11 +31,7 @@ const LogIn = () => {
 
   return (
     <div className="entry fade-in">
-      <EntryCard
-        title="Welcome back!"
-        onSubmit={handleSubmit}
-        buttonText="Login"
-      >
+      <EntryCard title="Welcome back!" onSubmit={handleSubmit} buttonText="Login">
         <InputGroup
           label="E-mail address"
           icon={User}
@@ -53,17 +50,11 @@ const LogIn = () => {
           placeholder="Password"
         />
         <div className="form__group">
-          <p>
-            <Link to="/forgot-password">Forgot your password?</Link>
-          </p>
+          <RedirectAction linkText="Forgot your password?" to="/forgot-password" />
         </div>
       </EntryCard>
 
-      <div className="redirect">
-        <p>
-          Don't have an account yet? <Link to="/register">Sign up here</Link>
-        </p>
-      </div>
+      <RedirectAction text="Don't have an account yet?" linkText="Sign up here" to="/register" />
     </div>
   )
 }
