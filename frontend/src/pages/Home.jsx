@@ -5,10 +5,10 @@ import toast from 'react-hot-toast'
 
 import useTitle from '../hooks/useTitle'
 import api from '../services/axios'
+import UserSection from '../components/UserSection'
 
 const Home = () => {
   useTitle('Home')
-
   const { userData, setUserData } = useContext(UserContext)
 
   const handleClickDelete = async () => {
@@ -34,49 +34,37 @@ const Home = () => {
     }
   }
 
+  const firstName = userData?.name.split(' ')[0] || 'user'
+  const isVerified = userData?.isAccountVerified
+
   return (
-    <section className="user fade-in">
-      {!userData?.isAccountVerified ? (
-        <>
-          <div className="user__heading">
-            <h1>Welcome, {userData?.name.split(' ')[0] || 'user'}</h1>
-            <h2>It's an honor, but...</h2>
-            <p>
-              Could you verify your e-mail? It's just going to take you one
-              minute. After that, you'll be free to delete your account.
-            </p>
-          </div>
-
-          <div className="user__actions">
-            <Link to="/verify-email" className="btn btn--outline">
-              Verify e-mail
-            </Link>
-          </div>
-        </>
+    <main className="user fade-in">
+      {!isVerified ? (
+        <UserSection
+          title={`Welcome, ${firstName}`}
+          subtitle="It's an honor, but..."
+          description="Could you verify your e-mail? It's just going to take you one minute. After that, you'll be free to delete your account."
+        >
+          <Link to="/verify-email" className="btn btn--outline">
+            Verify e-mail
+          </Link>
+        </UserSection>
       ) : (
-        <>
-          <div className="user__heading">
-            <h1>Hi, {userData?.name.split(' ')[0] || 'user'}</h1>
-            <h2>Looking good!</h2>
-            <p>
-              Seems like everything is in order here. You can now delete your
-              account if you'd like. More features will only be added in the
-              future...
-            </p>
-          </div>
-
-          <div className="user__actions">
-            <button
-              type="button"
-              className="btn btn--danger"
-              onClick={handleClickDelete}
-            >
-              Delete account
-            </button>
-          </div>
-        </>
+        <UserSection
+          title={`Hi, ${firstName}`}
+          subtitle="Looking good!"
+          description="Seems like everything is in order here. You can now delete your account if you'd like. More features will only be added in the future..."
+        >
+          <button
+            type="button"
+            className="btn btn--danger"
+            onClick={handleClickDelete}
+          >
+            Delete account
+          </button>
+        </UserSection>
       )}
-    </section>
+    </main>
   )
 }
 
