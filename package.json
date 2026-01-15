@@ -1,8 +1,21 @@
 {
+  "name": "mern-authentication-system",
+  "version": "1.0.0",
+  "description": "Plataforma de login e cadastro com verificação do tipo OTP",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/infrmke/mern-authentication-system.git"
+  },
+  "author": "Inaros Lemuel <infromke@gmail.com>",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/infrmke/mern-authentication-system/issues"
+  },
+  "homepage": "https://github.com/infrmke/mern-authentication-system#readme",
   "scripts": {
     "server": "npm run dev --prefix backend",
     "client": "npm run dev --prefix frontend",
-    "dev": "concurrently \"npm run server\" \"npm run client\""
+    "dev": "concurrently -n \"SERVER,CLIENT\" -c \"bgMagenta.bold,bgCyanBright.bold\" \"npm run server\" \"npm run client\""
   },
   "devDependencies": {
     "concurrently": "^9.2.1"
