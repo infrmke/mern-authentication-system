@@ -6,6 +6,7 @@ import useApi from './useApi'
 const useOtpLogic = ({ type, email, userId, onVerifySuccess, autoSend = false }) => {
   const [otp, setOtp] = useState(new Array(6).fill(''))
   const [timer, setTimer] = useState(0)
+  const [isError, setIsError] = useState(false)
 
   // dois hooks separados para loadings independentes
   const { request: verifyRequest, loading: isSubmitting } = useApi()
@@ -51,6 +52,8 @@ const useOtpLogic = ({ type, email, userId, onVerifySuccess, autoSend = false })
 
   // handler: envia o otp
   const handleOtpSubmit = async (currentOtp) => {
+    setIsError(false)
+
     try {
       // se o type for VERIFY, aponta para a rota de verificação de e-mail.
       // Se for RESET, para a rota de redefinição de senha
@@ -66,6 +69,8 @@ const useOtpLogic = ({ type, email, userId, onVerifySuccess, autoSend = false })
       await verifyRequest({ url: endpoint, method: 'POST', data: payload })
       await onVerifySuccess()
     } catch (error) {
+      setIsError(true)
+
       // se o código for inválido, limpa os inputs e foca no primeiro
       if (error.response?.data['code'] === 'OTP_NOT_FOUND') {
         setOtp(new Array(6).fill(''))
@@ -98,6 +103,7 @@ const useOtpLogic = ({ type, email, userId, onVerifySuccess, autoSend = false })
   // handler: evento onChange
   const handleChange = (value, index) => {
     if (isNaN(value)) return false
+    if (isError) setIsError(false) // limpa o erro assim que o usuário digitar algo novo
 
     const newOtp = [...otp]
     newOtp[index] = value
@@ -152,6 +158,7 @@ const useOtpLogic = ({ type, email, userId, onVerifySuccess, autoSend = false })
     timer,
     isSubmitting,
     isResending,
+    isError,
     inputRefs,
     handleOtpSubmit,
     handleResend,
