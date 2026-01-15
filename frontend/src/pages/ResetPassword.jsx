@@ -3,9 +3,11 @@ import { useLocation, useNavigate } from 'react-router-dom'
 import toast from 'react-hot-toast'
 import { LockOpen, Lock } from 'lucide-react'
 
-import api from '../services/axios'
+import useFormSubmit from '../hooks/useFormSubmit'
 import EntryCard from '../components/EntryCard'
 import InputGroup from '../components/InputGroup'
+
+import api from '../services/axios'
 
 const ResetPassword = () => {
   const passwordId = useId()
@@ -16,33 +18,20 @@ const ResetPassword = () => {
 
   const email = location.state?.email
 
-  const handleResetSubmit = async (e) => {
-    e.preventDefault()
-
-    const formData = new FormData(e.target)
-    const { new_password, confirm_password } = Object.fromEntries(formData)
-
-    try {
-      await api.patch('/otps/password-reset', {
-        email,
-        new_password,
-        confirm_password,
-      })
-      toast.success('Your password has been changed!', { duration: 6000 })
-      navigate('/')
-    } catch (error) {
-      toast.error(
-        error?.response?.data['message'] || 'Something went wrong. Try again.'
-      )
-    }
+  const handleReset = async (data) => {
+    await api.patch('/otps/password-reset', { email, ...data })
+    toast.success('Your password has been changed!', { duration: 6000 })
+    navigate('/')
   }
+
+  const { handleSubmit } = useFormSubmit(handleReset)
 
   return (
     <div className="entry fade-in">
       <EntryCard
         title="Change your password"
         description="Enter a new password below to change your password."
-        onSubmit={handleResetSubmit}
+        onSubmit={handleSubmit}
         buttonText="Reset password"
       >
         <InputGroup

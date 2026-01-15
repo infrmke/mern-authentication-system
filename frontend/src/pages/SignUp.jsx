@@ -1,11 +1,10 @@
 import { useContext, useId } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
-import toast from 'react-hot-toast'
-
 import { User, AtSign, LockOpen, Lock } from 'lucide-react'
 
 import useTitle from '../hooks/useTitle'
 import { UserContext } from '../context/UserContext'
+import useFormSubmit from '../hooks/useFormSubmit'
 import EntryCard from '../components/EntryCard'
 import InputGroup from '../components/InputGroup'
 
@@ -22,35 +21,20 @@ const SignUp = () => {
   const passwordId = useId()
   const confirmPwdId = useId()
 
-  const handleSignUpSubmit = async (e) => {
-    e.preventDefault()
-
-    const formData = new FormData(e.target)
-    const { name, email, password, confirm_password } =
-      Object.fromEntries(formData)
-
-    try {
-      const user = await api.post('/users', {
-        name,
-        email,
-        password,
-        confirm_password,
-      })
-      setUserData(user['data'])
-      navigate('/home')
-    } catch (error) {
-      toast.error(
-        error?.response?.data['message'] || "Something didn't work. Try again."
-      )
-    }
+  const handleSignUp = async (data) => {
+    const user = await api.post('/users', data)
+    setUserData(user['data'])
+    navigate('/home')
   }
+
+  const { handleSubmit } = useFormSubmit(handleSignUp)
 
   return (
     <div className="entry fade-in">
       <EntryCard
         title="Register"
         description="Enter your details below to create an account"
-        onSubmit={handleSignUpSubmit}
+        onSubmit={handleSubmit}
         buttonText="Sign up"
       >
         <InputGroup
