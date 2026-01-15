@@ -5,23 +5,29 @@ import api from '../services/axios'
 const useApi = () => {
   const [loading, setLoading] = useState(false)
 
-  const request = useCallback(async (config, showToast = true) => {
-    setLoading(true)
+  const request = useCallback(
+    async (config, showToast = true, customMessage) => {
+      setLoading(true)
 
-    try {
-      const response = await api(config)
-      return response.data
-    } catch (error) {
-      if (showToast) {
-        const message =
-          error.response?.data?.message || "Something didn't work. Try again!"
-        toast.error(message)
+      try {
+        const response = await api(config)
+        return response.data
+      } catch (error) {
+        if (showToast) {
+          const errorMessage =
+            error.response?.data?.message ||
+            customMessage ||
+            "Something didn't work. Try again!"
+
+          toast.error(errorMessage)
+        }
+        throw error
+      } finally {
+        setLoading(false)
       }
-      throw error
-    } finally {
-      setLoading(false)
-    }
-  }, [])
+    },
+    []
+  )
 
   return { request, loading }
 }
