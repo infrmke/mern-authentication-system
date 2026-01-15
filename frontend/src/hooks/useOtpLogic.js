@@ -49,6 +49,7 @@ const useOtpLogic = ({ type, email, userId, onVerifySuccess, autoSend = false })
     return () => clearInterval(interval)
   }, [timer])
 
+  // handler: envia o otp
   const handleOtpSubmit = async (currentOtp) => {
     try {
       // se o type for VERIFY, aponta para a rota de verificação de e-mail.
@@ -73,6 +74,7 @@ const useOtpLogic = ({ type, email, userId, onVerifySuccess, autoSend = false })
     }
   }
 
+  // handler: reenvia o otp
   const handleResend = async () => {
     try {
       // se o otp for do tipo VERIFY, envia apenas o type. Se for RESET, envia email e type
@@ -113,7 +115,7 @@ const useOtpLogic = ({ type, email, userId, onVerifySuccess, autoSend = false })
   }
 
   // handler: evento onkeyDown
-  //  move o foco para o input anterior se o usuário estiver apagando o código
+  // move o foco para o input anterior se o usuário estiver apagando o código
   const handleKeyDown = (e, index) => {
     if (e.key === 'Backspace' && !otp[index] && index > 0) {
       inputRefs.current[index - 1].focus()
@@ -146,6 +148,7 @@ const useOtpLogic = ({ type, email, userId, onVerifySuccess, autoSend = false })
 
   return {
     otp,
+    type,
     timer,
     isSubmitting,
     isResending,
