@@ -17,15 +17,15 @@
     z-index: 10;
   }
 
-  &:hover {
-    &__user {
+  &:hover,
+  &:focus-within {
+    .menu__user {
       border-bottom: 2px solid $clr-primary-hover;
     }
-  }
 
-  /* revela li's escondidas quando a primeira está sob hover */
-  &:hover li:not(.menu__user) {
-    display: block;
+    li:not(.menu__user) {
+      display: block; // revela as li's escondidas quando a primeira está sob hover ou focus(within)
+    }
   }
 
   &__user {
