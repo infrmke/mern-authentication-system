@@ -20,7 +20,7 @@ const sendVerificationEmail = async (id) => {
     throwHttpError(400, 'Account has already been verified.', 'USER_ALREADY_VERIFIED')
 
   const otpOptions = createOtpOptions(user._id, 'VERIFY')
-  const newOtp = await OtpRepository.createOtp(otpOptions)
+  const newOtp = await OtpRepository.create(otpOptions)
 
   const mail = getOtpMailOptions(user.email, newOtp.code, 'VERIFY')
   await sendEmail(mail)
@@ -38,7 +38,7 @@ const sendResetEmail = async (filter) => {
   const { user } = capsule
 
   const otpOptions = createOtpOptions(user._id, 'RESET')
-  const newOtp = await OtpRepository.createOtp(otpOptions)
+  const newOtp = await OtpRepository.create(otpOptions)
 
   const mail = getOtpMailOptions(user.email, newOtp.code, 'RESET')
   await sendEmail(mail)
@@ -56,7 +56,7 @@ const resendCode = async (type, filter) => {
   const { user } = capsule
 
   // deleta o OTP previamente gerado
-  await OtpRepository.deleteOtp(user._id, type)
+  await OtpRepository.remove(user._id, type)
 
   if (type === 'VERIFY') {
     return await sendVerificationEmail(user._id)
@@ -75,7 +75,7 @@ const validateEmailCode = async (id, otp, otpType) => {
   if (user.isAccountVerified)
     throwHttpError(400, 'Account has already been verified.', 'USER_ALREADY_VERIFIED')
 
-  const otpDocument = await OtpRepository.findOtpById(user._id, 'VERIFY')
+  const otpDocument = await OtpRepository.findById(user._id, 'VERIFY')
 
   if (!otpDocument) throwHttpError(500, 'Could not verify code. Try again.')
 
@@ -88,7 +88,7 @@ const validateEmailCode = async (id, otp, otpType) => {
 
   if (!updatedUser) throwHttpError(500, 'Could not update user. Try again.')
 
-  await OtpRepository.deleteOtp(id, 'VERIFY')
+  await OtpRepository.remove(id, 'VERIFY')
 
   return updatedUser
 }
@@ -100,14 +100,14 @@ const validateResetCode = async (otp, otpType, filter) => {
 
   const { user } = capsule
 
-  const otpDocument = await OtpRepository.findOtpById(user._id, 'RESET')
+  const otpDocument = await OtpRepository.findById(user._id, 'RESET')
 
   if (!otpDocument) throwHttpError(500, 'Could not verify code. Try again.')
 
   if (!otpDocument.code || otp !== otpDocument.code || otpType !== otpDocument.type)
     throwHttpError(403, 'Invalid code.', 'OTP_NOT_FOUND')
 
-  await OtpRepository.deleteOtp(user._id, 'RESET')
+  await OtpRepository.remove(user._id, 'RESET')
 
   const passwordToken = generateToken({ id: user._id }, process.env.JWT_RESET_SECRET, '15m')
 
