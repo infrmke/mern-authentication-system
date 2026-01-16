@@ -1,7 +1,7 @@
 import SessionService from './session.service.js'
 import throwHttpError from '../../utils/throwHttpError.js'
 
-const status = async (req, res, next) => {
+const show = async (req, res, next) => {
   const { id } = req.user
 
   try {
@@ -12,7 +12,7 @@ const status = async (req, res, next) => {
   }
 }
 
-const logIn = async (req, res, next) => {
+const authenticate = async (req, res, next) => {
   if (req.cookies.accessToken) {
     throwHttpError(400, 'Already logged in.', 'USER_ALREADY_AUTHENTICATED')
   }
@@ -41,7 +41,7 @@ const logIn = async (req, res, next) => {
   }
 }
 
-const logOut = async (req, res, next) => {
+const terminate = async (req, res, next) => {
   if (!req.cookies.accessToken) {
     throwHttpError(400, 'Already logged out.', 'USER_ALREADY_UNAUTHENTICATED')
   }
@@ -60,7 +60,7 @@ const logOut = async (req, res, next) => {
 }
 
 export default {
-  status,
-  logIn,
-  logOut,
+  show,
+  authenticate,
+  terminate,
 }
