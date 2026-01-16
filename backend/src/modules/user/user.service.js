@@ -5,7 +5,7 @@ import generateToken from '../../utils/generateToken.js'
 import { sendEmail } from '../../config/nodemailer.js'
 import { getWelcomeMailOptions } from '../../utils/generateMail.js'
 
-const findAllUsers = async (page = 1, limit = 10) => {
+const list = async (page = 1, limit = 10) => {
   const offset = (page - 1) * limit
 
   const { users, totalItems } = await UserRepository.findAll(limit, offset)
@@ -26,7 +26,7 @@ const findAllUsers = async (page = 1, limit = 10) => {
   }
 }
 
-const findUser = async (filter, projection = undefined) => {
+const find = async (filter, projection = undefined) => {
   const user = await UserRepository.findOne(filter, projection)
 
   if (!user) return null
@@ -36,7 +36,7 @@ const findUser = async (filter, projection = undefined) => {
   return { user, formattedUser }
 }
 
-const findUserById = async (id) => {
+const show = async (id) => {
   const user = await UserRepository.findById(id)
 
   if (!user) return null
@@ -46,7 +46,7 @@ const findUserById = async (id) => {
   return { user, formattedUser }
 }
 
-const createUser = async (data) => {
+const store = async (data) => {
   const user = await UserRepository.create(data)
 
   if (!user) throwHttpError(500, 'Could not create user.')
@@ -61,8 +61,8 @@ const createUser = async (data) => {
   return { formattedUser, accessToken }
 }
 
-const updateUserById = async (id, data) => {
-  const user = await UserRepository.updateById(id, data)
+const update = async (id, data) => {
+  const user = await UserRepository.update(id, data)
 
   if (!user) return null
 
@@ -71,8 +71,8 @@ const updateUserById = async (id, data) => {
   return formattedUser
 }
 
-const deleteUserById = async (id) => {
-  const user = await UserRepository.deleteById(id)
+const destroy = async (id) => {
+  const user = await UserRepository.remove(id)
 
   if (!user) return null
 
@@ -82,10 +82,10 @@ const deleteUserById = async (id) => {
 }
 
 export default {
-  findAllUsers,
-  findUser,
-  findUserById,
-  createUser,
-  updateUserById,
-  deleteUserById,
+  list,
+  find,
+  show,
+  store,
+  update,
+  destroy,
 }
