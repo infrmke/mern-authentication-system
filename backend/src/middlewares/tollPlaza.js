@@ -14,15 +14,10 @@ const verifiedOnly = [verifyAccessToken, isAccountVerified]
 const ownerOnly = [verifyAccessToken, verifyOwnership]
 
 /**
- * Verifica se o usuário está logado e se sua conta foi verificada.
- * Também verifica se o ID (`id`) passado é válido e se o usuário logado é dono da conta que deseja alterar.
+ * Verifica se o usuário está logado se o ID (`id`) passado é válido.
+ * Também verifica se o usuário logado é dono da conta que deseja alterar e se sua conta está verificada.
  */
-const fullLock = [
-  verifyAccessToken,
-  isAccountVerified,
-  validateId,
-  verifyOwnership,
-]
+const fullLock = [verifyAccessToken, validateId, verifyOwnership, isAccountVerified]
 
 /**
  * Verifica se tipo (`type`) do otp enviado é `VERIFY` ou `RESET`.
