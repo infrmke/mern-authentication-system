@@ -6,7 +6,7 @@ import { validatePassword } from '../../utils/password.js'
 import formatUserObject from '../../utils/formatUserObject.js'
 
 const checkStatus = async (id) => {
-  const capsule = await UserService.findUserById(id)
+  const capsule = await UserService.show(id)
 
   if (!capsule) return null
 
@@ -18,7 +18,7 @@ const checkStatus = async (id) => {
 }
 
 const logUserIn = async (password, filter) => {
-  const capsule = await UserService.findUser(filter, '+password')
+  const capsule = await UserService.find(filter, '+password')
 
   if (!capsule) return null
 
@@ -26,16 +26,11 @@ const logUserIn = async (password, filter) => {
 
   const isPwdValid = await validatePassword(password, user.password)
 
-  if (!isPwdValid)
-    throwHttpError(400, 'Incorrect credentials.', 'USER_INVALID_CREDENTIALS')
+  if (!isPwdValid) throwHttpError(400, 'Incorrect credentials.', 'USER_INVALID_CREDENTIALS')
 
   const formattedUser = formatUserObject(user)
 
-  const accessToken = generateToken(
-    { id: user._id },
-    process.env.JWT_ACCESS_SECRET,
-    '1d'
-  )
+  const accessToken = generateToken({ id: user._id }, process.env.JWT_ACCESS_SECRET, '1d')
 
   return { formattedUser, accessToken }
 }
