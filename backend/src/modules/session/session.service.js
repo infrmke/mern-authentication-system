@@ -5,7 +5,7 @@ import generateToken from '../../utils/generateToken.js'
 import { validatePassword } from '../../utils/password.js'
 import formatUserObject from '../../utils/formatUserObject.js'
 
-const checkStatus = async (id) => {
+const verify = async (id) => {
   const capsule = await UserService.show(id)
 
   if (!capsule) return null
@@ -17,7 +17,7 @@ const checkStatus = async (id) => {
   return formattedUser
 }
 
-const logUserIn = async (password, filter) => {
+const authenticate = async (password, filter) => {
   const capsule = await UserService.find(filter, '+password')
 
   if (!capsule) return null
@@ -25,7 +25,6 @@ const logUserIn = async (password, filter) => {
   const { user } = capsule
 
   const isPwdValid = await validatePassword(password, user.password)
-
   if (!isPwdValid) throwHttpError(400, 'Incorrect credentials.', 'USER_INVALID_CREDENTIALS')
 
   const formattedUser = formatUserObject(user)
