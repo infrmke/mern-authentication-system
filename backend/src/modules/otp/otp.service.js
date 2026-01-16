@@ -10,18 +10,14 @@ import { getOtpMailOptions } from '../../utils/generateMail.js'
 import { sendEmail } from '../../config/nodemailer.js'
 
 const sendVerificationEmail = async (id) => {
-  const capsule = await UserService.findUserById(id)
+  const capsule = await UserService.show(id)
 
   if (!capsule) return null
 
   const { user } = capsule
 
   if (user.isAccountVerified)
-    throwHttpError(
-      400,
-      'Account has already been verified.',
-      'USER_ALREADY_VERIFIED'
-    )
+    throwHttpError(400, 'Account has already been verified.', 'USER_ALREADY_VERIFIED')
 
   const otpOptions = createOtpOptions(user._id, 'VERIFY')
   const newOtp = await OtpRepository.createOtp(otpOptions)
@@ -35,7 +31,7 @@ const sendVerificationEmail = async (id) => {
 }
 
 const sendResetEmail = async (filter) => {
-  const capsule = await UserService.findUser(filter)
+  const capsule = await UserService.find(filter)
 
   if (!capsule) return null
 
@@ -53,7 +49,7 @@ const sendResetEmail = async (filter) => {
 }
 
 const resendCode = async (type, filter) => {
-  const capsule = await UserService.findUser(filter)
+  const capsule = await UserService.find(filter)
 
   if (!capsule) return null
 
@@ -70,31 +66,23 @@ const resendCode = async (type, filter) => {
 }
 
 const validateEmailCode = async (id, otp, otpType) => {
-  const capsule = await UserService.findUserById(id)
+  const capsule = await UserService.show(id)
 
   if (!capsule) return null
 
   const { user } = capsule
 
   if (user.isAccountVerified)
-    throwHttpError(
-      400,
-      'Account has already been verified.',
-      'USER_ALREADY_VERIFIED'
-    )
+    throwHttpError(400, 'Account has already been verified.', 'USER_ALREADY_VERIFIED')
 
   const otpDocument = await OtpRepository.findOtpById(user._id, 'VERIFY')
 
   if (!otpDocument) throwHttpError(500, 'Could not verify code. Try again.')
 
-  if (
-    !otpDocument.code ||
-    otp !== otpDocument.code ||
-    otpType !== otpDocument.type
-  )
+  if (!otpDocument.code || otp !== otpDocument.code || otpType !== otpDocument.type)
     throwHttpError(403, 'Invalid code.', 'OTP_NOT_FOUND')
 
-  const updatedUser = await UserService.updateUserById(user._id, {
+  const updatedUser = await UserService.update(user._id, {
     isAccountVerified: true,
   })
 
@@ -106,14 +94,9 @@ const validateEmailCode = async (id, otp, otpType) => {
 }
 
 const validateResetCode = async (otp, otpType, filter) => {
-  const capsule = await UserService.findUser(filter)
+  const capsule = await UserService.find(filter)
 
-  if (!capsule)
-    throwHttpError(
-      400,
-      'Verification failed. User not found.',
-      'USER_NOT_FOUND'
-    )
+  if (!capsule) throwHttpError(400, 'Verification failed. User not found.', 'USER_NOT_FOUND')
 
   const { user } = capsule
 
@@ -121,32 +104,24 @@ const validateResetCode = async (otp, otpType, filter) => {
 
   if (!otpDocument) throwHttpError(500, 'Could not verify code. Try again.')
 
-  if (
-    !otpDocument.code ||
-    otp !== otpDocument.code ||
-    otpType !== otpDocument.type
-  )
+  if (!otpDocument.code || otp !== otpDocument.code || otpType !== otpDocument.type)
     throwHttpError(403, 'Invalid code.', 'OTP_NOT_FOUND')
 
   await OtpRepository.deleteOtp(user._id, 'RESET')
 
-  const passwordToken = generateToken(
-    { id: user._id },
-    process.env.JWT_RESET_SECRET,
-    '15m'
-  )
+  const passwordToken = generateToken({ id: user._id }, process.env.JWT_RESET_SECRET, '15m')
 
   return passwordToken
 }
 
 const updatePassword = async (filter, password) => {
-  const capsule = await UserService.findUser(filter, '+password')
+  const capsule = await UserService.find(filter, '+password')
 
   if (!capsule) return null
 
   const { user } = capsule
 
-  const updatedUser = await UserService.updateUserById(user._id, { password })
+  const updatedUser = await UserService.update(user._id, { password })
 
   if (!updatedUser) throwHttpError(500, 'Could not update user. Try again.')
 
