@@ -1,14 +1,14 @@
 import OtpService from './otp.service.js'
 import throwHttpError from '../../utils/throwHttpError.js'
 
-const status = async (req, res, next) => {
+const show = async (req, res, next) => {
   return res.status(200).json({
     active: true,
     message: 'The password reset session is active.',
   })
 }
 
-const sendVerification = async (req, res, next) => {
+const requestVerification = async (req, res, next) => {
   const { id } = req.params
 
   try {
@@ -101,7 +101,7 @@ const verifyEmail = async (req, res, next) => {
   }
 }
 
-const verifyResetCode = async (req, res, next) => {
+const verifyReset = async (req, res, next) => {
   const { email, otp } = req.body
 
   try {
@@ -148,11 +148,11 @@ const resetPassword = async (req, res, next) => {
 }
 
 export default {
-  status,
-  sendVerification,
+  show,
+  requestVerification,
   requestReset,
   resendCode,
   verifyEmail,
-  verifyResetCode,
+  verifyReset,
   resetPassword,
 }
