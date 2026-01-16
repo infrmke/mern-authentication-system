@@ -6,7 +6,7 @@ const getAll = async (req, res, next) => {
   const limit = Math.max(1, parseInt(req.query.limit) || 10)
 
   try {
-    const result = await UserService.findAllUsers(page, limit)
+    const result = await UserService.list(page, limit)
 
     if (!result) {
       return res.status(200).json({ message: 'There are no registered users.' })
@@ -37,7 +37,7 @@ const getById = async (req, res, next) => {
   const { id } = req.params
 
   try {
-    const capsule = await UserService.findUserById(id)
+    const capsule = await UserService.show(id)
 
     if (!capsule) {
       throwHttpError(400, 'User does not exist.', 'USER_NOT_FOUND')
@@ -57,7 +57,7 @@ const create = async (req, res, next) => {
   const data = { name, email, password }
 
   try {
-    const { formattedUser, accessToken } = await UserService.createUser(data)
+    const { formattedUser, accessToken } = await UserService.store(data)
 
     res.cookie('accessToken', accessToken, {
       httpOnly: true,
@@ -87,7 +87,7 @@ const update = async (req, res, next) => {
     const { name, email, password } = req.body
     const updates = { name, email, password }
 
-    const user = await UserService.updateUserById(id, updates)
+    const user = await UserService.update(id, updates)
 
     if (!user) {
       throwHttpError(500, 'Could not update user.')
@@ -103,7 +103,7 @@ const destroy = async (req, res, next) => {
   const { id } = req.params
 
   try {
-    const user = await UserService.deleteUserById(id)
+    const user = await UserService.destroy(id)
 
     if (!user) {
       throwHttpError(400, 'User does not exist.', 'USER_NOT_FOUND')
