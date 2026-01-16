@@ -12,7 +12,7 @@ const sendVerification = async (req, res, next) => {
   const { id } = req.params
 
   try {
-    const user = await OtpService.sendVerificationEmail(id)
+    const user = await OtpService.sendVerification(id)
 
     if (!user) {
       throwHttpError(
@@ -26,8 +26,7 @@ const sendVerification = async (req, res, next) => {
   } catch (error) {
     if (error.code === 11000) {
       error.status = 409
-      error.message =
-        'An active e-mail code has already been sent to this account.'
+      error.message = 'An active e-mail code has already been sent to this account.'
       error.code = 'OTP_ALREADY_SENT'
     }
 
@@ -40,7 +39,7 @@ const requestReset = async (req, res, next) => {
 
   try {
     //  não captura o retorno porque o service lida com o caso de usuário não encontrado
-    await OtpService.sendResetEmail({ email })
+    await OtpService.sendReset({ email })
 
     return res.status(200).json({
       message: 'If the e-mail is registered, a code has been sent.',
@@ -48,8 +47,7 @@ const requestReset = async (req, res, next) => {
   } catch (error) {
     if (error.code === 11000) {
       error.status = 409
-      error.message =
-        'An active password reset code has already been sent to this account.'
+      error.message = 'An active password reset code has already been sent to this account.'
       error.code = 'OTP_ALREADY_SENT'
     }
 
@@ -91,14 +89,10 @@ const verifyEmail = async (req, res, next) => {
   const { otp } = req.body
 
   try {
-    const user = await OtpService.validateEmailCode(id, otp, 'VERIFY')
+    const user = await OtpService.validateEmail(id, otp, 'VERIFY')
 
     if (!user) {
-      throwHttpError(
-        400,
-        'Verification failed. Invalid code or user not found.',
-        'USER_NOT_FOUND'
-      )
+      throwHttpError(400, 'Verification failed. Invalid code or user not found.', 'USER_NOT_FOUND')
     }
 
     res.status(200).json({ message: 'E-mail verified successfully.' })
@@ -111,7 +105,7 @@ const verifyResetCode = async (req, res, next) => {
   const { email, otp } = req.body
 
   try {
-    const passwordToken = await OtpService.validateResetCode(otp, 'RESET', {
+    const passwordToken = await OtpService.validateReset(otp, 'RESET', {
       email,
     })
 
@@ -122,9 +116,7 @@ const verifyResetCode = async (req, res, next) => {
       maxAge: 15 * 60 * 1000, // 15 minutos
     })
 
-    res
-      .status(200)
-      .json({ message: 'Code has been verified. Proceed to password reset.' })
+    res.status(200).json({ message: 'Code has been verified. Proceed to password reset.' })
   } catch (error) {
     next(error)
   }
@@ -134,7 +126,7 @@ const resetPassword = async (req, res, next) => {
   const { email, new_password } = req.body
 
   try {
-    const user = await OtpService.updatePassword({ email }, new_password)
+    const user = await OtpService.resetPassword({ email }, new_password)
 
     if (!user)
       throwHttpError(
