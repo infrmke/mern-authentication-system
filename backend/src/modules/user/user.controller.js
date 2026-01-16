@@ -2,14 +2,32 @@ import UserService from './user.service.js'
 import throwHttpError from '../../utils/throwHttpError.js'
 
 const getAll = async (req, res, next) => {
-  try {
-    const users = await UserService.findAllUsers()
+  const page = Math.max(1, parseInt(req.query.page) || 1)
+  const limit = Math.max(1, parseInt(req.query.limit) || 10)
 
-    if (!users) {
+  try {
+    const result = await UserService.findAllUsers(page, limit)
+
+    if (!result) {
       return res.status(200).json({ message: 'There are no registered users.' })
     }
 
-    res.status(200).json(users)
+    const { users, totalItems, totalPages, currentPage } = result
+
+    // "links" de navegação
+    const nextPage = currentPage < totalPages ? currentPage + 1 : null
+    const prevPage = currentPage > 1 ? currentPage - 1 : null
+
+    res.status(200).json({
+      items: users,
+      pagination: {
+        totalItems,
+        totalPages,
+        currentPage,
+        nextPage,
+        prevPage,
+      },
+    })
   } catch (error) {
     next(error)
   }
