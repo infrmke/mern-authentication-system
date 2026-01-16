@@ -15,8 +15,8 @@ const findById = async (id) => await User.findById(id)
 
 const create = async (data) => await User.create(data)
 
-const updateById = async (id, data) => await User.findByIdAndUpdate(id, data, { new: true })
+const update = async (id, data) => await User.findByIdAndUpdate(id, data, { new: true })
 
-const deleteById = async (id) => await User.findByIdAndDelete(id)
+const remove = async (id) => await User.findByIdAndDelete(id)
 
-export default { findAll, findOne, findById, create, updateById, deleteById }
+export default { findAll, findOne, findById, create, update, remove }
