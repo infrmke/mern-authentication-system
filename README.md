@@ -2,6 +2,8 @@
 
 Uma aplicação de autenticação desenvolvida com a **MERN** Stack, focada em segurança, modularidade e padrões de design em camadas.
 
+O app está hospedado na Render e pode ser acessado [aqui](https://mern-auth-app-b5xg.onrender.com). Mas **atenção**: o servidor pode levar 30 ou 50 segundos para "acordar" no primeiro acesso.
+
 ## Visão Geral Técnica
 
 O projeto implementa um sistema simples de autenticação e autorização que possui foco em estabelecer fluxos seguros de autenticação e gestão de usuários.
