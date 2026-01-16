@@ -9,14 +9,14 @@ const router = Router()
 //  --- PUBLIC ROUTES ---
 
 // @route POST /sessions/login
-router.post('/login', loginValidator, SessionController.logIn)
+router.post('/login', loginValidator, SessionController.authenticate)
 
 // @route POST /sessions/logout
-router.post('/logout', SessionController.logOut)
+router.post('/logout', SessionController.terminate)
 
 //  --- PRIVATE ROUTES ---
 
 // @route GET /sessions/me
-router.get('/me', verifyAccessToken, SessionController.status)
+router.get('/me', verifyAccessToken, SessionController.show)
 
 export default router
