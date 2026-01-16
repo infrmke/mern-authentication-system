@@ -9,7 +9,7 @@ import { createOtpOptions } from '../../utils/generateOtp.js'
 import { getOtpMailOptions } from '../../utils/generateMail.js'
 import { sendEmail } from '../../config/nodemailer.js'
 
-const sendVerificationEmail = async (id) => {
+const sendVerification = async (id) => {
   const capsule = await UserService.show(id)
 
   if (!capsule) return null
@@ -30,7 +30,7 @@ const sendVerificationEmail = async (id) => {
   return formattedUser
 }
 
-const sendResetEmail = async (filter) => {
+const sendReset = async (filter) => {
   const capsule = await UserService.find(filter)
 
   if (!capsule) return null
@@ -59,13 +59,13 @@ const resendCode = async (type, filter) => {
   await OtpRepository.remove(user._id, type)
 
   if (type === 'VERIFY') {
-    return await sendVerificationEmail(user._id)
+    return await sendVerification(user._id)
   } else if (type === 'RESET') {
-    return await sendResetEmail({ email: user.email })
+    return await sendReset({ email: user.email })
   }
 }
 
-const validateEmailCode = async (id, otp, otpType) => {
+const validateEmail = async (id, otp, otpType) => {
   const capsule = await UserService.show(id)
 
   if (!capsule) return null
@@ -93,7 +93,7 @@ const validateEmailCode = async (id, otp, otpType) => {
   return updatedUser
 }
 
-const validateResetCode = async (otp, otpType, filter) => {
+const validateReset = async (otp, otpType, filter) => {
   const capsule = await UserService.find(filter)
 
   if (!capsule) throwHttpError(400, 'Verification failed. User not found.', 'USER_NOT_FOUND')
@@ -114,7 +114,7 @@ const validateResetCode = async (otp, otpType, filter) => {
   return passwordToken
 }
 
-const updatePassword = async (filter, password) => {
+const resetPassword = async (filter, password) => {
   const capsule = await UserService.find(filter, '+password')
 
   if (!capsule) return null
@@ -129,10 +129,10 @@ const updatePassword = async (filter, password) => {
 }
 
 export default {
-  sendVerificationEmail,
-  sendResetEmail,
+  sendVerification,
+  sendReset,
   resendCode,
-  validateEmailCode,
-  validateResetCode,
-  updatePassword,
+  validateEmail,
+  validateReset,
+  resetPassword,
 }
