@@ -5,7 +5,7 @@ const status = async (req, res, next) => {
   const { id } = req.user
 
   try {
-    const user = await SessionService.checkStatus(id)
+    const user = await SessionService.verify(id)
     return res.status(200).json(user)
   } catch (error) {
     next(error)
@@ -20,7 +20,7 @@ const logIn = async (req, res, next) => {
   const { email, password } = req.body
 
   try {
-    const capsule = await SessionService.logUserIn(password, { email })
+    const capsule = await SessionService.authenticate(password, { email })
 
     if (!capsule) {
       throwHttpError(400, 'Incorrect credentials.', 'USER_INVALID_CREDENTIALS')
