@@ -23,7 +23,7 @@ const authenticate = async (req, res, next) => {
     const capsule = await SessionService.authenticate(password, { email })
 
     if (!capsule) {
-      throwHttpError(400, 'Incorrect credentials.', 'USER_INVALID_CREDENTIALS')
+      throwHttpError(400, 'Invalid credentials.', 'USER_INVALID_CREDENTIALS')
     }
 
     const { formattedUser, accessToken } = capsule

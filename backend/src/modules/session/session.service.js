@@ -26,7 +26,7 @@ const authenticate = async (password, filter) => {
 
   const isPwdValid = await validatePassword(password, user.password)
 
-  if (!isPwdValid) throwHttpError(400, 'Incorrect credentials.', 'USER_INVALID_CREDENTIALS')
+  if (!isPwdValid) throwHttpError(400, 'Invalid credentials.', 'USER_INVALID_CREDENTIALS')
 
   const formattedUser = formatUserObject(user)
 
