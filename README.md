@@ -110,7 +110,7 @@ Os pré-requisitos são os seguintes:
 
 ---
 
-**Fullstack**
+**Full-stack**
 
 Para agilizar um pouco, o projeto utiliza a biblioteca `concurrently`, que permite rodar o servidor e o cliente simultaneamente com um único comando a partir da raiz do projeto.
 
@@ -171,6 +171,17 @@ Para rodar o projeto, você vai precisar adicionar as seguintes variáveis de am
 **Front-end**
 
 `VITE_PORT`
+
+## Planos Futuros
+
+No momento, apenas duas coisas:
+
+- Criar uma seção "Perfil" onde o usuário será capaz de:
+  - Alterar seu nome;
+  - Definir seu avatar;
+  - Trocar seu e-mail (que precisará ser verificado de novo); e
+  - Trocar sua senha.
+- Reestruturar o front-end, migrando da biblioteca React para o framework Angular (na branch `angular-frontend`).
 
 ## Créditos
 
