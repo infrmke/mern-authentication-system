@@ -79,7 +79,7 @@ class OtpController {
         throwHttpError(400, 'Invalid request body.', 'BAD_REQUEST')
       }
 
-      const result = await this.#otpService.resendCode(type, filter)
+      const result = await this.#otpService.resend(type, filter)
 
       if (!result) {
         throwHttpError(404, 'User does not exist.', 'USER_NOT_FOUND')
