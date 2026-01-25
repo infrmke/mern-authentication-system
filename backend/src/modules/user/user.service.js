@@ -1,4 +1,4 @@
-import UserRepository from './user.repository.js'
+import userRepository from './user.repository.js'
 
 import formatUserObject from '../../utils/formatUserObject.js'
 import generateToken from '../../utils/generateToken.js'
@@ -89,4 +89,4 @@ class UserService {
   }
 }
 
-export default new UserService(UserRepository)
+export default new UserService(userRepository)

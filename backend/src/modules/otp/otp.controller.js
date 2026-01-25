@@ -1,4 +1,4 @@
-import OtpService from './otp.service.js'
+import otpService from './otp.service.js'
 import throwHttpError from '../../utils/throwHttpError.js'
 
 class OtpController {
@@ -159,4 +159,4 @@ class OtpController {
   }
 }
 
-export default new OtpController(OtpService)
+export default new OtpController(otpService)
