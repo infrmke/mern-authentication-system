@@ -1,4 +1,4 @@
-import UserService from './user.service.js'
+import userService from './user.service.js'
 import throwHttpError from '../../utils/throwHttpError.js'
 
 class UserController {
@@ -129,4 +129,4 @@ class UserController {
   }
 }
 
-export default new UserController(UserService)
+export default new UserController(userService)

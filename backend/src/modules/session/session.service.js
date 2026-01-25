@@ -1,4 +1,4 @@
-import UserService from '../user/user.service.js'
+import userService from '../user/user.service.js'
 
 import throwHttpError from '../../utils/throwHttpError.js'
 import generateToken from '../../utils/generateToken.js'
@@ -43,4 +43,4 @@ class SessionService {
   }
 }
 
-export default new SessionService(UserService)
+export default new SessionService(userService)

@@ -1,4 +1,4 @@
-import SessionService from './session.service.js'
+import sessionService from './session.service.js'
 import throwHttpError from '../../utils/throwHttpError.js'
 
 class SessionController {
@@ -67,4 +67,4 @@ class SessionController {
   }
 }
 
-export default new SessionController(SessionService)
+export default new SessionController(sessionService)
