@@ -1,22 +1,34 @@
 import User from '../user/user.model.js'
 
-const findAll = async (limit, offset) => {
-  const [users, totalItems] = await Promise.all([
-    User.find().skip(offset).limit(limit),
-    User.countDocuments(),
-  ])
+class UserRepository {
+  async findAll(limit, offset) {
+    const [users, totalItems] = await Promise.all([
+      User.find().skip(offset).limit(limit),
+      User.countDocuments(),
+    ])
 
-  return { users, totalItems }
+    return { users, totalItems }
+  }
+
+  async findOne(filter, projection = {}) {
+    return await User.findOne(filter, projection)
+  }
+
+  async findById(id) {
+    return await User.findById(id)
+  }
+
+  async create(data) {
+    return await User.create(data)
+  }
+
+  async update(id, data) {
+    return await User.findByIdAndUpdate(id, data, { new: true })
+  }
+
+  async remove(id) {
+    return await User.findByIdAndDelete(id)
+  }
 }
 
-const findOne = async (filter, projection = undefined) => await User.findOne(filter, projection)
-
-const findById = async (id) => await User.findById(id)
-
-const create = async (data) => await User.create(data)
-
-const update = async (id, data) => await User.findByIdAndUpdate(id, data, { new: true })
-
-const remove = async (id) => await User.findByIdAndDelete(id)
-
-export default { findAll, findOne, findById, create, update, remove }
+export default new UserRepository()
