@@ -1,158 +1,162 @@
 import OtpService from './otp.service.js'
 import throwHttpError from '../../utils/throwHttpError.js'
 
-const show = async (req, res, next) => {
-  return res.status(200).json({
-    active: true,
-    message: 'The password reset session is active.',
-  })
-}
+class OtpController {
+  #otpService
 
-const requestVerification = async (req, res, next) => {
-  const { id } = req.params
-
-  try {
-    const user = await OtpService.sendVerification(id)
-
-    if (!user) {
-      throwHttpError(
-        400,
-        'Verification failed. Invalid session or user not found.',
-        'USER_NOT_FOUND'
-      )
-    }
-
-    return res.status(200).json({ message: 'Code has been sent.' })
-  } catch (error) {
-    if (error.code === 11000) {
-      error.status = 409
-      error.message = 'An active e-mail code has already been sent to this account.'
-      error.code = 'OTP_ALREADY_SENT'
-    }
-
-    next(error)
+  constructor(otpService) {
+    this.#otpService = otpService
   }
-}
 
-const requestReset = async (req, res, next) => {
-  const { email } = req.body
-
-  try {
-    //  não captura o retorno porque o service lida com o caso de usuário não encontrado
-    await OtpService.sendReset({ email })
-
+  show = async (req, res, next) => {
     return res.status(200).json({
-      message: 'If the e-mail is registered, a code has been sent.',
+      active: true,
+      message: 'The password reset session is active.',
     })
-  } catch (error) {
-    if (error.code === 11000) {
-      error.status = 409
-      error.message = 'An active password reset code has already been sent to this account.'
-      error.code = 'OTP_ALREADY_SENT'
+  }
+
+  requestVerification = async (req, res, next) => {
+    const { id } = req.params
+
+    try {
+      const user = await this.#otpService.sendVerification(id)
+
+      if (!user) {
+        throwHttpError(
+          400,
+          'Verification failed. Invalid session or user not found.',
+          'USER_NOT_FOUND',
+        )
+      }
+
+      return res.status(200).json({ message: 'Code has been sent.' })
+    } catch (error) {
+      if (error.code === 11000) {
+        error.status = 409
+        error.message = 'An active e-mail code has already been sent to this account.'
+        error.code = 'OTP_ALREADY_SENT'
+      }
+
+      next(error)
     }
-
-    next(error)
   }
-}
 
-const resendCode = async (req, res, next) => {
-  const { email, type } = req.body
+  requestReset = async (req, res, next) => {
+    const { email } = req.body
 
-  // disponível se o usuário estiver logado ('VERIFY')
-  const userIdFromToken = req.user?.id
+    try {
+      //  não captura o retorno porque o service lida com o caso de usuário não encontrado
+      await this.#otpService.sendReset({ email })
 
-  try {
-    let filter
+      return res.status(200).json({
+        message: 'If the e-mail is registered, a code has been sent.',
+      })
+    } catch (error) {
+      if (error.code === 11000) {
+        error.status = 409
+        error.message = 'An active password reset code has already been sent to this account.'
+        error.code = 'OTP_ALREADY_SENT'
+      }
 
-    if (type === 'VERIFY' && userIdFromToken) {
-      filter = { _id: userIdFromToken }
-    } else if (type === 'RESET' && email) {
-      filter = { email }
-    } else {
-      throwHttpError(400, 'Invalid request body.', 'BAD_REQUEST')
+      next(error)
     }
+  }
 
-    const result = await OtpService.resendCode(type, filter)
+  resendCode = async (req, res, next) => {
+    const { email, type } = req.body
 
-    if (!result) {
-      throwHttpError(404, 'User does not exist.', 'USER_NOT_FOUND')
+    // disponível se o usuário estiver logado ('VERIFY')
+    const userIdFromToken = req.user?.id
+
+    try {
+      let filter
+
+      if (type === 'VERIFY' && userIdFromToken) {
+        filter = { _id: userIdFromToken }
+      } else if (type === 'RESET' && email) {
+        filter = { email }
+      } else {
+        throwHttpError(400, 'Invalid request body.', 'BAD_REQUEST')
+      }
+
+      const result = await this.#otpService.resendCode(type, filter)
+
+      if (!result) {
+        throwHttpError(404, 'User does not exist.', 'USER_NOT_FOUND')
+      }
+
+      return res.status(200).json({ message: 'A new code has been sent.' })
+    } catch (error) {
+      next(error)
     }
-
-    return res.status(200).json({ message: 'A new code has been sent.' })
-  } catch (error) {
-    next(error)
   }
-}
 
-const verifyEmail = async (req, res, next) => {
-  const { id } = req.params
-  const { otp } = req.body
+  verifyEmail = async (req, res, next) => {
+    const { id } = req.params
+    const { otp } = req.body
 
-  try {
-    const user = await OtpService.validateEmail(id, otp, 'VERIFY')
+    try {
+      const user = await this.#otpService.validateEmail(id, otp, 'VERIFY')
 
-    if (!user) {
-      throwHttpError(400, 'Verification failed. Invalid code or user not found.', 'USER_NOT_FOUND')
+      if (!user) {
+        throwHttpError(
+          400,
+          'Verification failed. Invalid code or user not found.',
+          'USER_NOT_FOUND',
+        )
+      }
+
+      res.status(200).json({ message: 'E-mail verified successfully.' })
+    } catch (error) {
+      next(error)
     }
+  }
 
-    res.status(200).json({ message: 'E-mail verified successfully.' })
-  } catch (error) {
-    next(error)
+  verifyReset = async (req, res, next) => {
+    const { email, otp } = req.body
+
+    try {
+      const passwordToken = await this.#otpService.validateReset(otp, 'RESET', {
+        email,
+      })
+
+      res.cookie('passwordToken', passwordToken, {
+        httpOnly: true,
+        secure: process.env.NODE_ENV === 'production', // usar TRUE em HTTPS
+        sameSite: 'Lax',
+        maxAge: 15 * 60 * 1000, // 15 minutos
+      })
+
+      res.status(200).json({ message: 'Code has been verified. Proceed to password reset.' })
+    } catch (error) {
+      next(error)
+    }
+  }
+
+  resetPassword = async (req, res, next) => {
+    const { email, new_password } = req.body
+
+    try {
+      const user = await this.#otpService.resetPassword({ email }, new_password)
+
+      if (!user)
+        throwHttpError(
+          400,
+          'Verification failed. Invalid session or user not found.',
+          'USER_NOT_FOUND',
+        )
+
+      res.clearCookie('passwordToken', {
+        httpOnly: true,
+        secure: process.env.NODE_ENV === 'production', // usar TRUE em HTTPS
+        sameSite: 'Lax',
+      })
+
+      res.status(200).json(user)
+    } catch (error) {
+      next(error)
+    }
   }
 }
 
-const verifyReset = async (req, res, next) => {
-  const { email, otp } = req.body
-
-  try {
-    const passwordToken = await OtpService.validateReset(otp, 'RESET', {
-      email,
-    })
-
-    res.cookie('passwordToken', passwordToken, {
-      httpOnly: true,
-      secure: process.env.NODE_ENV === 'production', // usar TRUE em HTTPS
-      sameSite: 'Lax',
-      maxAge: 15 * 60 * 1000, // 15 minutos
-    })
-
-    res.status(200).json({ message: 'Code has been verified. Proceed to password reset.' })
-  } catch (error) {
-    next(error)
-  }
-}
-
-const resetPassword = async (req, res, next) => {
-  const { email, new_password } = req.body
-
-  try {
-    const user = await OtpService.resetPassword({ email }, new_password)
-
-    if (!user)
-      throwHttpError(
-        400,
-        'Verification failed. Invalid session or user not found.',
-        'USER_NOT_FOUND'
-      )
-
-    res.clearCookie('passwordToken', {
-      httpOnly: true,
-      secure: process.env.NODE_ENV === 'production', // usar TRUE em HTTPS
-      sameSite: 'Lax',
-    })
-
-    res.status(200).json(user)
-  } catch (error) {
-    next(error)
-  }
-}
-
-export default {
-  show,
-  requestVerification,
-  requestReset,
-  resendCode,
-  verifyEmail,
-  verifyReset,
-  resetPassword,
-}
+export default new OtpController(OtpService)
