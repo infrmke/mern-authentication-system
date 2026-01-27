@@ -1,5 +1,5 @@
-import UserService from '../user/user.service.js'
-import OtpRepository from './otp.repository.js'
+import userService from '../user/user.service.js'
+import otpRepository from './otp.repository.js'
 
 import throwHttpError from '../../utils/throwHttpError.js'
 import formatUserObject from '../../utils/formatUserObject.js'
@@ -138,4 +138,4 @@ class OtpService {
   }
 }
 
-export default new OtpService(OtpRepository, UserService)
+export default new OtpService(otpRepository, userService)

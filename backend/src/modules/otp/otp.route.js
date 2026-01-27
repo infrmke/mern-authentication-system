@@ -1,6 +1,6 @@
 import { Router } from 'express'
 
-import OtpController from './otp.controller.js'
+import otpController from './otp.controller.js'
 import {
   otpValidator,
   emailValidator,
@@ -16,21 +16,21 @@ const router = Router()
 //  --- PUBLIC ROUTES ---
 
 // @route POST /otps/email-verification/:id
-router.post('/email-verification/:id', validateId, OtpController.requestVerification)
+router.post('/email-verification/:id', validateId, otpController.requestVerification)
 
 // @route POST /otps/email-verification/check/:id
-router.post('/email-verification/check/:id', validateId, otpValidator, OtpController.verifyEmail)
+router.post('/email-verification/check/:id', validateId, otpValidator, otpController.verifyEmail)
 
 // @route POST /otps/password-reset/request
-router.post('/password-reset/request', emailValidator, OtpController.requestReset)
+router.post('/password-reset/request', emailValidator, otpController.requestReset)
 
 // @route POST /otps/password-reset/check
-router.post('/password-reset/check/', emailValidator, otpValidator, OtpController.verifyReset)
+router.post('/password-reset/check/', emailValidator, otpValidator, otpController.verifyReset)
 
 //  --- PRIVATE ROUTES ---
 
 // @route GET /otps/password-reset/status
-router.get('/password-reset/status', verifyPasswordToken, OtpController.show)
+router.get('/password-reset/status', verifyPasswordToken, otpController.show)
 
 // @route PATCH /password-reset
 router.patch(
@@ -38,10 +38,10 @@ router.patch(
   verifyPasswordToken,
   emailValidator,
   resetValidator,
-  OtpController.resetPassword
+  otpController.resetPassword,
 )
 
 // @route POST /otps/resend
-router.post('/resend', resendOtpFlow, resendOtpValidator, OtpController.resendCode)
+router.post('/resend', resendOtpFlow, resendOtpValidator, otpController.resendCode)
 
 export default router
