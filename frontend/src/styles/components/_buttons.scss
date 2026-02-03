@@ -1,0 +1,66 @@
+/*	================================
+    BUTTONS
+================================	*/
+
+@import '../abstracts/variables';
+
+button {
+  cursor: pointer;
+  border: none;
+  background-color: transparent;
+}
+
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 500;
+  border-radius: 100vmax;
+  padding: 0.5em 1.75em;
+  transition: all 0.2s ease;
+
+  &:disabled {
+    cursor: not-allowed;
+  }
+
+  &--outline {
+    border: 1px solid $clr-text-muted;
+    background-color: white;
+    color: $clr-text-main;
+
+    &:focus,
+    &:hover {
+      background-color: #eee;
+    }
+  }
+
+  &--warning {
+    background-color: $clr-primary;
+
+    &:hover:not(:disabled) {
+      background-color: $clr-primary-hover;
+    }
+  }
+
+  &--danger {
+    border: 1px solid $clr-danger;
+    background-color: white;
+    color: $clr-danger;
+
+    &:focus,
+    &:hover {
+      background-color: $clr-danger;
+      color: white;
+    }
+  }
+
+  &--link {
+    color: $clr-accent;
+
+    &:focus,
+    &:hover {
+      text-decoration: underline;
+      color: $clr-accent-hover;
+    }
+  }
+}
