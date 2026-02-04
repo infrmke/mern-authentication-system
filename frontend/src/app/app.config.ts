@@ -4,7 +4,7 @@ import {
   provideBrowserGlobalErrorListeners,
 } from '@angular/core';
 import { provideRouter } from '@angular/router';
-import { AtSign, Lock, LockOpen, LucideAngularModule, User } from 'lucide-angular';
+import { AtSign, ChevronDown, Lock, LockOpen, LucideAngularModule, User } from 'lucide-angular';
 
 import { routes } from './app.routes';
 
@@ -12,6 +12,6 @@ export const appConfig: ApplicationConfig = {
   providers: [
     provideBrowserGlobalErrorListeners(),
     provideRouter(routes),
-    importProvidersFrom(LucideAngularModule.pick({ User, Lock, AtSign, LockOpen })),
+    importProvidersFrom(LucideAngularModule.pick({ User, Lock, AtSign, LockOpen, ChevronDown })),
   ],
 };
