@@ -12,6 +12,11 @@ export const routes: Routes = [
     title: 'Register | Authentication System',
   },
   {
+    path: 'forgot-password', // esqueceu a senha
+    loadComponent: () =>
+      import('./features/auth/forgot-password/forgot-password').then((m) => m.ForgotPassword),
+  },
+  {
     path: '**', // rota de erro
     loadComponent: () => import('./features/error/error-page/error-page').then((m) => m.ErrorPage),
     title: 'Oops!',
