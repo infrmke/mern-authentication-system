@@ -1,11 +1,11 @@
 import { Component } from '@angular/core';
 
-import { LayoutCard } from '../../../shared/components/layout-card/layout-card';
+import { CardBody } from '../../../shared/components/card-body/card-body';
 import { InputGroup } from '../../../shared/components/input-group/input-group';
 
 @Component({
   selector: 'app-forgot-password',
-  imports: [LayoutCard, InputGroup],
+  imports: [CardBody, InputGroup],
   templateUrl: './forgot-password.html',
   styleUrl: './forgot-password.scss',
 })
