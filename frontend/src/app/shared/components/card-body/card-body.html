@@ -1,0 +1,11 @@
+<h1>{{ title }}</h1>
+
+@if (description) {
+  <p>{{ description }}</p>
+}
+
+<form class="form" (submit)="onSubmit()">
+  <ng-content></ng-content>
+
+  <button type="submit" class="btn btn--warning">{{ buttonText }}</button>
+</form>
