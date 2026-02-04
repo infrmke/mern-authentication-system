@@ -1,10 +1,10 @@
 /*	================================
-    LAYOUT-CARD
+    CARD
 ================================	*/
 
 @import '../abstracts/variables';
 
-.entry {
+.card {
   width: 334px;
   display: flex;
   flex-flow: column nowrap;
