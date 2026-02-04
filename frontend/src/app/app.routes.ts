@@ -17,6 +17,11 @@ export const routes: Routes = [
       import('./features/auth/forgot-password/forgot-password').then((m) => m.ForgotPassword),
   },
   {
+    path: 'home', // página inicial pós login
+    loadComponent: () => import('./features/home/home/home').then((m) => m.Home),
+    title: 'Home | Authentication System',
+  },
+  {
     path: '**', // rota de erro
     loadComponent: () => import('./features/error/error-page/error-page').then((m) => m.ErrorPage),
     title: 'Oops!',
