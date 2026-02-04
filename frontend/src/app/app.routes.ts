@@ -7,6 +7,11 @@ export const routes: Routes = [
     title: 'Log in | Authentication System',
   },
   {
+    path: 'register', // cadastro
+    loadComponent: () => import('./features/auth/sign-up/sign-up').then((m) => m.SignUp),
+    title: 'Register | Authentication System',
+  },
+  {
     path: '**', // rota de erro
     loadComponent: () => import('./features/error/error-page/error-page').then((m) => m.ErrorPage),
     title: 'Oops!',
