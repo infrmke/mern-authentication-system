@@ -20,6 +20,12 @@ export class AuthService {
   }
 
   /* resource: /sessions */
+  verifySession(): Observable<UserData> {
+    return this.http.get<UserData>(`${this.API_URL}/sessions/me`, {
+      withCredentials: true,
+    });
+  }
+
   login(credentials: any): Observable<UserData> {
     return this.http.post<UserData>(`${this.API_URL}/sessions/login`, credentials, {
       withCredentials: true,
