@@ -1,25 +1,32 @@
 import { Routes } from '@angular/router';
 
+import publicGuard from './core/guards/public.guard';
+import authGuard from './core/guards/auth.guard';
+
 export const routes: Routes = [
   {
     path: '', // raiz "/"
     loadComponent: () => import('./features/auth/login/login').then((m) => m.Login),
     title: 'Log in | Authentication System',
+    canActivate: [publicGuard], // usuários logados não podem acessar essa página
   },
   {
     path: 'register', // cadastro
     loadComponent: () => import('./features/auth/sign-up/sign-up').then((m) => m.SignUp),
     title: 'Register | Authentication System',
+    canActivate: [publicGuard], // usuários logados não podem acessar essa página
   },
   {
     path: 'forgot-password', // esqueceu a senha
     loadComponent: () =>
       import('./features/auth/forgot-password/forgot-password').then((m) => m.ForgotPassword),
+    canActivate: [publicGuard], // usuários logados não podem acessar essa página
   },
   {
     path: 'home', // página inicial pós login
     loadComponent: () => import('./features/home/home/home').then((m) => m.Home),
     title: 'Home | Authentication System',
+    canActivate: [authGuard], // usuários deslogados não podem acessar essa página
   },
   {
     path: '**', // rota de erro
