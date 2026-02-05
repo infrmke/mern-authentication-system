@@ -4,8 +4,6 @@
   <p>{{ description }}</p>
 }
 
-<form class="form" (submit)="onSubmit()">
-  <ng-content></ng-content>
+<ng-content></ng-content>
 
-  <button type="submit" class="btn btn--warning">{{ buttonText }}</button>
-</form>
+<button type="submit" class="btn btn--warning">{{ buttonText }}</button>
