@@ -1,7 +1,9 @@
 import { Component, inject } from '@angular/core';
+import { Router, RouterLink } from '@angular/router';
+
 import { Menu } from '../menu/menu';
 import { UserService } from '../../../core/services/user-service';
-import { RouterLink } from '@angular/router';
+import { AuthService } from '../../../core/services/auth-service';
 
 @Component({
   selector: 'app-navbar',
@@ -11,9 +13,17 @@ import { RouterLink } from '@angular/router';
 })
 export class Navbar {
   userService = inject(UserService);
+  authService = inject(AuthService);
+  private router = inject(Router);
 
   async handleClickLogOut() {
-    // lógica da api aqui...
-    this.userService.setUserData(null);
+    this.authService.logout().subscribe({
+      next: () => {},
+      error: () => {}, // o usuário será deslogado não importa o resultado da chamada à API
+      complete: () => {
+        this.userService.clearUser();
+        this.router.navigate(['/']);
+      },
+    });
   }
 }
