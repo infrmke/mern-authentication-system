@@ -11,12 +11,7 @@ export interface UserData {
   providedIn: 'root',
 })
 export class UserService {
-  private userState = signal<UserData | null>({
-    id: '507f1f77bcf86cd799439011',
-    name: 'User',
-    email: 'user@example.com',
-    isAccountVerified: false,
-  });
+  private userState = signal<UserData | null>(null);
 
   // expondo os dados apenas para leitura
   userData = this.userState.asReadonly();
