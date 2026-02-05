@@ -23,4 +23,8 @@ export class UserService {
   setUserData(data: UserData | null) {
     this.userState.set(data);
   }
+
+  clearUser() {
+    this.setUserData(null);
+  }
 }
