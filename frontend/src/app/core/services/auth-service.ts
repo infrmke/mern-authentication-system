@@ -41,4 +41,9 @@ export class AuthService {
       },
     );
   }
+
+  /* resource: /otps */
+  requestPasswordReset(email: string): Observable<any> {
+    return this.http.post(`${this.API_URL}/otps/password-reset/request`, { email });
+  }
 }
