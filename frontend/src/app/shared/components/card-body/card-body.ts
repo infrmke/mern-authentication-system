@@ -1,4 +1,4 @@
-import { Component, Input } from '@angular/core';
+import { Component, EventEmitter, Input, Output } from '@angular/core';
 
 @Component({
   selector: 'app-card-body',
@@ -10,8 +10,4 @@ export class CardBody {
   @Input() title: string = '';
   @Input() description: string = '';
   @Input() buttonText: string = '';
-
-  onSubmit() {
-    console.log('Enviado.');
-  }
 }
