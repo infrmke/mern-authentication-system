@@ -1,13 +1,15 @@
 import { AfterViewInit, Component, ElementRef, Input, ViewChild } from '@angular/core';
+import { FormControl, ReactiveFormsModule } from '@angular/forms';
 import { LucideAngularModule } from 'lucide-angular';
 
 @Component({
   selector: 'app-input-group',
-  imports: [LucideAngularModule],
+  imports: [LucideAngularModule, ReactiveFormsModule],
   templateUrl: './input-group.html',
   styleUrl: './input-group.scss',
 })
 export class InputGroup implements AfterViewInit {
+  @Input() control!: FormControl;
   @Input() label: string = '';
   @Input() type: string = '';
   @Input() id: string = '';

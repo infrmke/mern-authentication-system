@@ -10,6 +10,7 @@
 
     <input
       #inputElement
+      [formControl]="control"
       [type]="type"
       [name]="name"
       [id]="id"
@@ -18,4 +19,18 @@
       [autofocus]="autoFocus"
     />
   </div>
+
+  @if (control.invalid && control.touched) {
+    <small class="error-text fade-in">
+      @if (control.hasError('required')) {
+        {{ label }} cannot be empty.
+      } @else if (control.hasError('email')) {
+        Please enter a valid e-mail address.
+      } @else if (control.hasError('minlength')) {
+        Password must be at least {{ control.getError('minlength').requiredLength }} characters.
+      } @else {
+        Invalid field.
+      }
+    </small>
+  }
 </div>
