@@ -27,4 +27,10 @@ export class UserService {
   clearUser() {
     this.setUserData(null);
   }
+
+  resetEmail = signal<string | null>(null);
+
+  setResetEmail(email: string | null) {
+    this.resetEmail.set(email);
+  }
 }
