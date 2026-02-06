@@ -1,9 +1,10 @@
 import { Component, inject } from '@angular/core';
-import { RouterLink } from '@angular/router';
+import { Router, RouterLink } from '@angular/router';
 
+import { UserService } from '../../../core/services/user-service';
+import { AuthService } from '../../../core/services/auth-service';
 import { Navbar } from '../../../shared/components/navbar/navbar';
 import { UserSection } from '../../../shared/components/user-section/user-section';
-import { UserService } from '../../../core/services/user-service';
 
 @Component({
   selector: 'app-home',
@@ -13,15 +14,29 @@ import { UserService } from '../../../core/services/user-service';
 })
 export class Home {
   userService = inject(UserService);
+  authService = inject(AuthService);
+  private router = inject(Router);
 
   handleClickDelete() {
+    const user = this.userService.userData();
+
+    if (!user) return;
+
     if (
       confirm(
         'Are you sure you want to delete your account? This action is permanent and cannot be undone.',
       )
     ) {
-      // lógica da api aqui...
-      console.log('Excluido!');
+      this.authService.delete(user.id).subscribe({
+        next: () => {
+          this.userService.clearUser();
+          this.router.navigate(['/']);
+          alert('Account deleted successfully');
+        },
+        error: (err) => {
+          alert(err.error?.message || "Something didn't work! Try again.");
+        },
+      });
     }
   }
 }
