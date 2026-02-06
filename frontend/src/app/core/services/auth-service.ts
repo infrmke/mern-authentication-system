@@ -52,4 +52,22 @@ export class AuthService {
   requestPasswordReset(email: string): Observable<any> {
     return this.http.post(`${this.API_URL}/otps/password-reset/request`, { email });
   }
+
+  sendEmailVerificationOtp(userId: string): Observable<any> {
+    return this.http.post(`${this.API_URL}/otps/email-verification/${userId}`, {});
+  }
+
+  checkEmailOtp(userId: string, otp: string): Observable<any> {
+    return this.http.post(`${this.API_URL}/otps/email-verification/check/${userId}`, { otp });
+  }
+
+  resendOtp(type: 'VERIFY' | 'RESET'): Observable<{ message: string }> {
+    return this.http.post<{ message: string }>(
+      `${this.API_URL}/otps/resend`,
+      { type },
+      {
+        withCredentials: true,
+      },
+    );
+  }
 }
