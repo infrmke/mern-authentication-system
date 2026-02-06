@@ -1,18 +1,22 @@
 # Full-Stack Auth System
 
+> ⚠️ Este projeto está em transição ativa de React para Angular.
+
 Uma aplicação de autenticação desenvolvida com a **MERN** Stack, focada em segurança, modularidade e padrões de design em camadas.
 
 O app está hospedado na Render e pode ser acessado [aqui](https://mern-auth-app-b5xg.onrender.com). Mas **atenção**: o servidor pode levar 30 ou 50 segundos para "acordar" no primeiro acesso.
 
 ## Visão Geral Técnica
 
-O projeto implementa um sistema simples de autenticação e autorização que possui foco em estabelecer fluxos seguros de autenticação e gestão de usuários.
+O projeto implementa um sistema completo de autenticação e autorização que possui foco em estabelecer fluxos seguros de autenticação e gestão de usuários.
 
 - **Deployment**: Back-end e Front-end hospedados na Render;
 - **E-mail Service**: SMTP via Brevo para notificações transacionais;
 - **Database**: MongoDB Atlas com indexação TTL para expiração automática de tokens OTP.
 
 ## Arquitetura e Padrões de Design
+
+O projeto é **híbrido**, tendo classes (Singleton) para camadas que mantêm responsabilidades fixas (Controllers/Services/Repositories) e também tendo funções modulares para lógica auxiliar.
 
 - **Monólito Modular**: Back-end organizado em módulos desacoplados, facilitando a manutenção e testes;
 - **Controller-Service-Repository**:
@@ -134,43 +138,32 @@ Você pode testar todos os endpoints da API diretamente no Postman através da c
 
 [![Run in Postman](https://run.pstmn.io/button.svg)](https://www.postman.com/infrkme/workspace/public/collection/37979308-76d4549e-cb2d-4b6e-be1f-91a07d2ce862?action=share&creator=37979308)
 
-**Atenção**: configure uma Variable `base_url`, que aponte para a sua instância local ou de produção, antes de testar.
+**Atenção**: configure uma Variable `base_url` que aponte para a sua instância local ou de produção antes de testar!
 
 ## Variáveis de Ambiente
 
-Para rodar o projeto, você vai precisar adicionar as seguintes variáveis de ambiente nos seus respectivos ".env".
+Para rodar o projeto, você vai precisar adicionar as seguintes variáveis de ambiente nos seus respectivos ".env":
 
 **Back-end**
 
-`NODE_ENV`
-
-`SERVER_PORT`
-
-`CLIENT_PORT`
-
-`MONGODB_URI`
-
-`DB_NAME`
-
-`JWT_ACCESS_SECRET`
-
-`JWT_RESET_SECRET`
-
-`SMTP_MAILER`
-
-`SMTP_HOST`
-
-`SMTP_PORT`
-
-`SMTP_USER`
-
-`SMTP_PWD`
+- `NODE_ENV`
+- `SERVER_PORT`
+- `CLIENT_PORT`
+- `MONGODB_URI`
+- `DB_NAME`
+- `JWT_ACCESS_SECRET`
+- `JWT_RESET_SECRET`
+- `SMTP_MAILER`
+- `SMTP_HOST`
+- `SMTP_PORT`
+- `SMTP_USER`
+- `SMTP_PWD`
 
 ---
 
 **Front-end**
 
-`VITE_PORT`
+- `VITE_PORT`
 
 ## Planos Futuros
 
