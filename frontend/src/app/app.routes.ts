@@ -29,6 +29,13 @@ export const routes: Routes = [
     canActivate: [authGuard], // usuários deslogados não podem acessar essa página
   },
   {
+    path: 'verify-email', // página de verificação de e-mail
+    loadComponent: () =>
+      import('./features/auth/verify-email/verify-email').then((m) => m.VerifyEmail),
+    title: 'Authentication System',
+    canActivate: [authGuard], // apenas usuários deslogados não podem acessar essa página (por enquanto)
+  },
+  {
     path: '**', // rota de erro
     loadComponent: () => import('./features/error/error-page/error-page').then((m) => m.ErrorPage),
     title: 'Oops!',
