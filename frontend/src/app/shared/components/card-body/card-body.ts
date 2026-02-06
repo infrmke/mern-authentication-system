@@ -10,4 +10,7 @@ export class CardBody {
   @Input() title: string = '';
   @Input() description: string = '';
   @Input() buttonText: string = '';
+
+  @Input() isLoading: boolean = false;
+  @Input() disabled: boolean = false;
 }

@@ -6,4 +6,10 @@
 
 <ng-content></ng-content>
 
-<button type="submit" class="btn btn--warning">{{ buttonText }}</button>
+<button type="submit" class="btn btn--warning" [disabled]="disabled">
+  @if (isLoading) {
+    Verifying...
+  } @else {
+    {{ buttonText }}
+  }
+</button>
