@@ -19,6 +19,12 @@ export class AuthService {
     });
   }
 
+  delete(userId: string): Observable<any> {
+    return this.http.delete(`${this.API_URL}/users/${userId}`, {
+      withCredentials: true,
+    });
+  }
+
   /* resource: /sessions */
   verifySession(): Observable<UserData> {
     return this.http.get<UserData>(`${this.API_URL}/sessions/me`, {
