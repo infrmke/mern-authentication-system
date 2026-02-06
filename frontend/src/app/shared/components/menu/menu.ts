@@ -12,9 +12,9 @@ export class Menu {
   @Input() firstNameLetter: string = '';
 
   // emissor de eventos
-  @Output() logoutRequest = new EventEmitter<void>();
+  @Output() onLogoutRequest = new EventEmitter<void>();
 
   handleClickLogOut(): void {
-    this.logoutRequest.emit(); // avisa para o componente pai que houve um clique
+    this.onLogoutRequest.emit(); // avisa para o componente pai que houve um clique
   }
 }
