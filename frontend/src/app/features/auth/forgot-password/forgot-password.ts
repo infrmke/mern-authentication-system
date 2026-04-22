@@ -38,7 +38,7 @@ export class ForgotPassword {
     this.authService.requestPasswordReset(email).subscribe({
       next: () => {
         this.userService.setResetEmail(email); // guarda o email no state definido no UserService
-        this.router.navigate(['/verify-otp']); // navega para a próxima rota
+        this.router.navigate(['/forgot-password/verify']); // navega para a próxima rota
       },
       error: (err) => {
         this.isLoading.set(false);
