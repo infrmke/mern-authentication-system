@@ -61,13 +61,16 @@ export class AuthService {
     return this.http.post(`${this.API_URL}/otps/email-verification/check/${userId}`, { otp });
   }
 
-  resendOtp(type: 'VERIFY' | 'RESET'): Observable<{ message: string }> {
-    return this.http.post<{ message: string }>(
-      `${this.API_URL}/otps/resend`,
-      { type },
-      {
-        withCredentials: true,
-      },
-    );
+  resendOtp(type: 'VERIFY' | 'RESET', email?: string): Observable<{ message: string }> {
+    const payload: any = { type };
+
+    // para RESET, o e-mail é adicionado ao corpo da requisição
+    if (type === 'RESET' && email) {
+      payload.email = email;
+    }
+
+    return this.http.post<{ message: string }>(`${this.API_URL}/otps/resend`, payload, {
+      withCredentials: true,
+    });
   }
 }
