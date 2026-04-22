@@ -23,6 +23,13 @@ export const routes: Routes = [
     canActivate: [publicGuard], // usuários logados não podem acessar essa página
   },
   {
+    path: 'forgot-password/verify', // página de verificação de otp para redefinição de senha
+    loadComponent: () =>
+      import('./features/auth/verify-reset/verify-reset').then((m) => m.VerifyReset),
+    title: 'Authentication System',
+    canActivate: [publicGuard], // usuários logados não podem acessar essa página
+  },
+  {
     path: 'home', // página inicial pós login
     loadComponent: () => import('./features/home/home/home').then((m) => m.Home),
     title: 'Home | Authentication System',
