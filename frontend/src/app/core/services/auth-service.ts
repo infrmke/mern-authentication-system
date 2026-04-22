@@ -61,6 +61,10 @@ export class AuthService {
     return this.http.post(`${this.API_URL}/otps/email-verification/check/${userId}`, { otp });
   }
 
+  checkResetOtp(email: string, otp: string): Observable<any> {
+    return this.http.post(`${this.API_URL}/otps/password-reset/check/`, { email, otp });
+  }
+
   resendOtp(type: 'VERIFY' | 'RESET', email?: string): Observable<{ message: string }> {
     const payload: any = { type };
 
