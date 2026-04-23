@@ -30,6 +30,13 @@ export const routes: Routes = [
     canActivate: [publicGuard], // usuários logados não podem acessar essa página
   },
   {
+    path: 'forgot-password/reset', // página de redefinição de senha
+    loadComponent: () =>
+      import('./features/auth/reset-password/reset-password').then((m) => m.ResetPassword),
+    title: 'Authentication System',
+    canActivate: [],
+  },
+  {
     path: 'home', // página inicial pós login
     loadComponent: () => import('./features/home/home/home').then((m) => m.Home),
     title: 'Home | Authentication System',
