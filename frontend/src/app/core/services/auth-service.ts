@@ -55,7 +55,7 @@ export class AuthService {
     });
   }
 
-  sendEmailVerificationOtp(userId: string): Observable<{ message: string }> {
+  requestEmailVerification(userId: string): Observable<{ message: string }> {
     return this.http.post<{ message: string }>(
       `${this.API_URL}/otps/email-verification/${userId}`,
       {},

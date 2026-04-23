@@ -34,7 +34,7 @@ export class VerifyEmail {
     const user = this.userService.userData();
     if (!user || this.hasSentInitialOtp) return;
 
-    this.authService.sendEmailVerificationOtp(user.id).subscribe({
+    this.authService.requestEmailVerification(user.id).subscribe({
       next: () => (this.hasSentInitialOtp = true),
       error: (err) => alert(err.error?.message || "Something didn't work! Try again."),
     });
