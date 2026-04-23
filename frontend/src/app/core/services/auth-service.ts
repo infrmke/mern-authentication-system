@@ -49,6 +49,13 @@ export class AuthService {
   }
 
   /* resource: /otps */
+  checkResetStatus(): Observable<{ active: boolean; message: string }> {
+    return this.http.get<{ active: boolean; message: string }>(
+      `${this.API_URL}/otps/password-reset/status`,
+      { withCredentials: true },
+    );
+  }
+
   requestPasswordReset(email: string): Observable<{ message: string }> {
     return this.http.post<{ message: string }>(`${this.API_URL}/otps/password-reset/request`, {
       email,
