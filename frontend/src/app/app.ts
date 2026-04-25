@@ -1,5 +1,5 @@
 import { Component, inject, OnInit, signal } from '@angular/core';
-import { NavigationEnd, NavigationStart, Router, RouterOutlet } from '@angular/router';
+import { RouterOutlet } from '@angular/router';
 
 import { AuthService } from './core/services/auth-service/auth-service';
 import { UserService } from './core/services/user-service/user-service';
