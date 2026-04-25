@@ -1,5 +1,6 @@
 import express from 'express'
 import cookieParser from 'cookie-parser'
+import morgan from 'morgan'
 
 import connectToDb from './config/database.js'
 import cors from './config/cors.js'
@@ -16,6 +17,7 @@ verifyConnection() // verifica a conexão do nodemailer
 app.use(express.json())
 app.use(cors)
 app.use(cookieParser())
+app.use(morgan('dev'))
 
 //  rotas
 app.use(GlobalRouter)
