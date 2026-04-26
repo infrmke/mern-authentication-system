@@ -14,16 +14,14 @@ const HTTP_ERROR = {
 const errorHandler = (err, req, res, next) => {
   let status = err.status || 500
   let code = err.code || 'INTERNAL_SERVER_ERROR'
-  let message =
-    err.message || 'An unexpected error occurred. Try again another time.'
+  let message = err.message || 'An unexpected error occurred. Try again another time.'
 
   //  tratamento para o erro de duplicidade gerado pelo mongodb/mongoose
   //  pode ser personalizado no catch(error) do controller
   if (err.code === 11000) {
     status = 409
     code = 'RESOURCE_ALREADY_EXISTS'
-    message =
-      'One or more of the records provided already exist in the database.'
+    message = 'One or more of the records provided already exist in the database.'
   }
 
   //  busca o nome do erro ou simplesmente usa 'Error'
@@ -39,6 +37,7 @@ const errorHandler = (err, req, res, next) => {
     error: errorType,
     message,
     code,
+    ...(err.errors ? { errors: err.errors } : {}), // para os erros vindos do Zod
     ...(process.env.NODE_ENV === 'development' ? { stack: err.stack } : null),
   })
 }
