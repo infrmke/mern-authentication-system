@@ -1,7 +1,8 @@
-import validateId from './validateId.js'
 import verifyAccessToken from './verifyAccessToken.js'
 import isAccountVerified from './isAccountVerified.js'
 import verifyOwnership from './verifyOwnership.js'
+import handleValidation from './handleValidation.js'
+import { paramsIdSchema } from '../utils/common.schema.js'
 
 /**
  * Verifica se o usuário está logado e se sua conta foi verificada.
@@ -17,7 +18,12 @@ const ownerOnly = [verifyAccessToken, verifyOwnership]
  * Verifica se o usuário está logado se o ID (`id`) passado é válido.
  * Também verifica se o usuário logado é dono da conta que deseja alterar e se sua conta está verificada.
  */
-const fullLock = [verifyAccessToken, validateId, verifyOwnership, isAccountVerified]
+const fullLock = [
+  verifyAccessToken,
+  handleValidation(paramsIdSchema),
+  verifyOwnership,
+  isAccountVerified,
+]
 
 /**
  * Verifica se tipo (`type`) do otp enviado é `VERIFY` ou `RESET`.
