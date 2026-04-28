@@ -1,5 +1,6 @@
 import otpService from './otp.service.js'
 import throwHttpError from '../../utils/throwHttpError.js'
+import cache from '../../lib/cache.js'
 
 class OtpController {
   #otpService
@@ -9,10 +10,24 @@ class OtpController {
   }
 
   show = async (req, res, next) => {
-    return res.status(200).json({
+    const identifier = req.cookies.passwordToken.split('.')[1]
+    const cacheKey = `password_reset_${identifier}`
+
+    const cachedData = cache.get(cacheKey)
+
+    // tenta buscar o resultado da requisição no cache primeiro
+    if (cachedData) {
+      return res.status(200).json(cachedData)
+    }
+
+    // se não houver cache, executa a lógica normal abaixo
+    const resetStatus = {
       active: true,
       message: 'The password reset session is active.',
-    })
+    }
+
+    cache.set(cacheKey, resetStatus) // salva os dados no cache
+    return res.status(200).json(resetStatus)
   }
 
   requestVerification = async (req, res, next) => {
@@ -64,13 +79,22 @@ class OtpController {
 
   resendCode = async (req, res, next) => {
     const { email, type } = req.body
+    const userIdFromToken = req.user?.id // disponível se o usuário estiver logado ('VERIFY')
 
-    // disponível se o usuário estiver logado ('VERIFY')
-    const userIdFromToken = req.user?.id
+    const identifier = type === 'VERIFY' ? userIdFromToken : email
+    const cacheKey = `otp_cooldown_${type}_${identifier}`
 
     try {
-      let filter
+      // verificar se o cooldown de 60s está ativo
+      if (cache.has(cacheKey)) {
+        throwHttpError(
+          429,
+          'Please wait 60 seconds before requesting a new code.',
+          'OTP_COOLDOWN_TIME',
+        )
+      }
 
+      let filter
       if (type === 'VERIFY' && userIdFromToken) {
         filter = { _id: userIdFromToken }
       } else if (type === 'RESET' && email) {
@@ -85,6 +109,7 @@ class OtpController {
         throwHttpError(404, 'User does not exist.', 'USER_NOT_FOUND')
       }
 
+      cache.set(cacheKey, true, 60) // ativa o cooldown no cache
       return res.status(200).json({ message: 'A new code has been sent.' })
     } catch (error) {
       next(error)

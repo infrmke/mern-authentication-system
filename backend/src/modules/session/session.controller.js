@@ -1,5 +1,6 @@
 import sessionService from './session.service.js'
 import throwHttpError from '../../utils/throwHttpError.js'
+import cache from '../../lib/cache.js'
 
 class SessionController {
   #sessionService
@@ -10,9 +11,20 @@ class SessionController {
 
   show = async (req, res, next) => {
     const { id } = req.user
+    const cacheKey = `user_session_${id}`
 
+    // tenta buscar o resultado da requisição no cache primeiro
+    const cachedData = cache.get(cacheKey)
+
+    if (cachedData) {
+      return res.status(200).json(cachedData)
+    }
+
+    // se não houver cache, executa a lógica normal abaixo
     try {
       const user = await this.#sessionService.verify(id)
+
+      cache.set(cacheKey, user, 120) // salva os dados no cache com TTL de 2 min
       return res.status(200).json(user)
     } catch (error) {
       next(error)
@@ -42,6 +54,7 @@ class SessionController {
         maxAge: 24 * 60 * 60 * 1000, // 1 dia
       })
 
+      cache.del(`user_session_${formattedUser.id}`) // limpa o cache
       return res.status(200).json(formattedUser)
     } catch (error) {
       next(error)
@@ -54,6 +67,10 @@ class SessionController {
     }
 
     try {
+      if (req.user.id) {
+        cache.del(`user_session_${req.user.id}`) // limpa o cache
+      }
+
       res.clearCookie('accessToken', {
         httpOnly: true,
         secure: process.env.NODE_ENV === 'production', // usar TRUE em HTTPS

@@ -1,5 +1,6 @@
 import userService from './user.service.js'
 import throwHttpError from '../../utils/throwHttpError.js'
+import cache from '../../lib/cache.js'
 
 class UserController {
   #userService
@@ -9,6 +10,16 @@ class UserController {
   }
 
   getAll = async (req, res, next) => {
+    const cacheKey = `users_list_${JSON.stringify(req.query)}`
+
+    // tenta buscar o resultado da requisição no cache primeiro
+    const cachedData = cache.get(cacheKey)
+
+    if (cachedData) {
+      return res.status(200).json(cachedData)
+    }
+
+    // se não houver cache, executa a lógica normal abaixo
     const page = Math.max(1, parseInt(req.query.page) || 1)
     const limit = Math.max(1, parseInt(req.query.limit) || 10)
 
@@ -25,7 +36,7 @@ class UserController {
       const nextPage = currentPage < totalPages ? currentPage + 1 : null
       const prevPage = currentPage > 1 ? currentPage - 1 : null
 
-      res.status(200).json({
+      const paginationData = {
         items: users,
         pagination: {
           totalItems,
@@ -34,7 +45,10 @@ class UserController {
           nextPage,
           prevPage,
         },
-      })
+      }
+
+      cache.set(cacheKey, paginationData) // salva os dados no cache
+      return res.status(200).json(paginationData)
     } catch (error) {
       next(error)
     }
@@ -42,7 +56,16 @@ class UserController {
 
   getById = async (req, res, next) => {
     const { id } = req.params
+    const cacheKey = `user_id_${id}`
 
+    // tenta buscar o resultado da requisição no cache primeiro
+    const cachedData = cache.get(cacheKey)
+
+    if (cachedData) {
+      return res.status(200).json(cachedData)
+    }
+
+    // se não houver cache, executa a lógica normal abaixo
     try {
       const capsule = await this.#userService.show(id)
 
@@ -52,6 +75,7 @@ class UserController {
 
       const { formattedUser } = capsule
 
+      cache.set(cacheKey, formattedUser) // salva os dados no cache
       return res.status(200).json(formattedUser)
     } catch (error) {
       next(error)
@@ -72,6 +96,14 @@ class UserController {
         sameSite: 'Lax',
         maxAge: 24 * 60 * 60 * 1000, // 1 dia
       })
+
+      // limpa o cache para não retornar dados ultrapassados no próximo GET
+      const allCacheKeys = cache.keys()
+
+      const keysToDelete = allCacheKeys.filter(
+        (key) => key.startsWith('users_list') || key.startsWith('user_id'),
+      )
+      if (keysToDelete.length > 0) cache.del(keysToDelete)
 
       return res.status(201).json(formattedUser)
     } catch (error) {
@@ -100,6 +132,17 @@ class UserController {
         throwHttpError(500, 'Could not update user.')
       }
 
+      // limpa o cache para não retornar dados ultrapassados no próximo GET
+      const allCacheKeys = cache.keys()
+
+      const keysToDelete = allCacheKeys.filter(
+        (key) =>
+          key.startsWith('users_list') ||
+          key.startsWith('user_id') ||
+          key.startsWith('user_session'),
+      )
+      if (keysToDelete.length > 0) cache.del(keysToDelete)
+
       return res.status(200).json(user)
     } catch (error) {
       next(error)
@@ -121,6 +164,17 @@ class UserController {
         secure: process.env.NODE_ENV === 'production', // usar TRUE em HTTPS
         sameSite: 'Lax',
       })
+
+      // limpa o cache para não retornar dados ultrapassados no próximo GET
+      const allCacheKeys = cache.keys()
+
+      const keysToDelete = allCacheKeys.filter(
+        (key) =>
+          key.startsWith('users_list') ||
+          key.startsWith('user_id') ||
+          key.startsWith('user_session'),
+      )
+      if (keysToDelete.length > 0) cache.del(keysToDelete)
 
       return res.status(204).end()
     } catch (error) {
