@@ -1,4 +1,4 @@
-import rateLimit from 'express-rate-limit.js'
+import rateLimit from 'express-rate-limit'
 import throwHttpError from './throwHttpError.js'
 
 /**
