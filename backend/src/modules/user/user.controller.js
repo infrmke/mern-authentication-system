@@ -1,6 +1,7 @@
 import userService from './user.service.js'
 import throwHttpError from '../../utils/throwHttpError.js'
 import cache from '../../lib/cache.js'
+import clearUserCache from '../../utils/clearUserCache.js'
 
 class UserController {
   #userService
@@ -97,14 +98,7 @@ class UserController {
         maxAge: 24 * 60 * 60 * 1000, // 1 dia
       })
 
-      // limpa o cache para não retornar dados ultrapassados no próximo GET
-      const allCacheKeys = cache.keys()
-
-      const keysToDelete = allCacheKeys.filter(
-        (key) => key.startsWith('users_list') || key.startsWith('user_id'),
-      )
-      if (keysToDelete.length > 0) cache.del(keysToDelete)
-
+      clearUserCache() // limpa o cache para não retornar dados ultrapassados no próximo GET
       return res.status(201).json(formattedUser)
     } catch (error) {
       if (error.code === 11000) {
@@ -132,17 +126,7 @@ class UserController {
         throwHttpError(500, 'Could not update user.')
       }
 
-      // limpa o cache para não retornar dados ultrapassados no próximo GET
-      const allCacheKeys = cache.keys()
-
-      const keysToDelete = allCacheKeys.filter(
-        (key) =>
-          key.startsWith('users_list') ||
-          key.startsWith('user_id') ||
-          key.startsWith('user_session'),
-      )
-      if (keysToDelete.length > 0) cache.del(keysToDelete)
-
+      clearUserCache(id) // limpa o cache para não retornar dados ultrapassados no próximo GET
       return res.status(200).json(user)
     } catch (error) {
       next(error)
@@ -165,17 +149,7 @@ class UserController {
         sameSite: 'Lax',
       })
 
-      // limpa o cache para não retornar dados ultrapassados no próximo GET
-      const allCacheKeys = cache.keys()
-
-      const keysToDelete = allCacheKeys.filter(
-        (key) =>
-          key.startsWith('users_list') ||
-          key.startsWith('user_id') ||
-          key.startsWith('user_session'),
-      )
-      if (keysToDelete.length > 0) cache.del(keysToDelete)
-
+      clearUserCache(id) // limpa o cache para não retornar dados ultrapassados no próximo GET
       return res.status(204).end()
     } catch (error) {
       next(error)

@@ -1,6 +1,7 @@
 import sessionService from './session.service.js'
 import throwHttpError from '../../utils/throwHttpError.js'
 import cache from '../../lib/cache.js'
+import clearUserCache from '../../utils/clearUserCache.js'
 
 class SessionController {
   #sessionService
@@ -54,7 +55,7 @@ class SessionController {
         maxAge: 24 * 60 * 60 * 1000, // 1 dia
       })
 
-      cache.del(`user_session_${formattedUser.id}`) // limpa o cache
+      clearUserCache(formattedUser.id) // limpa o cache para não retornar dados ultrapassados
       return res.status(200).json(formattedUser)
     } catch (error) {
       next(error)
@@ -68,7 +69,7 @@ class SessionController {
 
     try {
       if (req.user.id) {
-        cache.del(`user_session_${req.user.id}`) // limpa o cache
+        clearUserCache(req.user.id) // limpa o cache para não retornar dados ultrapassados
       }
 
       res.clearCookie('accessToken', {
