@@ -34,6 +34,7 @@ const errorHandler = (err, req, res, next) => {
   // header adequado conforme o RFC da IETF
   res.setHeader('Content-Type', 'application/problem+json')
   return res.status(status).json({
+    type: 'about:blank', // valor padrão da RFC quando não há link de doc
     status,
     error: title,
     detail,
