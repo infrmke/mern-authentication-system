@@ -1,7 +1,5 @@
 import userService from './user.service.js'
 import throwHttpError from '../../utils/throwHttpError.js'
-import cache from '../../lib/cache.js'
-import clearUserCache from '../../utils/clearUserCache.js'
 
 class UserController {
   #userService

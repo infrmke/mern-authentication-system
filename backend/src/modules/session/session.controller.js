@@ -1,7 +1,5 @@
 import sessionService from './session.service.js'
 import throwHttpError from '../../utils/throwHttpError.js'
-import cache from '../../lib/cache.js'
-import clearUserCache from '../../utils/clearUserCache.js'
 
 class SessionController {
   #sessionService

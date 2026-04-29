@@ -1,6 +1,5 @@
 import otpService from './otp.service.js'
 import throwHttpError from '../../utils/throwHttpError.js'
-import cache from '../../lib/cache.js'
 
 class OtpController {
   #otpService
