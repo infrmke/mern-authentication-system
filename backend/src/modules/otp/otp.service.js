@@ -41,7 +41,7 @@ class OtpService {
 
   sendVerification = async (id) => {
     const capsule = await this.#userService.show(id)
-    const { user } = capsule
+    const user = capsule?.user || capsule // se .user não existir assume que a capsule já é o user
 
     if (user.isAccountVerified)
       throwHttpError(403, 'Account has already been verified.', 'FORBIDDEN_ACTION')
@@ -99,7 +99,7 @@ class OtpService {
 
   validateEmail = async (id, otp, otpType) => {
     const capsule = await this.#userService.show(id)
-    const { user } = capsule
+    const user = capsule?.user || capsule // se .user não existir assume que a capsule já é o user
 
     if (user.isAccountVerified)
       throwHttpError(403, 'Account has already been verified.', 'FORBIDDEN_ACTION')

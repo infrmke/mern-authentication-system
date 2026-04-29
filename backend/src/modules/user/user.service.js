@@ -66,9 +66,10 @@ class UserService {
     if (!user) throwHttpError(400, 'User does not exist.', 'USER_NOT_FOUND')
 
     const formattedUser = formatUserObject(user)
+    const result = { user, formattedUser }
 
-    cache.set(cacheKey, formattedUser) // salva os dados no cache
-    return { user, formattedUser }
+    cache.set(cacheKey, result) // salva os dados no cache
+    return result
   }
 
   store = async (data) => {
