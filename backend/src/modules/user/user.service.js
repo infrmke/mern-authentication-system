@@ -5,6 +5,7 @@ import { sendEmail } from '../../config/nodemailer.js'
 import { getWelcomeMailOptions } from '../../utils/generateMail.js'
 import clearUserCache from '../../utils/clearUserCache.js'
 import cache from '../../lib/cache.js'
+import throwHttpError from '../../utils/throwHttpError.js'
 
 class UserService {
   #userRepository
