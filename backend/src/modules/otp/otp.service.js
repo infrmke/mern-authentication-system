@@ -134,7 +134,7 @@ class OtpService {
 
   resetPassword = async (filter, password) => {
     const user = await this.#getUserByFilter(filter, '+password')
-    await this.#userService.update(user._id, { password })
+    const updatedUser = await this.#userService.update(user._id, { password })
 
     clearUserCache(user._id) // limpa o cache para não retornar dados ultrapassados no próximo GET
     return updatedUser
