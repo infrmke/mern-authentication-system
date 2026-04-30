@@ -59,7 +59,7 @@ O projeto utiliza o `concurrently` em sua raiz para facilitar a inicialização 
 1. Clone o repositório:
 
 ```bash
-    git clone https://github.com/seu-usuario/seu-repositorio.git
+    git clone https://github.com/infrmke/mean-authentication-system.git
     cd seu-repositorio
     npm run install-all
 ```
