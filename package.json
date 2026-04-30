@@ -1,5 +1,5 @@
 {
-  "name": "mern-authentication-system",
+  "name": "mean-authentication-system",
   "version": "1.0.0",
   "description": "Plataforma de login e cadastro com verificação do tipo OTP",
   "repository": {
